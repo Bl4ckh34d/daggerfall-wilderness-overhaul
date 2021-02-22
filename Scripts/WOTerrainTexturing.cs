@@ -178,15 +178,24 @@ namespace DaggerfallWorkshop
                     upperWaterSpread = 0.08f;
                 if (worldClimate == (int)MapsFile.Climates.Desert)
                     upperWaterSpread = 0.1f;
-
-                if (weight < upperWaterSpread)
-                    return water;
-                else if (weight >= upperWaterSpread && weight < lowerGrassSpread)
-                    return dirt;
-                else if (weight > upperGrassSpread)
-                    return stone;
-                else
-                    return grass;
+                if (worldClimate != (int)MapsFile.Climates.Desert2) {
+                  if (weight < upperWaterSpread)
+                      return water;
+                  else if (weight >= upperWaterSpread && weight < lowerGrassSpread)
+                      return dirt;
+                  else if (weight > upperGrassSpread)
+                      return stone;
+                  else
+                      return grass;
+                }
+                else {
+                    if (weight < upperWaterSpread)
+                        return water;
+                    else if (weight >= upperWaterSpread && weight < upperGrassSpread)
+                        return dirt;
+                    else
+                        return stone;
+                }
             }
 
             // Noise function

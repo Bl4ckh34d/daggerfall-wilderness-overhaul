@@ -67,7 +67,11 @@ namespace DaggerfallWorkshop
         List<int> desertPlants               = new List<int>(new int[] {7,25,27});
         List<int> desertWaterPlants          = new List<int>(new int[] {7,7,7,7,7,25,27,27,27,27,27});
         List<int> desertStones               = new List<int>(new int[] {2,3,4,6,8,18,19,20,21,22,});
-        List<int> desertTrees                = new List<int>(new int[] {5,13,13});
+        if(/*DREAM MOD IS RUNNING*/) {
+          List<int> desertTrees              = new List<int>(new int[] {5,13,30}); 
+        } else {
+          List<int> desertTrees              = new List<int>(new int[] {5,13,13}); 
+        }
         List<int> desertCactus               = new List<int>(new int[] {1,14,15,16});
         List<int> desertDeadTrees            = new List<int>(new int[] {10,11,12,23,28});
 
