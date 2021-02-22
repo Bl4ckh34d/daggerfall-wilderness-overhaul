@@ -12,6 +12,9 @@ namespace WildernessOverhaul
         static WOTerrainTexturing woTexturing;
         static WOTerrainNature woNature;
 
+        static Mod DREAMMod = ModManager.Instance.GetModFromGUID("");
+        bool DREAMModEnabled = DREAMMod != null && DREAMMod.Enabled;
+
         bool dynamicVegetationClearance;
         bool vegetationInLocations;
         float generalNatureClearance;
@@ -44,6 +47,7 @@ namespace WildernessOverhaul
             natureClearance5 = settings.GetValue<float>("DynamicNatureClearance", "Dungeons(Laybinths,Keeps,Ruins,Graveyards,Covens)");
 
             woNature = new WOTerrainNature(
+                DREAMModEnabled,
                 dynamicVegetationClearance,
                 vegetationInLocations,
                 generalNatureClearance,
