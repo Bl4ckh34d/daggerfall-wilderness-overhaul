@@ -1,0 +1,89 @@
+{
+    "Version": "0.5.0",
+    "Sections": [
+        {
+            "Name": "TerrainNature",
+            "Description": "Variables changing the vegetation distribution",
+            "IsAdvanced": false,
+            "Keys": [
+                {
+                    "Value": true,
+                    "Name": "DynamicVegetationClearance",
+                    "Description": "Activates varying clearance distances for vegetation around different sizes of settlements",
+                    "$version": "v1",
+                    "$type": "DaggerfallWorkshop.Game.Utility.ModSupport.ModSettings.ToggleKey"
+                },
+                {
+                    "Value": true,
+                    "Name": "VegetationInsideJungleLocations",
+                    "Description": "Activates the spawning of vegetation inside of jungle biome locations (towns, villages, farms, etc.)",
+                    "$version": "v1",
+                    "$type": "DaggerfallWorkshop.Game.Utility.ModSupport.ModSettings.ToggleKey"
+                },
+                {
+                    "Min": -4.0,
+                    "Max": 8.0,
+                    "Value": 4.0,
+                    "Name": "GeneralNatureClearance",
+                    "Description": "Area around locations that is cleared from vegetation. (gets overwritten if Dynamic Vegetation Clearance is active)",
+                    "$version": "v1",
+                    "$type": "DaggerfallWorkshop.Game.Utility.ModSupport.ModSettings.SliderFloatKey"
+                }
+            ],
+            "$version": "v1"
+        },
+        {
+            "Name": "DynamicNatureClearance",
+            "Description": "Variables changing the area around locations to be cleared of vegetation",
+            "IsAdvanced": false,
+            "Keys": [
+                {
+                    "Min": -4.0,
+                    "Max": 4.0,
+                    "Value": 4.0,
+                    "Name": "Cities",
+                    "Description": "Biggest type of cities in Daggerfall",
+                    "$version": "v1",
+                    "$type": "DaggerfallWorkshop.Game.Utility.ModSupport.ModSettings.SliderFloatKey"
+                },
+                {
+                    "Min": -4.0,
+                    "Max": 4.0,
+                    "Value": 2.0,
+                    "Name": "Hamlets",
+                    "Description": "Small towns, second biggest type of settlements in Daggerfall",
+                    "$version": "v1",
+                    "$type": "DaggerfallWorkshop.Game.Utility.ModSupport.ModSettings.SliderFloatKey"
+                },
+                {
+                    "Min": -4.0,
+                    "Max": 4.0,
+                    "Value": 1.0,
+                    "Name": "Villages,Homes(Wealthy),ReligiousCults",
+                    "Description": "Small villages, Homes of wealthy folks and Temple locations",
+                    "$version": "v1",
+                    "$type": "DaggerfallWorkshop.Game.Utility.ModSupport.ModSettings.SliderFloatKey"
+                },
+                {
+                    "Min": -4.0,
+                    "Max": 4.0,
+                    "Value": 0.5,
+                    "Name": "Farms,Taverns,Temples,Homes(Poor)",
+                    "Description": "The smallest types of settlements in Daggerfall",
+                    "$version": "v1",
+                    "$type": "DaggerfallWorkshop.Game.Utility.ModSupport.ModSettings.SliderFloatKey"
+                },
+                {
+                    "Min": -4.0,
+                    "Max": 4.0,
+                    "Value": -4.0,
+                    "Name": "Dungeons(Laybinths,Keeps,Ruins,Graveyards,Covens)",
+                    "Description": "Daggerfalls numerous dungeon types",
+                    "$version": "v1",
+                    "$type": "DaggerfallWorkshop.Game.Utility.ModSupport.ModSettings.SliderFloatKey"
+                }
+            ],
+            "$version": "v1"
+        }
+    ]
+}
