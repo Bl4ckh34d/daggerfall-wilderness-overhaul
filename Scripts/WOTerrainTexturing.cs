@@ -30,6 +30,99 @@ namespace DaggerfallWorkshop
     const byte grass = 2;
     const byte stone = 3;
 
+    const float desert1Frequency = 0.05f;
+    const float desert1Amplitude = 1f;
+    const float desert1Persistance = 0.4f;
+    const int desert1Octaves = 3;
+    const float desert1UpperWaterSpread = 0.75f;
+    const float desert1LowerGrassSpread = 0.85f;
+    const float desert1UpperGrassSpread = 0.95f;
+
+    const float desert2Frequency = 0.1f;
+    const float desert2Amplitude = 0.9f;
+    const float desert2Persistance = 0.4f;
+    const int desert2Octaves = 3;
+    const float desert2UpperWaterSpread = 0.08f;
+    const float desert2LowerGrassSpread = 0.85f;
+    const float desert2UpperGrassSpread = 1f;
+
+    const float mountainFrequencyHigh = 0.1f;
+    const float mountainAmplitudeHigh = 0.95f;
+    const float mountainPersistanceHigh = 0.3f;
+    const int mountainOctavesHigh = 5;
+    const float mountainUpperWaterSpreadHigh = 0.0f;
+    const float mountainLowerGrassSpreadHigh = 0.15f;
+    const float mountainUpperGrassSpreadHigh = 0.35f;
+
+    const float mountainUpperWaterSpreadMiddle = 0.0f;
+    const float mountainLowerGrassSpreadMiddle = 0.35f;
+    const float mountainUpperGrassSpreadMiddle = 0.95f;
+
+    const float mountainFrequencyLow = 0.1f;
+    const float mountainAmplitudeLow = 0.9f;
+    const float mountainPersistanceLow = 0.3f;
+    const int mountainOctavesLow = 5;
+    const float mountainUpperWaterSpreadLow = 0.0f;
+    const float mountainLowerGrassSpreadLow = 0.55f;
+    const float mountainUpperGrassSpreadLow = 0.95f;
+
+    const float rainforestFrequency = 0.1f;
+    const float rainforestAmplitude = 0.95f;
+    const float rainforestPersistance = 0.3f;
+    const int rainforestOctaves = 5;
+    const float rainforestUpperWaterSpread = 0.0f;
+    const float rainforestLowerGrassSpread = 0.75f;
+    const float rainforestUpperGrassSpread = 0.95f;
+
+    const float swampFrequency = 0.1f;
+    const float swampAmplitude = 0.95f;
+    const float swampPersistance = 0.3f;
+    const int swampOctaves = 5;
+    const float swampUpperWaterSpread = 0.0f;
+    const float swampLowerGrassSpread = 0.35f;
+    const float swampUpperGrassSpread = 0.95f;
+
+    const float subtropicalFrequency = 0.1f;
+    const float subtropicalAmplitude = 0.95f;
+    const float subtropicalPersistance = 0.3f;
+    const int subtropicalOctaves = 5;
+    const float subtropicalUpperWaterSpread = 0.0f;
+    const float subtropicalLowerGrassSpread = 0.35f;
+    const float subtropicalUpperGrassSpread = 0.95f;
+
+    const float mountainWoodsFrequency = 0.1f;
+    const float mountainWoodsAmplitude = 0.95f;
+    const float mountainWoodsPersistance = 0.3f;
+    const int mountainWoodsOctaves = 5;
+    const float mountainWoodsUpperWaterSpread = 0.0f;
+    const float mountainWoodsLowerGrassSpread = 0.35f;
+    const float mountainWoodsUpperGrassSpread = 0.95f;
+
+    const float woodlandsFrequency = 0.1f;
+    const float woodlandsAmplitude = 0.95f;
+    const float woodlandsPersistance = 0.3f;
+    const int woodlandsOctaves = 5;
+    const float woodlandsUpperWaterSpread = 0.0f;
+    const float woodlandsLowerGrassSpread = 0.35f;
+    const float woodlandsUpperGrassSpread = 0.95f;
+
+    const float hauntedWoodsFrequency = 0.1f;
+    const float hauntedWoodsAmplitude = 0.95f;
+    const float hauntedWoodsPersistance = 0.3f;
+    const int hauntedWoodsOctaves = 5;
+    const float hauntedWoodsUpperWaterSpread = 0.0f;
+    const float hauntedWoodsLowerGrassSpread = 0.35f;
+    const float hauntedWoodsUpperGrassSpread = 0.95f;
+
+    const float oceanFrequency = 0.1f;
+    const float oceanAmplitude = 0.95f;
+    const float oceanPersistance = 0.3f;
+    const int oceanOctaves = 5;
+    const float oceanUpperWaterSpread = 0.0f;
+    const float oceanLowerGrassSpread = 0.35f;
+    const float oceanUpperGrassSpread = 0.95f;
+
+
     public static float treeLine = UnityEngine.Random.Range(0.80f,0.85f);
 
     protected static readonly int tileDataDim = MapsFile.WorldMapTileDim + 1;
@@ -154,37 +247,37 @@ namespace DaggerfallWorkshop
       {
         switch(worldClimate) {
           case (int)MapsFile.Climates.Desert:
-            return GetNoise(worldX, worldY, 0.05f, 1f, 0.4f, 3, seed);
+            return GetNoise(worldX, worldY, desert1Frequency, desert1Amplitude, desert1Persistance, desert1Octaves, seed);
             break;
           case (int)MapsFile.Climates.Desert2:
-            return GetNoise(worldX, worldY, 0.1f, 0.9f, 0.4f, 3, seed);
+            return GetNoise(worldX, worldY, desert2Frequency, desert2Amplitude, desert2Persistance, desert2Octaves, seed);
             break;
           case (int)MapsFile.Climates.Mountain:
             if((height / maxTerrainHeight) + JobRand.Next(-50, 50) / 1000f < treeLine)
-              return GetNoise(worldX, worldY, 0.1f, 0.9f, 0.3f, 5, seed);
+              return GetNoise(worldX, worldY, mountainFrequencyLow, mountainAmplitudeLow, mountainPersistanceLow, mountainOctavesLow, seed);
             else
-              return GetNoise(worldX, worldY, 0.1f, 0.95f, 0.3f, 5, seed);
+              return GetNoise(worldX, worldY, mountainFrequencyHigh, mountainAmplitudeHigh, mountainPersistanceHigh, mountainOctavesHigh, seed);
             break;
           case (int)MapsFile.Climates.Rainforest:
-            return GetNoise(worldX, worldY, 0.1f, 0.95f, 0.3f, 5, seed);
+            return GetNoise(worldX, worldY, rainforestFrequency, rainforestAmplitude, rainforestPersistance, rainforestOctaves, seed);
             break;
           case (int)MapsFile.Climates.Swamp:
-            return GetNoise(worldX, worldY, 0.1f, 0.95f, 0.3f, 5, seed);
+            return GetNoise(worldX, worldY, swampFrequency, swampAmplitude, swampPersistance, swampOctaves, seed);
             break;
           case (int)MapsFile.Climates.Subtropical:
-            return GetNoise(worldX, worldY, 0.1f, 0.95f, 0.3f, 5, seed);
+            return GetNoise(worldX, worldY, subtropicalFrequency, subtropicalAmplitude, subtropicalPersistance, subtropicalOctaves, seed);
             break;
           case (int)MapsFile.Climates.MountainWoods:
-            return GetNoise(worldX, worldY, 0.1f, 0.95f, 0.3f, 5, seed);
+            return GetNoise(worldX, worldY, mountainWoodsFrequency, mountainWoodsAmplitude, mountainWoodsPersistance, mountainWoodsOctaves, seed);
             break;
           case (int)MapsFile.Climates.Woodlands:
-            return GetNoise(worldX, worldY, 0.1f, 0.95f, 0.3f, 5, seed);
+            return GetNoise(worldX, worldY, woodlandsFrequency, woodlandsAmplitude, woodlandsPersistance, woodlandsOctaves, seed);
             break;
           case (int)MapsFile.Climates.HauntedWoodlands:
-            return GetNoise(worldX, worldY, 0.1f, 0.95f, 0.3f, 5, seed);
+            return GetNoise(worldX, worldY, hauntedWoodsFrequency, hauntedWoodsAmplitude, hauntedWoodsPersistance, hauntedWoodsOctaves, seed);
             break;
           case (int)MapsFile.Climates.Ocean:
-            return GetNoise(worldX, worldY, 0.1f, 0.95f, 0.3f, 5, seed);
+            return GetNoise(worldX, worldY, oceanFrequency, oceanAmplitude, oceanPersistance, oceanOctaves, seed);
             break;
         }
         return GetNoise(worldX, worldY, 0.1f, 0.95f, 0.3f, 5, seed); //worldX, worldY, 0.05f, 0.9f, 0.4f, 3, seed
@@ -260,39 +353,39 @@ namespace DaggerfallWorkshop
         
         switch (worldClimate) {
           case (int)MapsFile.Climates.Desert:
-            tileData[index] = GetWeightedRecord(weight, 0.75f, 0.85f, 0.95f);
+            tileData[index] = GetWeightedRecord(weight, desert1UpperWaterSpread, desert1LowerGrassSpread, desert1UpperGrassSpread);
             break;
           case (int)MapsFile.Climates.Desert2:
-            tileData[index] = GetWeightedRecord(weight, 0.08f, 0.85f, 1f);
+            tileData[index] = GetWeightedRecord(weight, desert2UpperWaterSpread, desert2LowerGrassSpread, desert2UpperGrassSpread);
             break;
           case (int)MapsFile.Climates.Mountain:
             if ((height / maxTerrainHeight) <= 0.55f)
-              tileData[index] = GetWeightedRecord(weight, 0f, 0.55f, 0.95f);
+              tileData[index] = GetWeightedRecord(weight, mountainUpperWaterSpreadLow, mountainLowerGrassSpreadLow, mountainUpperGrassSpreadLow);
             else if((height / maxTerrainHeight) + JobRand.Next(-50, 50) / 1000f < treeLine && (height / maxTerrainHeight) > 0.55f)
-              tileData[index] = GetWeightedRecord(weight);
+              tileData[index] = GetWeightedRecord(weight, mountainUpperWaterSpreadMiddle, mountainLowerGrassSpreadMiddle, mountainUpperGrassSpreadMiddle);
             else
-              tileData[index] = GetWeightedRecord(weight, 0f, 0.15f, 0.35f);
+              tileData[index] = GetWeightedRecord(weight, mountainUpperWaterSpreadHigh, mountainLowerGrassSpreadHigh, mountainUpperGrassSpreadHigh);
             break;
           case (int)MapsFile.Climates.Rainforest:
-            tileData[index] = GetWeightedRecord(weight);
+            tileData[index] = GetWeightedRecord(weight, rainforestUpperWaterSpread, rainforestLowerGrassSpread, rainforestUpperGrassSpread);
             break;
           case (int)MapsFile.Climates.Swamp:
-            tileData[index] = GetWeightedRecord(weight);
+            tileData[index] = GetWeightedRecord(weight, swampUpperWaterSpread, swampLowerGrassSpread, swampUpperGrassSpread);
             break;
           case (int)MapsFile.Climates.Subtropical:
-            tileData[index] = GetWeightedRecord(weight);
+            tileData[index] = GetWeightedRecord(weight, subtropicalUpperWaterSpread, subtropicalLowerGrassSpread, subtropicalUpperGrassSpread);
             break;
           case (int)MapsFile.Climates.MountainWoods:
-            tileData[index] = GetWeightedRecord(weight);
+            tileData[index] = GetWeightedRecord(weight, mountainWoodsUpperWaterSpread, mountainWoodsLowerGrassSpread, mountainWoodsUpperGrassSpread);
             break;
           case (int)MapsFile.Climates.Woodlands:
-            tileData[index] = GetWeightedRecord(weight);
+            tileData[index] = GetWeightedRecord(weight, woodlandsUpperWaterSpread, woodlandsLowerGrassSpread, woodlandsUpperGrassSpread);
             break;
           case (int)MapsFile.Climates.HauntedWoodlands:
-            tileData[index] = GetWeightedRecord(weight);
+            tileData[index] = GetWeightedRecord(weight, hauntedWoodsUpperWaterSpread, hauntedWoodsLowerGrassSpread, hauntedWoodsUpperGrassSpread);
             break;
           case (int)MapsFile.Climates.Ocean:
-            tileData[index] = GetWeightedRecord(weight);
+            tileData[index] = GetWeightedRecord(weight, oceanUpperWaterSpread, oceanLowerGrassSpread, oceanUpperGrassSpread);
             break;
         }
       }
