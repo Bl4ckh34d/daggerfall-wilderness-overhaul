@@ -1147,7 +1147,7 @@ namespace DaggerfallWorkshop
             #region Temperate Spawns
             case (int)MapsFile.Climates.Woodlands:
 
-              weight += GetNoise(latitude, longitude, tempForestFrequency, tempForestAmplitude, tempForestPersistence, tempForestOctaves, 100);
+              /* weight += GetNoise(latitude, longitude, tempForestFrequency, tempForestAmplitude, tempForestPersistence, tempForestOctaves, 100);
 
               if (tile == 1) // Dirt
               {
@@ -1300,7 +1300,7 @@ namespace DaggerfallWorkshop
                 {
                   AddBillboardToBatch(dfTerrain, dfBillboardBatch, temperateWoodlandRocks, scale, steepness, terrain, x, y, 1.50f); // Stones
                 }
-              }
+              } */
               break;
             #endregion
 

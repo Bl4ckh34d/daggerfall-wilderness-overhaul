@@ -154,40 +154,40 @@ namespace DaggerfallWorkshop
       {
         switch(worldClimate) {
           case (int)MapsFile.Climates.Desert:
-            return GetNoise(worldX, worldY, 0.05f, 1f, 0.4f, 3, seed); //worldX, worldY, 0.05f, 0.9f, 0.4f, 3, seed
+            return GetNoise(worldX, worldY, 0.05f, 1f, 0.4f, 3, seed);
             break;
           case (int)MapsFile.Climates.Desert2:
-            return GetNoise(worldX, worldY, 0.1f, 0.9f, 0.4f, 3, seed); //worldX, worldY, 0.05f, 0.9f, 0.4f, 3, seed
+            return GetNoise(worldX, worldY, 0.1f, 0.9f, 0.4f, 3, seed);
             break;
           case (int)MapsFile.Climates.Mountain:
             if((height / maxTerrainHeight) + JobRand.Next(-50, 50) / 1000f < treeLine)
-              return GetNoise(worldX, worldY, 0.1f, 0.9f, 0.3f, 5, seed); //worldX, worldY, 0.05f, 0.9f, 0.4f, 3, seed
+              return GetNoise(worldX, worldY, 0.1f, 0.9f, 0.3f, 5, seed);
             else
-              return GetNoise(worldX, worldY, 0.1f, 0.95f, 0.3f, 5, seed); //worldX, worldY, 0.05f, 0.9f, 0.4f, 3, seed
+              return GetNoise(worldX, worldY, 0.1f, 0.95f, 0.3f, 5, seed);
             break;
           case (int)MapsFile.Climates.Rainforest:
-            return GetNoise(worldX, worldY, 0.1f, 0.95f, 0.3f, 5, seed); //worldX, worldY, 0.05f, 0.9f, 0.4f, 3, seed
+            return GetNoise(worldX, worldY, 0.1f, 0.95f, 0.3f, 5, seed);
             break;
           case (int)MapsFile.Climates.Swamp:
-            return GetNoise(worldX, worldY, 0.1f, 0.95f, 0.3f, 5, seed); //worldX, worldY, 0.05f, 0.9f, 0.4f, 3, seed
+            return GetNoise(worldX, worldY, 0.1f, 0.95f, 0.3f, 5, seed);
             break;
           case (int)MapsFile.Climates.Subtropical:
-            return GetNoise(worldX, worldY, 0.1f, 0.95f, 0.3f, 5, seed); //worldX, worldY, 0.05f, 0.9f, 0.4f, 3, seed
+            return GetNoise(worldX, worldY, 0.1f, 0.95f, 0.3f, 5, seed);
             break;
           case (int)MapsFile.Climates.MountainWoods:
-            return GetNoise(worldX, worldY, 0.1f, 0.95f, 0.3f, 5, seed); //worldX, worldY, 0.05f, 0.9f, 0.4f, 3, seed
+            return GetNoise(worldX, worldY, 0.1f, 0.95f, 0.3f, 5, seed);
             break;
           case (int)MapsFile.Climates.Woodlands:
-            return GetNoise(worldX, worldY, 0.1f, 0.95f, 0.3f, 5, seed); //worldX, worldY, 0.05f, 0.9f, 0.4f, 3, seed
+            return GetNoise(worldX, worldY, 0.1f, 0.95f, 0.3f, 5, seed);
             break;
           case (int)MapsFile.Climates.HauntedWoodlands:
-            return GetNoise(worldX, worldY, 0.1f, 0.95f, 0.3f, 5, seed); //worldX, worldY, 0.05f, 0.9f, 0.4f, 3, seed
+            return GetNoise(worldX, worldY, 0.1f, 0.95f, 0.3f, 5, seed);
             break;
           case (int)MapsFile.Climates.Ocean:
-            return GetNoise(worldX, worldY, 0.1f, 0.95f, 0.3f, 5, seed); //worldX, worldY, 0.05f, 0.9f, 0.4f, 3, seed
+            return GetNoise(worldX, worldY, 0.1f, 0.95f, 0.3f, 5, seed);
             break;
         }
-        return GetNoise(worldX, worldY, 0.1f, 0.95f, 0.3f, 5, seed);
+        return GetNoise(worldX, worldY, 0.1f, 0.95f, 0.3f, 5, seed); //worldX, worldY, 0.05f, 0.9f, 0.4f, 3, seed
       }
 
       // Sets texture by range
@@ -197,10 +197,10 @@ namespace DaggerfallWorkshop
           return water;
         else if (weight >= upperWaterSpread && weight < lowerGrassSpread)
           return dirt;
-        else if (weight > upperGrassSpread)
-          return stone;
-        else
+        else if (weight >= lowerGrassSpread && weight < upperGrassSpread)
           return grass;
+        else
+          return stone;
       }
 
       // Noise function
@@ -222,6 +222,7 @@ namespace DaggerfallWorkshop
         }
         return Mathf.Clamp(finalValue, -1, 1);
         //return (Mathf.Clamp(finalValue, -1, 1) + 1) / 2;
+        //return (Mathf.Clamp(finalValue, -10, 10) + 10) / 20;
       }
 
       public void Execute(int index)
@@ -255,30 +256,44 @@ namespace DaggerfallWorkshop
         // Set texture tile using weighted noise
         float weight = 0;
 
-        weight += NoiseWeight(latitude, longitude, height);  
+        weight += NoiseWeight(latitude, longitude, height);
         
-        // TODO: Add other weights to influence texture tile generation
-        if(worldClimate == (int)MapsFile.Climates.Mountain)
-        {
-          if ((height / maxTerrainHeight) <= 0.55f)
-            tileData[index] = GetWeightedRecord(weight, 0f, 0.55f, 0.95f);
-          else if((height / maxTerrainHeight) + JobRand.Next(-50, 50) / 1000f < treeLine && (height / maxTerrainHeight) > 0.55f)
+        switch (worldClimate) {
+          case (int)MapsFile.Climates.Desert:
+            tileData[index] = GetWeightedRecord(weight, 0.75f, 0.85f, 0.95f);
+            break;
+          case (int)MapsFile.Climates.Desert2:
+            tileData[index] = GetWeightedRecord(weight, 0.08f, 0.85f, 1f);
+            break;
+          case (int)MapsFile.Climates.Mountain:
+            if ((height / maxTerrainHeight) <= 0.55f)
+              tileData[index] = GetWeightedRecord(weight, 0f, 0.55f, 0.95f);
+            else if((height / maxTerrainHeight) + JobRand.Next(-50, 50) / 1000f < treeLine && (height / maxTerrainHeight) > 0.55f)
+              tileData[index] = GetWeightedRecord(weight);
+            else
+              tileData[index] = GetWeightedRecord(weight, 0f, 0.15f, 0.35f);
+            break;
+          case (int)MapsFile.Climates.Rainforest:
             tileData[index] = GetWeightedRecord(weight);
-          else
-            tileData[index] = GetWeightedRecord(weight, 0f, 0.15f, 0.35f);
-        }
-        //DOESNT WORK. WHO THE FUCK KNOWS WHY?!
-        if(worldClimate == (int)MapsFile.Climates.Desert)
-        {
-          tileData[index] = GetWeightedRecord(weight, 0.75f, 0.85f, 0.95f);
-        }
-        if(worldClimate == (int)MapsFile.Climates.Desert2)
-        {
-          tileData[index] = GetWeightedRecord(weight, 0.08f, 0.85f, 1f);
-        }
-        else 
-        {
-          tileData[index] = GetWeightedRecord(weight);
+            break;
+          case (int)MapsFile.Climates.Swamp:
+            tileData[index] = GetWeightedRecord(weight);
+            break;
+          case (int)MapsFile.Climates.Subtropical:
+            tileData[index] = GetWeightedRecord(weight);
+            break;
+          case (int)MapsFile.Climates.MountainWoods:
+            tileData[index] = GetWeightedRecord(weight);
+            break;
+          case (int)MapsFile.Climates.Woodlands:
+            tileData[index] = GetWeightedRecord(weight);
+            break;
+          case (int)MapsFile.Climates.HauntedWoodlands:
+            tileData[index] = GetWeightedRecord(weight);
+            break;
+          case (int)MapsFile.Climates.Ocean:
+            tileData[index] = GetWeightedRecord(weight);
+            break;
         }
       }
     }
