@@ -12,7 +12,7 @@ namespace WildernessOverhaul
         static WOTerrainTexturing woTexturing;
         static WOTerrainNature woNature;
 
-        static Mod DREAMMod = ModManager.Instance.GetModFromGUID("");
+        static Mod DREAMMod = ModManager.Instance.GetModFromGUID("5e1af2fc-2c12-4d05-829c-12b37f396e19");
         bool DREAMModEnabled = DREAMMod != null && DREAMMod.Enabled;
 
         bool dynamicVegetationClearance;

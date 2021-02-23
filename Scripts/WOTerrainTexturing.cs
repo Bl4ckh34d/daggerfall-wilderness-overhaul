@@ -187,6 +187,7 @@ namespace DaggerfallWorkshop
             return GetNoise(worldX, worldY, 0.1f, 0.95f, 0.3f, 5, seed); //worldX, worldY, 0.05f, 0.9f, 0.4f, 3, seed
             break;
         }
+        return GetNoise(worldX, worldY, 0.1f, 0.95f, 0.3f, 5, seed);
       }
 
       // Sets texture by range
