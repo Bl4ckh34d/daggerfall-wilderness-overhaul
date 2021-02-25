@@ -5,7 +5,7 @@
 // Source Code:     https://github.com/Interkarma/daggerfall-unity
 // Original Author: Gavin Clayton (interkarma@dfworkshop.net)
 // Contributors:    Hazelnut, Daniel87
-// 
+//
 // Notes:
 //
 
@@ -46,25 +46,13 @@ namespace DaggerfallWorkshop
     const float desert2LowerGrassSpread = 0.85f;
     const float desert2UpperGrassSpread = 1f;
 
-    const float mountainFrequencyHigh = 0.1f;
-    const float mountainAmplitudeHigh = 0.95f;
-    const float mountainPersistanceHigh = 0.3f;
-    const int mountainOctavesHigh = 5;
-    const float mountainUpperWaterSpreadHigh = 0.0f;
-    const float mountainLowerGrassSpreadHigh = 0.15f;
-    const float mountainUpperGrassSpreadHigh = 0.35f;
-
-    const float mountainUpperWaterSpreadMiddle = 0.0f;
-    const float mountainLowerGrassSpreadMiddle = 0.35f;
-    const float mountainUpperGrassSpreadMiddle = 0.95f;
-
-    const float mountainFrequencyLow = 0.1f;
-    const float mountainAmplitudeLow = 0.9f;
-    const float mountainPersistanceLow = 0.3f;
-    const int mountainOctavesLow = 5;
-    const float mountainUpperWaterSpreadLow = 0.0f;
-    const float mountainLowerGrassSpreadLow = 0.55f;
-    const float mountainUpperGrassSpreadLow = 0.95f;
+    const float mountainFrequency = 0.025f;
+    const float mountainAmplitude = 0.3f;
+    const float mountainPersistance = 0.95f;
+    const int mountainOctaves = 5;
+    const float mountainUpperWaterSpread = 0.0f;
+    const float mountainLowerGrassSpread = 0.35f;
+    const float mountainUpperGrassSpread = 0.95f;
 
     const float rainforestFrequency = 0.1f;
     const float rainforestAmplitude = 0.95f;
@@ -98,9 +86,9 @@ namespace DaggerfallWorkshop
     const float mountainWoodsLowerGrassSpread = 0.35f;
     const float mountainWoodsUpperGrassSpread = 0.95f;
 
-    const float woodlandsFrequency = 0.1f;
-    const float woodlandsAmplitude = 0.95f;
-    const float woodlandsPersistance = 0.3f;
+    const float woodlandsFrequency = 0.035f;
+    const float woodlandsAmplitude = 0.4f;
+    const float woodlandsPersistance = 0.8f;
     const int woodlandsOctaves = 5;
     const float woodlandsUpperWaterSpread = 0.0f;
     const float woodlandsLowerGrassSpread = 0.35f;
@@ -122,8 +110,7 @@ namespace DaggerfallWorkshop
     const float oceanLowerGrassSpread = 0.35f;
     const float oceanUpperGrassSpread = 0.95f;
 
-
-    public static float treeLine = UnityEngine.Random.Range(0.80f,0.85f);
+    public static float treeLine = UnityEngine.Random.Range(0.815f,0.835f);
 
     protected static readonly int tileDataDim = MapsFile.WorldMapTileDim + 1;
     protected static readonly int assignTilesDim = MapsFile.WorldMapTileDim;
@@ -132,7 +119,7 @@ namespace DaggerfallWorkshop
 
     public WOTerrainTexturing()
     {
-      CreateLookupTable();
+		CreateLookupTable();
     }
 
     public virtual JobHandle ScheduleAssignTilesJob(ITerrainSampler terrainSampler, ref MapPixelData mapData, JobHandle dependencies, bool march = true)
@@ -245,40 +232,35 @@ namespace DaggerfallWorkshop
       // Gets noise value
       private float NoiseWeight(float worldX, float worldY, float height)
       {
+        float woodlandsPersistanceRnd = woodlandsPersistance + ((height/maxTerrainHeight)*1.5f) - 0.35f;
+        float mountainsPersistanceRnd;
+        if((height / maxTerrainHeight) + JobRand.Next(-5, 5) / 1000f > treeLine) {
+            mountainsPersistanceRnd = mountainPersistance - treeLine + ((height/maxTerrainHeight)*1.2f);
+        } else {
+            mountainsPersistanceRnd = mountainPersistance - (1-(height/maxTerrainHeight))*0.4f;
+        }
+
         switch(worldClimate) {
           case (int)MapsFile.Climates.Desert:
             return GetNoise(worldX, worldY, desert1Frequency, desert1Amplitude, desert1Persistance, desert1Octaves, seed);
-            break;
           case (int)MapsFile.Climates.Desert2:
             return GetNoise(worldX, worldY, desert2Frequency, desert2Amplitude, desert2Persistance, desert2Octaves, seed);
-            break;
           case (int)MapsFile.Climates.Mountain:
-            if((height / maxTerrainHeight) + JobRand.Next(-50, 50) / 1000f < treeLine)
-              return GetNoise(worldX, worldY, mountainFrequencyLow, mountainAmplitudeLow, mountainPersistanceLow, mountainOctavesLow, seed);
-            else
-              return GetNoise(worldX, worldY, mountainFrequencyHigh, mountainAmplitudeHigh, mountainPersistanceHigh, mountainOctavesHigh, seed);
-            break;
+            return GetNoise(worldX, worldY, mountainFrequency, mountainAmplitude, mountainsPersistanceRnd, mountainOctaves, seed);
           case (int)MapsFile.Climates.Rainforest:
             return GetNoise(worldX, worldY, rainforestFrequency, rainforestAmplitude, rainforestPersistance, rainforestOctaves, seed);
-            break;
           case (int)MapsFile.Climates.Swamp:
             return GetNoise(worldX, worldY, swampFrequency, swampAmplitude, swampPersistance, swampOctaves, seed);
-            break;
           case (int)MapsFile.Climates.Subtropical:
             return GetNoise(worldX, worldY, subtropicalFrequency, subtropicalAmplitude, subtropicalPersistance, subtropicalOctaves, seed);
-            break;
           case (int)MapsFile.Climates.MountainWoods:
             return GetNoise(worldX, worldY, mountainWoodsFrequency, mountainWoodsAmplitude, mountainWoodsPersistance, mountainWoodsOctaves, seed);
-            break;
           case (int)MapsFile.Climates.Woodlands:
-            return GetNoise(worldX, worldY, woodlandsFrequency, woodlandsAmplitude, woodlandsPersistance, woodlandsOctaves, seed);
-            break;
+            return GetNoise(worldX, worldY, woodlandsFrequency, woodlandsAmplitude, woodlandsPersistanceRnd, woodlandsOctaves, seed);
           case (int)MapsFile.Climates.HauntedWoodlands:
             return GetNoise(worldX, worldY, hauntedWoodsFrequency, hauntedWoodsAmplitude, hauntedWoodsPersistance, hauntedWoodsOctaves, seed);
-            break;
           case (int)MapsFile.Climates.Ocean:
             return GetNoise(worldX, worldY, oceanFrequency, oceanAmplitude, oceanPersistance, oceanOctaves, seed);
-            break;
         }
         return GetNoise(worldX, worldY, 0.1f, 0.95f, 0.3f, 5, seed); //worldX, worldY, 0.05f, 0.9f, 0.4f, 3, seed
       }
@@ -350,7 +332,7 @@ namespace DaggerfallWorkshop
         float weight = 0;
 
         weight += NoiseWeight(latitude, longitude, height);
-        
+
         switch (worldClimate) {
           case (int)MapsFile.Climates.Desert:
             tileData[index] = GetWeightedRecord(weight, desert1UpperWaterSpread, desert1LowerGrassSpread, desert1UpperGrassSpread);
@@ -359,12 +341,7 @@ namespace DaggerfallWorkshop
             tileData[index] = GetWeightedRecord(weight, desert2UpperWaterSpread, desert2LowerGrassSpread, desert2UpperGrassSpread);
             break;
           case (int)MapsFile.Climates.Mountain:
-            if ((height / maxTerrainHeight) <= 0.55f)
-              tileData[index] = GetWeightedRecord(weight, mountainUpperWaterSpreadLow, mountainLowerGrassSpreadLow, mountainUpperGrassSpreadLow);
-            else if((height / maxTerrainHeight) + JobRand.Next(-50, 50) / 1000f < treeLine && (height / maxTerrainHeight) > 0.55f)
-              tileData[index] = GetWeightedRecord(weight, mountainUpperWaterSpreadMiddle, mountainLowerGrassSpreadMiddle, mountainUpperGrassSpreadMiddle);
-            else
-              tileData[index] = GetWeightedRecord(weight, mountainUpperWaterSpreadHigh, mountainLowerGrassSpreadHigh, mountainUpperGrassSpreadHigh);
+            tileData[index] = GetWeightedRecord(weight, mountainUpperWaterSpread, mountainLowerGrassSpread, mountainUpperGrassSpread);
             break;
           case (int)MapsFile.Climates.Rainforest:
             tileData[index] = GetWeightedRecord(weight, rainforestUpperWaterSpread, rainforestLowerGrassSpread, rainforestUpperGrassSpread);
