@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using Unity.Collections;
 using System.Collections.Generic;
 using DaggerfallConnect.Arena2;
 using DaggerfallConnect;
@@ -1273,7 +1274,7 @@ namespace DaggerfallWorkshop
             #region Mountain Spawns
             case (int)MapsFile.Climates.Mountain:
 
-              /*weight += GetNoise(latitude, longitude, mountForestFrequency, mountForestAmplitude, mountForestPersistence, mountForestOctaves, 100);
+              weight += GetNoise(latitude, longitude, mountForestFrequency, mountForestAmplitude, mountForestPersistence, mountForestOctaves, 100);
 
               if (tile == 1) // Dirt
               {
@@ -1664,7 +1665,7 @@ namespace DaggerfallWorkshop
                             AddBillboardToBatch(dfTerrain, dfBillboardBatch, mountainsFlowers, scale, steepness, terrain, x, y, 0.75f); // Flowers
                         }
                     }
-                }*/
+                }
                 break;
             #endregion
 
@@ -2160,7 +2161,7 @@ namespace DaggerfallWorkshop
             #region Desert2 Spawns
             case (int)MapsFile.Climates.Desert2: //REAL Desert
 
-              /* if (tile == 1) // Dirt
+              /*if (tile == 1) // Dirt
               {
                 float elevationRnd = Random.Range(0.01f,0.03f);
                 if(dfTerrain.MapData.heightmapSamples[hy, hx] < elevationRnd && Random.Range(0.0f,100.0f) < Random.Range(0.0f,25.0f))
@@ -2530,8 +2531,8 @@ namespace DaggerfallWorkshop
                 {
                   AddBillboardToBatch(dfTerrain, dfBillboardBatch, desertStones, scale, steepness, terrain, x, y, 2.5f); // Stones
                 }
-              }
-              else if (
+              }*/
+              if (
                 tile == 0 || tile == 4 || tile == 5 || tile == 6 || tile == 7 || tile == 8 || tile == 19 || tile == 20 || tile == 21 || tile == 22 ||
                 tile == 23 || tile == 29 || tile == 30 || tile == 31 || tile == 32 || tile == 33 || tile == 34 || tile == 35 || tile == 36 || tile == 37 ||
                 tile == 38 || tile == 40 || tile == 41 || tile == 43 || tile == 44 || tile == 48 || tile == 49 || tile == 50)
@@ -2633,7 +2634,7 @@ namespace DaggerfallWorkshop
                     AddBillboardToBatchWater(dfTerrain, dfBillboardBatch, desertWaterFlowers, scale, steepness, terrain, x, y, Random.Range(0.2f,1.5f)); // Flowers
                   }
                 }
-              } */
+              }
               break;
             #endregion
 
@@ -3960,5 +3961,18 @@ namespace DaggerfallWorkshop
       }
       return true;
     }
+
+    public static bool InArrayBounds(this float[] array, int x)
+    {
+      if (
+        x < array.GetLowerBound(0) ||
+        x > array.GetUpperBound(0))
+      {
+        return false;
+      }
+      return true;
+    }
   }
 }
+
+
