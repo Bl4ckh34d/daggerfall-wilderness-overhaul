@@ -30,21 +30,21 @@ namespace DaggerfallWorkshop
     const byte grass = 2;
     const byte stone = 3;
 
-    const float desert1Frequency = 0.05f;
-    const float desert1Amplitude = 1f;
-    const float desert1Persistance = 0.4f;
-    const int desert1Octaves = 3;
+    const float desert1Frequency = 0.02f;
+    const float desert1Amplitude = 0.3f;
+    const float desert1Persistance = 0.5f;
+    const int desert1Octaves = 5;
     const float desert1UpperWaterSpread = -1.0f;
-    const float desert1LowerGrassSpread = 0.85f;
-    const float desert1UpperGrassSpread = 0.95f;
+    const float desert1LowerGrassSpread = 0.4f;
+    const float desert1UpperGrassSpread = 0.5f;
 
     const float desert2Frequency = 0.02f;
     const float desert2Amplitude = 0.3f;
-    const float desert2Persistance = 0.5f;
+    const float desert2Persistance = 0.55f;
     const int desert2Octaves = 5;
     const float desert2UpperWaterSpread = -1.0f;
-    const float desert2LowerGrassSpread = 0.5f;
-    const float desert2UpperGrassSpread = 0.55f;
+    const float desert2LowerGrassSpread = 0.35f;
+    const float desert2UpperGrassSpread = 0.5f;
 
     const float mountainFrequency = 0.025f;
     const float mountainAmplitude = 0.3f;
@@ -240,11 +240,12 @@ namespace DaggerfallWorkshop
         } else {
             mountainsPersistanceRnd = mountainPersistance - (1-(height/maxTerrainHeight))*0.4f;
         }
-        float desert2PersistanceRnd = desert2Persistance + (height/maxTerrainHeight)*1.2f;
+        float desert1PersistanceRnd = desert1Persistance + ((height/maxTerrainHeight)*2) - 0.25f;
+        float desert2PersistanceRnd = desert2Persistance + ((height/maxTerrainHeight)*2) - 0.25f;
 
         switch(worldClimate) {
           case (int)MapsFile.Climates.Desert:
-            return GetNoise(worldX, worldY, desert1Frequency, desert1Amplitude, desert1Persistance, desert1Octaves, seed);
+            return GetNoise(worldX, worldY, desert1Frequency, desert1Amplitude, desert1PersistanceRnd, desert1Octaves, seed);
           case (int)MapsFile.Climates.Desert2:
             return GetNoise(worldX, worldY, desert2Frequency, desert2Amplitude, desert2PersistanceRnd, desert2Octaves, seed);
           case (int)MapsFile.Climates.Mountain:
@@ -367,15 +368,13 @@ namespace DaggerfallWorkshop
             break;
         }
         // Check for lowest local point in desert to place oasis
-        if ((worldClimate == (int)MapsFile.Climates.Desert ||
-            worldClimate == (int)MapsFile.Climates.Desert2) &&
-            LowestPointFound(heightmapData, maxTerrainHeight, hx, hy, hDim, uB) &&
-            tileData[index] == dirt &&
-            JobA.Row(index, tdDim) - 5 > 0 &&
-            JobA.Col(index, tdDim) + 5 < tdDim &&
-            JobA.Row(index, tdDim) + 5 < tdDim &&
-            JobA.Col(index, tdDim) - 5 > 0 &&
-            JobRand.Next(0,100) > 95)
+        if (worldClimate == (int)MapsFile.Climates.Desert2 &&
+            LowestPointFound(heightmapData, maxTerrainHeight, hx, hy, hDim, uB, index, tdDim, tileData))
+        {
+            tileData[index] = water;
+        }
+        if (worldClimate == (int)MapsFile.Climates.Desert &&
+            LowestPointFound(heightmapData, maxTerrainHeight, hx, hy, hDim, uB, index, tdDim, tileData))
         {
             tileData[index] = water;
         }
@@ -448,37 +447,56 @@ namespace DaggerfallWorkshop
       return (byte)index;
     }
 
-    static bool LowestPointFound(NativeArray<float> heightmapData, float maxTerrainHeight, int hx, int hy, int hDim, int upperBound)
+    static bool LowestPointFound(NativeArray<float> heightmapData, float maxTerrainHeight, int hx, int hy, int hDim, int upperBound, int index, int tdDim, NativeArray<byte> tileData)
     {
-      float thisHeight = heightmapData[JobA.Idx(hy, hx, hDim)] * maxTerrainHeight;
-      if  (JobA.Idx(hy-5, hx-5, hDim) < 0 ||
-           JobA.Idx(hy-5, hx-5, hDim) > upperBound ||
-           JobA.Idx(hy-5, hx+5, hDim) < 0 ||
-           JobA.Idx(hy-5, hx+5, hDim) > upperBound ||
-           JobA.Idx(hy+5, hx-5, hDim) < 0 ||
-           JobA.Idx(hy+5, hx-5, hDim) > upperBound ||
-           JobA.Idx(hy+5, hx+5, hDim) < 0 ||
-           JobA.Idx(hy+5, hx+5, hDim) > upperBound
-           )
-      {
-        return false;
-      }
+      int chance = 100 - (int)(heightmapData[JobA.Idx(hy, hx, hDim)] * 1000);
+
+      if (tileData[index] != dirt ||
+        JobA.Row(index, tdDim) - 5 <= 0 ||
+        JobA.Col(index, tdDim) + 5 >= tdDim ||
+        JobA.Row(index, tdDim) + 5 >= tdDim ||
+        JobA.Col(index, tdDim) - 5 <= 0)
+        {
+            return false;
+        }
       else
       {
-        for (int a = -4; a < 5; a++)
+        float thisHeight = heightmapData[JobA.Idx(hy, hx, hDim)] * maxTerrainHeight;
+        if  (JobA.Idx(hy-5, hx-5, hDim) < 0 ||
+            JobA.Idx(hy-5, hx-5, hDim) > upperBound ||
+            JobA.Idx(hy-5, hx+5, hDim) < 0 ||
+            JobA.Idx(hy-5, hx+5, hDim) > upperBound ||
+            JobA.Idx(hy+5, hx-5, hDim) < 0 ||
+            JobA.Idx(hy+5, hx-5, hDim) > upperBound ||
+            JobA.Idx(hy+5, hx+5, hDim) < 0 ||
+            JobA.Idx(hy+5, hx+5, hDim) > upperBound
+            )
         {
-          for (int b = -4; b < 5; b++)
-          {
-            if (heightmapData[JobA.Idx(hy+a, hx+b, hDim)] * maxTerrainHeight < thisHeight)
+            return false;
+        }
+        else
+        {
+            for (int a = -4; a < 5; a++)
+            {
+              for (int b = -4; b < 5; b++)
+              {
+                if ((a != 0 && b != 0) && heightmapData[JobA.Idx(hy+a, hx+b, hDim)] * maxTerrainHeight < thisHeight + (0.0000035f * Mathf.Abs(a)) + (0.0000035f * Mathf.Abs(b)))
+                {
+                  return false;
+                }
+              }
+            }
+            if (JobRand.Next(0,100) <= chance)
+            {
+              return true;
+            }
+            else
             {
               return false;
             }
-          }
         }
-        return true;
       }
     }
-
     #endregion
   }
 }
