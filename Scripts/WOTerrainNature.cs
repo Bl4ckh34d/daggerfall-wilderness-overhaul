@@ -2051,8 +2051,8 @@ namespace DaggerfallWorkshop
                 {
                   AddBillboardToBatch(dfTerrain, dfBillboardBatch, desertStones, scale, steepness, terrain, x, y, 2f); // Stones
                 }
-              }
-              else if (
+              }*/
+              if (
                 tile == 0 || tile == 4 || tile == 5 || tile == 6 || tile == 7 || tile == 8 || tile == 19 || tile == 20 || tile == 21 || tile == 22 ||
                 tile == 23 || tile == 29 || tile == 30 || tile == 31 || tile == 32 || tile == 33 || tile == 34 || tile == 35 || tile == 36 || tile == 37 ||
                 tile == 38 || tile == 40 || tile == 41 || tile == 43 || tile == 44 || tile == 48 || tile == 49 || tile == 50)
@@ -2154,7 +2154,7 @@ namespace DaggerfallWorkshop
                     AddBillboardToBatchWater(dfTerrain, dfBillboardBatch, desertWaterFlowers, scale, steepness, terrain, x, y, Random.Range(0.2f,0.5f)); // Flowers
                   }
                 }
-              } */
+              }
               break;
             #endregion
 

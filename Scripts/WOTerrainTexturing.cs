@@ -369,12 +369,12 @@ namespace DaggerfallWorkshop
         }
         // Check for lowest local point in desert to place oasis
         if (worldClimate == (int)MapsFile.Climates.Desert2 &&
-            LowestPointFound(heightmapData, maxTerrainHeight, hx, hy, hDim, uB, index, tdDim, tileData))
+            LowestPointFound(30, heightmapData, maxTerrainHeight, hx, hy, hDim, uB, index, tdDim, tileData))
         {
             tileData[index] = water;
         }
         if (worldClimate == (int)MapsFile.Climates.Desert &&
-            LowestPointFound(heightmapData, maxTerrainHeight, hx, hy, hDim, uB, index, tdDim, tileData))
+            LowestPointFound(80, heightmapData, maxTerrainHeight, hx, hy, hDim, uB, index, tdDim, tileData))
         {
             tileData[index] = water;
         }
@@ -447,9 +447,9 @@ namespace DaggerfallWorkshop
       return (byte)index;
     }
 
-    static bool LowestPointFound(NativeArray<float> heightmapData, float maxTerrainHeight, int hx, int hy, int hDim, int upperBound, int index, int tdDim, NativeArray<byte> tileData)
+    static bool LowestPointFound(int chance, NativeArray<float> heightmapData, float maxTerrainHeight, int hx, int hy, int hDim, int upperBound, int index, int tdDim, NativeArray<byte> tileData)
     {
-      int chance = 100 - (int)(heightmapData[JobA.Idx(hy, hx, hDim)] * 1000);
+      int newChance = (int)(chance - (chance * heightmapData[JobA.Idx(hy, hx, hDim)] * 2));
 
       if (tileData[index] != dirt ||
         JobA.Row(index, tdDim) - 5 <= 0 ||
@@ -486,7 +486,7 @@ namespace DaggerfallWorkshop
                 }
               }
             }
-            if (JobRand.Next(0,100) <= chance)
+            if (JobRand.Next(0,100) <= newChance)
             {
               return true;
             }
