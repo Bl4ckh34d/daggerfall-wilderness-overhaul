@@ -54,33 +54,33 @@ namespace DaggerfallWorkshop
     const float mountainLowerGrassSpread = 0.35f;
     const float mountainUpperGrassSpread = 0.95f;
 
-    const float rainforestFrequency = 0.1f;
-    const float rainforestAmplitude = 0.95f;
-    const float rainforestPersistance = 0.3f;
+    const float rainforestFrequency = 0.035f;
+    const float rainforestAmplitude = 0.4f;
+    const float rainforestPersistance = 0.8f;
     const int rainforestOctaves = 5;
     const float rainforestUpperWaterSpread = 0.0f;
-    const float rainforestLowerGrassSpread = 0.75f;
+    const float rainforestLowerGrassSpread = 0.35f;
     const float rainforestUpperGrassSpread = 0.95f;
 
-    const float swampFrequency = 0.1f;
-    const float swampAmplitude = 0.95f;
-    const float swampPersistance = 0.3f;
+    const float swampFrequency = 0.02f;
+    const float swampAmplitude = 0.3f;
+    const float swampPersistance = 0.5f;
     const int swampOctaves = 5;
-    const float swampUpperWaterSpread = 0.0f;
-    const float swampLowerGrassSpread = 0.35f;
-    const float swampUpperGrassSpread = 0.95f;
+    const float swampUpperWaterSpread = -1.0f;
+    const float swampLowerGrassSpread = 0.4f;
+    const float swampUpperGrassSpread = 0.5f;
 
-    const float subtropicalFrequency = 0.1f;
-    const float subtropicalAmplitude = 0.95f;
-    const float subtropicalPersistance = 0.3f;
+    const float subtropicalFrequency = 0.02f;
+    const float subtropicalAmplitude = 0.3f;
+    const float subtropicalPersistance = 0.5f;
     const int subtropicalOctaves = 5;
-    const float subtropicalUpperWaterSpread = 0.0f;
-    const float subtropicalLowerGrassSpread = 0.35f;
-    const float subtropicalUpperGrassSpread = 0.95f;
+    const float subtropicalUpperWaterSpread = -1.0f;
+    const float subtropicalLowerGrassSpread = 0.4f;
+    const float subtropicalUpperGrassSpread = 0.5f;
 
-    const float mountainWoodsFrequency = 0.1f;
-    const float mountainWoodsAmplitude = 0.95f;
-    const float mountainWoodsPersistance = 0.3f;
+    const float mountainWoodsFrequency = 0.035f;
+    const float mountainWoodsAmplitude = 0.4f;
+    const float mountainWoodsPersistance = 0.8f;
     const int mountainWoodsOctaves = 5;
     const float mountainWoodsUpperWaterSpread = 0.0f;
     const float mountainWoodsLowerGrassSpread = 0.35f;
@@ -94,9 +94,9 @@ namespace DaggerfallWorkshop
     const float woodlandsLowerGrassSpread = 0.35f;
     const float woodlandsUpperGrassSpread = 0.95f;
 
-    const float hauntedWoodsFrequency = 0.1f;
-    const float hauntedWoodsAmplitude = 0.95f;
-    const float hauntedWoodsPersistance = 0.3f;
+    const float hauntedWoodsFrequency = 0.035f;
+    const float hauntedWoodsAmplitude = 0.4f;
+    const float hauntedWoodsPersistance = 0.8f;
     const int hauntedWoodsOctaves = 5;
     const float hauntedWoodsUpperWaterSpread = 0.0f;
     const float hauntedWoodsLowerGrassSpread = 0.35f;
@@ -234,6 +234,8 @@ namespace DaggerfallWorkshop
       private float NoiseWeight(float worldX, float worldY, float height)
       {
         float woodlandsPersistanceRnd = woodlandsPersistance + ((height/maxTerrainHeight)*1.5f) - 0.35f;
+				float mountainWoodsPersistanceRnd = mountainWoodsPersistance + ((height/maxTerrainHeight)*1.5f) - 0.35f;
+				float hauntedWoodsPersistanceRnd = hauntedWoodsPersistance + ((height/maxTerrainHeight)*1.5f) - 0.35f;
         float mountainsPersistanceRnd;
         if((height / maxTerrainHeight) + JobRand.Next(-5, 5) / 1000f > treeLine) {
             mountainsPersistanceRnd = mountainPersistance - treeLine + ((height/maxTerrainHeight)*1.2f);
@@ -242,6 +244,9 @@ namespace DaggerfallWorkshop
         }
         float desert1PersistanceRnd = desert1Persistance + ((height/maxTerrainHeight)*2) - 0.25f;
         float desert2PersistanceRnd = desert2Persistance + ((height/maxTerrainHeight)*2) - 0.25f;
+        float subtropicalPersistanceRnd = subtropicalPersistance + ((height/maxTerrainHeight)*2) - 0.25f;
+        float swampPersistanceRnd = swampPersistance + ((height/maxTerrainHeight)*3) - 0.25f;
+        float rainforestPersistanceRnd = rainforestPersistance + ((height/maxTerrainHeight)*1.5f) - 0.35f;
 
         switch(worldClimate) {
           case (int)MapsFile.Climates.Desert:
@@ -255,13 +260,13 @@ namespace DaggerfallWorkshop
           case (int)MapsFile.Climates.Swamp:
             return GetNoise(worldX, worldY, swampFrequency, swampAmplitude, swampPersistance, swampOctaves, seed);
           case (int)MapsFile.Climates.Subtropical:
-            return GetNoise(worldX, worldY, subtropicalFrequency, subtropicalAmplitude, subtropicalPersistance, subtropicalOctaves, seed);
+            return GetNoise(worldX, worldY, subtropicalFrequency, subtropicalAmplitude, subtropicalPersistanceRnd, subtropicalOctaves, seed);
           case (int)MapsFile.Climates.MountainWoods:
-            return GetNoise(worldX, worldY, mountainWoodsFrequency, mountainWoodsAmplitude, mountainWoodsPersistance, mountainWoodsOctaves, seed);
+            return GetNoise(worldX, worldY, mountainWoodsFrequency, mountainWoodsAmplitude, mountainWoodsPersistanceRnd, mountainWoodsOctaves, seed);
           case (int)MapsFile.Climates.Woodlands:
             return GetNoise(worldX, worldY, woodlandsFrequency, woodlandsAmplitude, woodlandsPersistanceRnd, woodlandsOctaves, seed);
           case (int)MapsFile.Climates.HauntedWoodlands:
-            return GetNoise(worldX, worldY, hauntedWoodsFrequency, hauntedWoodsAmplitude, hauntedWoodsPersistance, hauntedWoodsOctaves, seed);
+            return GetNoise(worldX, worldY, hauntedWoodsFrequency, hauntedWoodsAmplitude, hauntedWoodsPersistanceRnd, hauntedWoodsOctaves, seed);
           case (int)MapsFile.Climates.Ocean:
             return GetNoise(worldX, worldY, oceanFrequency, oceanAmplitude, oceanPersistance, oceanOctaves, seed);
         }
