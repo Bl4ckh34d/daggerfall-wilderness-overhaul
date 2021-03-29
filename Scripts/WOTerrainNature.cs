@@ -247,7 +247,6 @@ namespace DaggerfallWorkshop
       }
 
       float terrainElevation = Mathf.Clamp((dfTerrain.MapData.worldHeight / 128f), 0.0f, 1.0f);
-      Debug.Log("Terrain Elevation: "+terrainElevation);
 
       // Get terrain
       Terrain terrain = dfTerrain.gameObject.GetComponent<Terrain>();
@@ -950,26 +949,26 @@ namespace DaggerfallWorkshop
         else if (terrainElevation <= treeLine && terrainElevation > 0.6f)
         {
           chanceOnGrass = Mathf.Clamp(Random.Range( 0.275f, 0.300f ), 0f, 1f);
-          chanceOnDirt  = Mathf.Clamp(Random.Range( 0.375f, 0.450f ), 0f, 1f);
+          chanceOnDirt  = Mathf.Clamp(Random.Range( 0.375f, 0.400f ), 0f, 1f);
           chanceOnStone = Mathf.Clamp(Random.Range( 0.275f, 0.300f ), 0f, 1f);
         }
         else if(terrainElevation <= 0.6f && terrainElevation > 0.4f)
         {
           chanceOnGrass = Mathf.Clamp(Random.Range( 0.300f, 0.325f ), 0f, 1f);
-          chanceOnDirt  = Mathf.Clamp(Random.Range( 0.350f, 0.450f ), 0f, 1f);
+          chanceOnDirt  = Mathf.Clamp(Random.Range( 0.350f, 0.400f ), 0f, 1f);
           chanceOnStone = Mathf.Clamp(Random.Range( 0.225f, 0.250f ), 0f, 1f);
         }
         else if(terrainElevation <= 0.4f && terrainElevation > 0.2f)
         {
           chanceOnGrass = Mathf.Clamp(Random.Range( 0.325f, 0.375f ), 0f, 1f);
-          chanceOnDirt  = Mathf.Clamp(Random.Range( 0.400f, 0.475f ), 0f, 1f);
+          chanceOnDirt  = Mathf.Clamp(Random.Range( 0.350f, 0.375f ), 0f, 1f);
           chanceOnStone = Mathf.Clamp(Random.Range( 0.175f, 0.200f ), 0f, 1f);
         }
         else if(terrainElevation <= 0.2f)
         {
-          chanceOnGrass = Mathf.Clamp(Random.Range( 0.400f, 0.450f ), 0f, 1f);
-          chanceOnDirt  = Mathf.Clamp(Random.Range( 0.300f, 0.375f ), 0f, 1f);
-          chanceOnStone = Mathf.Clamp(Random.Range( 0.275f, 0.300f ), 0f, 1f);
+          chanceOnGrass = Mathf.Clamp(Random.Range( 0.375f, 0.400f ), 0f, 1f);
+          chanceOnDirt  = Mathf.Clamp(Random.Range( 0.300f, 0.350f ), 0f, 1f);
+          chanceOnStone = Mathf.Clamp(Random.Range( 0.250f, 0.275f ), 0f, 1f);
         }
       }
 
@@ -1148,7 +1147,7 @@ namespace DaggerfallWorkshop
             #region Temperate Spawns
             case (int)MapsFile.Climates.Woodlands:
 
-              /* weight += GetNoise(latitude, longitude, tempForestFrequency, tempForestAmplitude, tempForestPersistence, tempForestOctaves, 100);
+              weight += GetNoise(latitude, longitude, tempForestFrequency, tempForestAmplitude, tempForestPersistence, tempForestOctaves, 100);
 
               if (tile == 1) // Dirt
               {
@@ -1216,7 +1215,10 @@ namespace DaggerfallWorkshop
                     AddBillboardToBatch(dfTerrain, dfBillboardBatch, temperateWoodlandMushroom, scale, steepness, terrain, x, y, 0.00f); // Mushroom
                   }
 
-                  AddBillboardToBatch(dfTerrain, dfBillboardBatch, temperateWoodlandFlowers, scale, steepness, terrain, x, y, 0.50f); // Flowers
+                  for (int i = 0; i < Random.Range(1,8); i++)
+                  {
+                    AddBillboardToBatch(dfTerrain, dfBillboardBatch, temperateWoodlandFlowers, scale, steepness, terrain, x, y, 0.50f); // Flowers
+                  }
 
                   float rndMinor = Random.Range(0,100);
                   if(rndMinor < mapStyleChance1)
@@ -1267,7 +1269,7 @@ namespace DaggerfallWorkshop
                 {
                     AddBillboardToBatch(dfTerrain, dfBillboardBatch, temperateWoodlandRocks, scale, steepness, terrain, x, y, 1.00f); // Stones
                 }
-            } */
+            }
             break;
             #endregion
 
