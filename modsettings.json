@@ -1,5 +1,5 @@
 {
-    "Version": "1.0",
+    "Version": "0.11.0",
     "Sections": [
         {
             "Name": "TerrainNature",
@@ -86,14 +86,21 @@
             "$version": "v1"
         },
         {
-            "Name": "Wildlife",
-            "Description": "Activate/Deactivate wildlife",
+            "Name": "Nature",
+            "Description": "Activate/Deactivate nature and wildlife",
             "IsAdvanced": false,
             "Keys": [
                 {
                     "Value": true,
                     "Name": "Fireflies",
                     "Description": "Activate/Deactivate fireflies at night",
+                    "$version": "v1",
+                    "$type": "DaggerfallWorkshop.Game.Utility.ModSupport.ModSettings.ToggleKey"
+                },
+                {
+                    "Value": true,
+                    "Name": "ShootingStars",
+                    "Description": "Activate/Deactivate shooting stars at night",
                     "$version": "v1",
                     "$type": "DaggerfallWorkshop.Game.Utility.ModSupport.ModSettings.ToggleKey"
                 }

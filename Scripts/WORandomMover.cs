@@ -34,6 +34,7 @@ public class WORandomMover : MonoBehaviour
   float t = 0f;
 
   void Awake() {
+    startPos = transform.position;
     dfUnity = GameObject.Find("DaggerfallUnity").GetComponent<DaggerfallUnity>();
     rb = GetComponent<Rigidbody>();
     sRenderer = GetComponent<SpriteRenderer>();
@@ -43,7 +44,6 @@ public class WORandomMover : MonoBehaviour
 
   void Start()
   {
-    startPos = transform.position;
     my_StartTime = Random.Range(1030, 1100);
     my_EndTime = Random.Range(340, 370);
     light_offset = Random.Range(0f,1f);
@@ -60,7 +60,6 @@ public class WORandomMover : MonoBehaviour
       if (!isOn) {
         init = true;
         m_Alpha = 0f;
-        transform.position = startPos;
       }
       isOn = true;
     } else {
@@ -94,7 +93,7 @@ public class WORandomMover : MonoBehaviour
     if (isOn && !init) {
       t += Time.fixedDeltaTime;
 
-      m_Material.SetColor("_Color", new Color(1f, 1f, 1f, Mathf.PingPong(Time.time * pulseFactor, 1f)));
+      m_Material.SetColor("_Color", new Color(1f, 1f, 1f, -1 + (Mathf.PingPong(Time.time * pulseFactor, 1f) * 2)));
 
       if (randomizePosChangeTime) {
         if (t > Random.Range(0.3f, 3)) {
@@ -120,8 +119,6 @@ public class WORandomMover : MonoBehaviour
       dirVect = targetPos - transform.localPosition;
       if (Time.timeScale == 1f) {
         rb.AddForce(dirVect * speed);
-      } else {
-        transform.position = startPos;
       }
     }
 

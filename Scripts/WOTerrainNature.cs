@@ -21,6 +21,7 @@ namespace DaggerfallWorkshop
     readonly bool dynamicNatureClearance;
     readonly bool vegetationInLocations;
     readonly bool firefliesExist;
+    readonly bool shootingStarsExist;
     static float generalNatureClearance;
     static float natureClearance1;
     static float natureClearance2;
@@ -31,6 +32,7 @@ namespace DaggerfallWorkshop
     const float maxSteepness   = 50f; // 50
     const float slopeSinkRatio = 70f; // 70 - Sink flats slightly into ground as slope increases to prevent floaty trees.
     public GameObject firefly = Resources.Load("Firefly") as GameObject;
+    public GameObject shootingStar = Resources.Load("ShootingStars") as GameObject;
 
     // Chance for different terrain layout
     public float mapStyleChance0 = 30f;
@@ -163,6 +165,7 @@ namespace DaggerfallWorkshop
       bool dNClearance,
       bool vegInLoc,
       bool fireflies,
+      bool shootingStars,
       float gNClearance,
       float nClearance1,
       float nClearance2,
@@ -186,6 +189,8 @@ namespace DaggerfallWorkshop
         Debug.Log("Wilderness Overhaul: Setting General Nature Clearance: " + generalNatureClearance);
         firefliesExist = fireflies;
         Debug.Log("Wilderness Overhaul: Generate Fireflies at Night: " + firefliesExist);
+        shootingStarsExist = shootingStars;
+        Debug.Log("Wilderness Overhaul: Generate Shooting Stars at Night: " + shootingStarsExist);
         natureClearance1  = nClearance1;
         Debug.Log("Wilderness Overhaul: Setting Nature Clearance 1: " + natureClearance1);
         natureClearance2  = nClearance2;
@@ -1150,6 +1155,14 @@ namespace DaggerfallWorkshop
           if (tile == 0 || height <= 0)
             continue;
 
+          float rndShootingStar = Random.Range(0.0f,100.0f);
+          if (rndShootingStar <= 0.01f && shootingStarsExist)
+          {
+            Vector3 shootingStarPos = new Vector3(dfTerrain.transform.position.x, dfTerrain.transform.position.z, 0);
+            var shootingStarInstance = GameObject.Instantiate(shootingStar, new Vector3(shootingStarPos.x, terrain.SampleHeight(new Vector3(x * scale, 0, y * scale) + terrain.transform.position) + 700, shootingStarPos.y), Quaternion.identity, dfBillboardBatch.transform);
+            shootingStarInstance.transform.rotation = Quaternion.Euler(90, 0, 0);
+          }
+
           int record = (int)Mathf.Round(Random.Range(1, 32));
           switch (climate.WorldClimate)
           {
@@ -1265,7 +1278,7 @@ namespace DaggerfallWorkshop
                       for (int i = 0; i < Random.Range(1,5); i++)
                       {
                         Vector3 pos = new Vector3((x + Random.Range(-6,6)) * scale, 0, (y + Random.Range(-6,6)) * scale);
-                        var fireflyInstance = GameObject.Instantiate(firefly, new Vector3(pos.x, terrain.SampleHeight(pos + terrain.transform.position)  + Random.Range(1,4), pos.z), Quaternion.identity, dfBillboardBatch.transform);
+                        var fireflyInstance = GameObject.Instantiate(firefly, new Vector3(pos.x, terrain.SampleHeight(pos + terrain.transform.position) + Random.Range(1,4), pos.z), Quaternion.identity, dfBillboardBatch.transform);
                       }
                     }
 
@@ -1280,7 +1293,7 @@ namespace DaggerfallWorkshop
                         for (int i = 0; i < Random.Range(5,20); i++)
                         {
                           Vector3 pos = new Vector3((x + Random.Range(-6,6)) * scale, 0, (y + Random.Range(-6,6)) * scale);
-                          var fireflyInstance = GameObject.Instantiate(firefly, new Vector3(pos.x, terrain.SampleHeight(pos + terrain.transform.position)  + Random.Range(1,4), pos.z), Quaternion.identity, dfBillboardBatch.transform);
+                          var fireflyInstance = GameObject.Instantiate(firefly, new Vector3(pos.x, terrain.SampleHeight(pos + terrain.transform.position) + Random.Range(1,4), pos.z), Quaternion.identity, dfBillboardBatch.transform);
                         }
                       }
                     }
@@ -1296,7 +1309,7 @@ namespace DaggerfallWorkshop
                         for (int i = 0; i < Random.Range(40,120); i++)
                         {
                           Vector3 pos = new Vector3((x + Random.Range(-6,6)) * scale, 0, (y + Random.Range(-6,6)) * scale);
-                          var fireflyInstance = GameObject.Instantiate(firefly, new Vector3(pos.x, terrain.SampleHeight(pos + terrain.transform.position)  + Random.Range(1,4), pos.z), Quaternion.identity, dfBillboardBatch.transform);
+                          var fireflyInstance = GameObject.Instantiate(firefly, new Vector3(pos.x, terrain.SampleHeight(pos + terrain.transform.position) + Random.Range(1,4), pos.z), Quaternion.identity, dfBillboardBatch.transform);
                         }
                       }
                     }
