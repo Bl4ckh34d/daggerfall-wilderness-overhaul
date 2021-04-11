@@ -17,6 +17,7 @@ namespace WildernessOverhaul
 
         bool dynamicVegetationClearance;
         bool vegetationInLocations;
+        bool fireflies;
         float generalNatureClearance;
         float natureClearance1;
         float natureClearance2;
@@ -44,6 +45,7 @@ namespace WildernessOverhaul
             ModSettings settings = mod.GetSettings();
             dynamicVegetationClearance = settings.GetValue<bool>("TerrainNature", "DynamicVegetationClearance");
             vegetationInLocations = settings.GetValue<bool>("TerrainNature", "VegetationInsideJungleLocations");
+            fireflies = settings.GetValue<bool>("Wildlife", "Fireflies");
             generalNatureClearance = settings.GetValue<float>("TerrainNature", "GeneralNatureClearance");
             natureClearance1 = settings.GetValue<float>("DynamicNatureClearance", "Cities");
             natureClearance2 = settings.GetValue<float>("DynamicNatureClearance", "Hamlets");
@@ -55,6 +57,7 @@ namespace WildernessOverhaul
                 DREAMModEnabled,
                 dynamicVegetationClearance,
                 vegetationInLocations,
+                fireflies,
                 generalNatureClearance,
                 natureClearance1,
                 natureClearance2,

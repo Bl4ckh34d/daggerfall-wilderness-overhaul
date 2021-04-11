@@ -20,6 +20,7 @@ namespace DaggerfallWorkshop
     //Mod Settings
     readonly bool dynamicNatureClearance;
     readonly bool vegetationInLocations;
+    readonly bool firefliesExist;
     static float generalNatureClearance;
     static float natureClearance1;
     static float natureClearance2;
@@ -161,6 +162,7 @@ namespace DaggerfallWorkshop
       bool DMEnabled,
       bool dNClearance,
       bool vegInLoc,
+      bool fireflies,
       float gNClearance,
       float nClearance1,
       float nClearance2,
@@ -182,6 +184,8 @@ namespace DaggerfallWorkshop
         Debug.Log("Wilderness Overhaul: Setting Vegetation in Jungle Location: " + vegetationInLocations);
         generalNatureClearance = gNClearance;
         Debug.Log("Wilderness Overhaul: Setting General Nature Clearance: " + generalNatureClearance);
+        firefliesExist = fireflies;
+        Debug.Log("Wilderness Overhaul: Generate Fireflies at Night: " + firefliesExist);
         natureClearance1  = nClearance1;
         Debug.Log("Wilderness Overhaul: Setting Nature Clearance 1: " + natureClearance1);
         natureClearance2  = nClearance2;
@@ -1257,7 +1261,7 @@ namespace DaggerfallWorkshop
                     AddBillboardToBatch(dfTerrain, dfBillboardBatch, temperateWoodlandBushes, scale, steepness, terrain, x, y, 1.00f); // Bushes
 
                     float rndFirefly = Random.Range(0.0f,100.0f);
-                    if (rndFirefly <= 0.1f && DaggerfallUnity.Instance.WorldTime.Now.SeasonValue != DaggerfallDateTime.Seasons.Winter) { // Firefly
+                    if (rndFirefly <= 0.1f && DaggerfallUnity.Instance.WorldTime.Now.SeasonValue != DaggerfallDateTime.Seasons.Winter && firefliesExist && terrainDist < 2 ) { // Firefly
                       for (int i = 0; i < Random.Range(1,5); i++)
                       {
                         Vector3 pos = new Vector3((x + Random.Range(-6,6)) * scale, 0, (y + Random.Range(-6,6)) * scale);
@@ -1272,7 +1276,7 @@ namespace DaggerfallWorkshop
                       AddBillboardToBatch(dfTerrain, dfBillboardBatch, temperateWoodlandBushes, scale, steepness, terrain, x, y, 1.50f); // Bushes
 
                       rndFirefly = Random.Range(0.0f,100.0f);
-                      if (rndFirefly <= 0.1f && DaggerfallUnity.Instance.WorldTime.Now.SeasonValue != DaggerfallDateTime.Seasons.Winter) { // Firefly
+                      if (rndFirefly <= 0.5f && DaggerfallUnity.Instance.WorldTime.Now.SeasonValue != DaggerfallDateTime.Seasons.Winter && firefliesExist && terrainDist < 2) { // Firefly
                         for (int i = 0; i < Random.Range(5,20); i++)
                         {
                           Vector3 pos = new Vector3((x + Random.Range(-6,6)) * scale, 0, (y + Random.Range(-6,6)) * scale);
@@ -1288,7 +1292,7 @@ namespace DaggerfallWorkshop
                       AddBillboardToBatch(dfTerrain, dfBillboardBatch, temperateWoodlandBushes, scale, steepness, terrain, x, y, 1.25f); // Bushes
 
                       rndFirefly = Random.Range(0.0f,100.0f);
-                      if (rndFirefly <= 0.1f && DaggerfallUnity.Instance.WorldTime.Now.SeasonValue != DaggerfallDateTime.Seasons.Winter) { // Firefly
+                      if (rndFirefly <= 0.3f && DaggerfallUnity.Instance.WorldTime.Now.SeasonValue != DaggerfallDateTime.Seasons.Winter && firefliesExist && terrainDist < 2) { // Firefly
                         for (int i = 0; i < Random.Range(40,120); i++)
                         {
                           Vector3 pos = new Vector3((x + Random.Range(-6,6)) * scale, 0, (y + Random.Range(-6,6)) * scale);

@@ -84,6 +84,21 @@
                 }
             ],
             "$version": "v1"
+        },
+        {
+            "Name": "Wildlife",
+            "Description": "Activate/Deactivate wildlife",
+            "IsAdvanced": false,
+            "Keys": [
+                {
+                    "Value": true,
+                    "Name": "Fireflies",
+                    "Description": "Activate/Deactivate fireflies at night",
+                    "$version": "v1",
+                    "$type": "DaggerfallWorkshop.Game.Utility.ModSupport.ModSettings.ToggleKey"
+                }
+            ],
+            "$version": "v1"
         }
     ]
 }
