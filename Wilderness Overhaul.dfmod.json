@@ -11,6 +11,7 @@
         "Assets/Game/Mods/Wilderness Overhaul/Scripts/WOTerrainNature.cs",
         "Assets/Game/Mods/Wilderness Overhaul/Scripts/WOTerrainTexturing.cs",
         "Assets/Game/Mods/Wilderness Overhaul/Wilderness Overhaul.dfmod.json",
-        "Assets/Game/Mods/Wilderness Overhaul/modsettings.json"
+        "Assets/Game/Mods/Wilderness Overhaul/modsettings.json",
+        "Assets/Game/Mods/Wilderness Overhaul/Resources/Firefly.prefab"
     ]
 }

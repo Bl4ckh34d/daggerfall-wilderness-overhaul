@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using Unity.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using DaggerfallConnect.Arena2;
 using DaggerfallConnect;
@@ -28,6 +29,7 @@ namespace DaggerfallWorkshop
 
     const float maxSteepness   = 50f; // 50
     const float slopeSinkRatio = 70f; // 70 - Sink flats slightly into ground as slope increases to prevent floaty trees.
+    public GameObject firefly = Resources.Load("Firefly") as GameObject;
 
     // Chance for different terrain layout
     public float mapStyleChance0 = 30f;
@@ -261,6 +263,9 @@ namespace DaggerfallWorkshop
       // Remove exiting billboards
       dfBillboardBatch.Clear();
       MeshReplacement.ClearNatureGameObjects(terrain);
+      foreach(Transform child in dfBillboardBatch.transform) {
+        GameObject.Destroy(child.gameObject);
+      }
 
       // Seed random with terrain key
       Random.InitState(TerrainHelper.MakeTerrainKey(dfTerrain.MapPixelX, dfTerrain.MapPixelY));
@@ -1062,13 +1067,13 @@ namespace DaggerfallWorkshop
 
       if (mapStyle < 1)
         mapStyleChance = mapStyleChance0;
-      else if (mapStyle >= 1 && mapStyle < 2)
+      if (mapStyle < 2)
         mapStyleChance = mapStyleChance1;
-      else if (mapStyle >= 2 && mapStyle < 3)
+      if (mapStyle < 3)
         mapStyleChance = mapStyleChance2;
-      else if (mapStyle >= 3 && mapStyle < 4)
+      if (mapStyle < 4)
         mapStyleChance = mapStyleChance3;
-      else if (mapStyle >= 4 && mapStyle < 5)
+      if (mapStyle < 5)
         mapStyleChance = mapStyleChance4;
       else
         mapStyleChance = mapStyleChance5;
@@ -1156,8 +1161,16 @@ namespace DaggerfallWorkshop
                 {
                   AddBillboardToBatch(dfTerrain, dfBillboardBatch, temperateWoodlandBeach, scale, steepness, terrain, x, y, 0.25f); // Beach
                 }
-                else
-                {
+                else if (dfTerrain.MapData.heightmapSamples[hy, hx] * maxTerrainHeight >= beachLine && dfTerrain.MapData.heightmapSamples[hy, hx] < Random.Range(0.15f,0.18f)) {
+                    if(Random.Range(0,100) < Random.Range(50,60))
+                    {
+                      AddBillboardToBatch(dfTerrain, dfBillboardBatch, temperateWoodlandDeadTrees, scale, steepness, terrain, x, y, 0.25f); // Dead Trees
+                    }
+                    else {
+                        AddBillboardToBatch(dfTerrain, dfBillboardBatch, temperateWoodlandBeach, scale, steepness, terrain, x, y, 0.25f); // Beach
+                    }
+                }
+                else {
                   if(GetWeightedRecord(weight) == "forest")
                   {
                     if(Random.Range(0,100) < Random.Range(80,90))
@@ -1243,11 +1256,29 @@ namespace DaggerfallWorkshop
 
                     AddBillboardToBatch(dfTerrain, dfBillboardBatch, temperateWoodlandBushes, scale, steepness, terrain, x, y, 1.00f); // Bushes
 
+                    float rndFirefly = Random.Range(0.0f,100.0f);
+                    if (rndFirefly <= 0.1f && DaggerfallUnity.Instance.WorldTime.Now.SeasonValue != DaggerfallDateTime.Seasons.Winter) { // Firefly
+                      for (int i = 0; i < Random.Range(1,5); i++)
+                      {
+                        Vector3 pos = new Vector3((x + Random.Range(-6,6)) * scale, 0, (y + Random.Range(-6,6)) * scale);
+                        var fireflyInstance = GameObject.Instantiate(firefly, new Vector3(pos.x, terrain.SampleHeight(pos + terrain.transform.position)  + Random.Range(1,4), pos.z), Quaternion.identity, dfBillboardBatch.transform);
+                      }
+                    }
+
                     if(rndMinor < mapStyleChance1)
                     {
                       AddBillboardToBatch(dfTerrain, dfBillboardBatch, temperateWoodlandTrees, scale, steepness, terrain, x, y, 1.75f); // Trees
 
                       AddBillboardToBatch(dfTerrain, dfBillboardBatch, temperateWoodlandBushes, scale, steepness, terrain, x, y, 1.50f); // Bushes
+
+                      rndFirefly = Random.Range(0.0f,100.0f);
+                      if (rndFirefly <= 0.1f && DaggerfallUnity.Instance.WorldTime.Now.SeasonValue != DaggerfallDateTime.Seasons.Winter) { // Firefly
+                        for (int i = 0; i < Random.Range(5,20); i++)
+                        {
+                          Vector3 pos = new Vector3((x + Random.Range(-6,6)) * scale, 0, (y + Random.Range(-6,6)) * scale);
+                          var fireflyInstance = GameObject.Instantiate(firefly, new Vector3(pos.x, terrain.SampleHeight(pos + terrain.transform.position)  + Random.Range(1,4), pos.z), Quaternion.identity, dfBillboardBatch.transform);
+                        }
+                      }
                     }
 
                     if(rndMinor < mapStyleChance0)
@@ -1255,6 +1286,15 @@ namespace DaggerfallWorkshop
                       AddBillboardToBatch(dfTerrain, dfBillboardBatch, temperateWoodlandTrees, scale, steepness, terrain, x, y, 1.50f); // Trees
 
                       AddBillboardToBatch(dfTerrain, dfBillboardBatch, temperateWoodlandBushes, scale, steepness, terrain, x, y, 1.25f); // Bushes
+
+                      rndFirefly = Random.Range(0.0f,100.0f);
+                      if (rndFirefly <= 0.1f && DaggerfallUnity.Instance.WorldTime.Now.SeasonValue != DaggerfallDateTime.Seasons.Winter) { // Firefly
+                        for (int i = 0; i < Random.Range(40,120); i++)
+                        {
+                          Vector3 pos = new Vector3((x + Random.Range(-6,6)) * scale, 0, (y + Random.Range(-6,6)) * scale);
+                          var fireflyInstance = GameObject.Instantiate(firefly, new Vector3(pos.x, terrain.SampleHeight(pos + terrain.transform.position)  + Random.Range(1,4), pos.z), Quaternion.identity, dfBillboardBatch.transform);
+                        }
+                      }
                     }
                   }
                 }
@@ -1276,9 +1316,9 @@ namespace DaggerfallWorkshop
             #region Mountain Spawns
             case (int)MapsFile.Climates.Mountain:
 
-              weight += GetNoise(latitude, longitude, mountForestFrequency, mountForestAmplitude, mountForestPersistence, mountForestOctaves, 100);
+                weight += GetNoise(latitude, longitude, mountForestFrequency, mountForestAmplitude, mountForestPersistence, mountForestOctaves, 100);
 
-              if (tile == 1) // Dirt
+                if (tile == 1) // Dirt
               {
                 // Beach
                 if(dfTerrain.MapData.heightmapSamples[hy, hx] * maxTerrainHeight < beachLine)
@@ -1441,7 +1481,7 @@ namespace DaggerfallWorkshop
                       }
                     }
                   }
-                  else if(dfTerrain.MapData.heightmapSamples[hy, hx] < treeLine && dfTerrain.MapData.heightmapSamples[hy, hx] >= Random.Range(0.70f,0.75f))
+                  else if(dfTerrain.MapData.heightmapSamples[hy, hx] < treeLine && dfTerrain.MapData.heightmapSamples[hy, hx] >= Random.Range(0.70f,0.72f))
                   {
                     if (GetWeightedRecord(weight, mountForestLimit1, mountForestLimit2) == "flower")
                     {
@@ -1483,7 +1523,7 @@ namespace DaggerfallWorkshop
 
                         if(rndMinor < mapStyleChance0)
                         {
-                          for(int i = 0; i < (int)Mathf.Round(Random.Range(0,2)); i++)
+                          for(int i = 0; i < (int)Mathf.Round(Random.Range(1,2)); i++)
                           {
                             AddBillboardToBatch(dfTerrain, dfBillboardBatch, mountainsNeedleTrees, scale, steepness, terrain, x, y, 1.75f); // Trees
                           }
@@ -1534,7 +1574,7 @@ namespace DaggerfallWorkshop
                       }
                     }
                   }
-                  else if(dfTerrain.MapData.heightmapSamples[hy, hx] < Random.Range(0.70f,0.75f) && dfTerrain.MapData.heightmapSamples[hy, hx] > Random.Range(0.45f,0.40f))
+                  else if(dfTerrain.MapData.heightmapSamples[hy, hx] < Random.Range(0.70f,0.72f) && dfTerrain.MapData.heightmapSamples[hy, hx] > Random.Range(0.45f,0.40f))
                   {
                     if (GetWeightedRecord(weight, mountForestLimit1, mountForestLimit2) == "forest")
                     {

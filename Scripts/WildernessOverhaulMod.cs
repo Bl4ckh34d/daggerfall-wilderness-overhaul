@@ -12,8 +12,8 @@ namespace WildernessOverhaul
         static WOTerrainTexturing woTexturing;
         static WOTerrainNature woNature;
 
-        static Mod DREAMMod = ModManager.Instance.GetModFromGUID("5e1af2fc-2c12-4d05-829c-12b37f396e19");
-        bool DREAMModEnabled = DREAMMod != null && DREAMMod.Enabled;
+        static Mod DREAMMod;
+        static bool DREAMModEnabled;
 
         bool dynamicVegetationClearance;
         bool vegetationInLocations;
@@ -26,10 +26,15 @@ namespace WildernessOverhaul
 
         [Invoke(StateManager.StateTypes.Start, 0)]
         public static void Init(InitParams initParams)
-        {            
+        {
             mod = initParams.Mod;
             var go = new GameObject(mod.Title);
             go.AddComponent<WildernessOverhaulMod>();
+            if (ModManager.Instance.GetModFromGUID("5e1af2fc-2c12-4d05-829c-12b37f396e19") != null) {
+                DREAMMod = ModManager.Instance.GetModFromGUID("5e1af2fc-2c12-4d05-829c-12b37f396e19");
+                if (DREAMMod != null && DREAMMod.Enabled)
+                    DREAMModEnabled = true;
+            }
         }
 
         void Awake()
