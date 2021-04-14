@@ -47,7 +47,7 @@ public class WODistanceChecker : MonoBehaviour
   void FixedUpdate()
   {
     if (counter <= 0) {
-      if (Vector3.Distance(playerTransform.position, transform.position) <= 1000f) {
+      if (Vector3.Distance(playerTransform.position, transform.position) <= 200f) {
         if (!firefliesActive) {
           ActivateAllChildren();
           foreach(WORandomMover firefly in allChildren) {
@@ -64,7 +64,7 @@ public class WODistanceChecker : MonoBehaviour
           }
         }
       }
-      counter = 5f;
+      counter = 2f;
     } else {
       counter -= Time.fixedDeltaTime;
     }

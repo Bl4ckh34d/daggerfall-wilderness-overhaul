@@ -1294,7 +1294,7 @@ namespace DaggerfallWorkshop
                                             fireflyContainer.transform.parent = dfBillboardBatch.transform;
                                             fireflyContainer.transform.position = new Vector3(dfTerrain.transform.position.x + (x * scale), terrain.SampleHeight(new Vector3(x * scale, 0, y * scale) + terrain.transform.position), dfTerrain.transform.position.z + (y * scale));
                                             fireflyContainer.AddComponent<WODistanceChecker>();
-                                            for (int i = 0; i < Random.Range(3, 8); i++)
+                                            for (int i = 0; i < Random.Range(10, 25); i++)
                                             {
                                                 fireflyContainer.GetComponent<WODistanceChecker>().CreateFirefly(fireflyContainer.transform.position, x, y, scale, terrain, 10); // Firefly
                                             }
@@ -1309,14 +1309,14 @@ namespace DaggerfallWorkshop
                                             AddBillboardToBatch(dfTerrain, dfBillboardBatch, temperateWoodlandBushes, scale, steepness, terrain, x, y, 1.50f); // Bushes
 
                                             rndFirefly = Random.Range(0.0f, 100.0f);
-                                            if (rndFirefly <= 0.1f && DaggerfallUnity.Instance.WorldTime.Now.SeasonValue != DaggerfallDateTime.Seasons.Winter && firefliesExist)
+                                            if (rndFirefly <= 0.05f && DaggerfallUnity.Instance.WorldTime.Now.SeasonValue != DaggerfallDateTime.Seasons.Winter && firefliesExist)
                                             { // Firefly
                                                 GameObject fireflyContainer = new GameObject();
                                                 fireflyContainer.name = "fireflyContainer";
                                                 fireflyContainer.transform.parent = dfBillboardBatch.transform;
                                                 fireflyContainer.transform.position = new Vector3(dfTerrain.transform.position.x + (x * scale), terrain.SampleHeight(new Vector3(x * scale, 0, y * scale) + terrain.transform.position), dfTerrain.transform.position.z + (y * scale));
                                                 fireflyContainer.AddComponent<WODistanceChecker>();
-                                                for (int i = 0; i < Random.Range(10, 30); i++)
+                                                for (int i = 0; i < Random.Range(50, 100); i++)
                                                 {
                                                     fireflyContainer.GetComponent<WODistanceChecker>().CreateFirefly(fireflyContainer.transform.position, x, y, scale, terrain, 25); // Firefly
                                                 }
@@ -1331,14 +1331,14 @@ namespace DaggerfallWorkshop
                                             AddBillboardToBatch(dfTerrain, dfBillboardBatch, temperateWoodlandBushes, scale, steepness, terrain, x, y, 1.25f); // Bushes
 
                                             rndFirefly = Random.Range(0.0f, 100.0f);
-                                            if (rndFirefly <= 0.1f && DaggerfallUnity.Instance.WorldTime.Now.SeasonValue != DaggerfallDateTime.Seasons.Winter && firefliesExist)
+                                            if (rndFirefly <= 0.025f && DaggerfallUnity.Instance.WorldTime.Now.SeasonValue != DaggerfallDateTime.Seasons.Winter && firefliesExist)
                                             { // Firefly
                                                 GameObject fireflyContainer = new GameObject();
                                                 fireflyContainer.name = "fireflyContainer";
                                                 fireflyContainer.transform.parent = dfBillboardBatch.transform;
                                                 fireflyContainer.transform.position = new Vector3(dfTerrain.transform.position.x + (x * scale), terrain.SampleHeight(new Vector3(x * scale, 0, y * scale) + terrain.transform.position), dfTerrain.transform.position.z + (y * scale));
                                                 fireflyContainer.AddComponent<WODistanceChecker>();
-                                                for (int i = 0; i < Random.Range(30, 50); i++)
+                                                for (int i = 0; i < Random.Range(100, 150); i++)
                                                 {
                                                     fireflyContainer.GetComponent<WODistanceChecker>().CreateFirefly(fireflyContainer.transform.position, x, y, scale, terrain, 45); // Firefly
                                                 }

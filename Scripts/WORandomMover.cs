@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 using DaggerfallWorkshop;
+using DaggerfallWorkshop.Game;
+using DaggerfallWorkshop.Game.Weather;
 
 public class WORandomMover : MonoBehaviour
 {
@@ -19,6 +21,7 @@ public class WORandomMover : MonoBehaviour
   Material h_Material;
   GameObject player;
   Transform glowLight;
+  WeatherManager weatherManager;
 
   int my_StartTime;
   int my_EndTime;
@@ -53,6 +56,7 @@ public class WORandomMover : MonoBehaviour
   void Awake()
   {
     dfUnity = GameObject.Find("DaggerfallUnity").GetComponent<DaggerfallUnity>();
+    weatherManager = GameObject.Find("WeatherManager").GetComponent<WeatherManager>();
     m_Camera = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<Camera>();
     rb = GetComponent<Rigidbody>();
     sRenderer = GetComponent<SpriteRenderer>();
@@ -77,7 +81,12 @@ public class WORandomMover : MonoBehaviour
   void FixedUpdate()
   {
     if (isPerforming) {
-      if (dfUnity.WorldTime.Now.MinuteOfDay > my_StartTime || dfUnity.WorldTime.Now.MinuteOfDay < my_EndTime)
+      if ((dfUnity.WorldTime.Now.MinuteOfDay > my_StartTime || dfUnity.WorldTime.Now.MinuteOfDay < my_EndTime) &&
+           weatherManager.PlayerWeather.WeatherType != WeatherType.Rain &&
+           weatherManager.PlayerWeather.WeatherType != WeatherType.Snow &&
+           weatherManager.PlayerWeather.WeatherType != WeatherType.Rain_Normal &&
+           weatherManager.PlayerWeather.WeatherType != WeatherType.Snow_Normal &&
+           weatherManager.PlayerWeather.WeatherType != WeatherType.Thunder)
       {
         if (!isOn)
         {
