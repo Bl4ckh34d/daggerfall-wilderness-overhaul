@@ -103,6 +103,24 @@
                     "Description": "Activate/Deactivate shooting stars at night",
                     "$version": "v1",
                     "$type": "DaggerfallWorkshop.Game.Utility.ModSupport.ModSettings.ToggleKey"
+                },
+                {
+                    "Min": 0.0,
+                    "Max": 100.0,
+                    "Value": 0.1,
+                    "Name": "ShootingStarsMinChance",
+                    "Description": "Minimum chance of shooting stars appearing",
+                    "$version": "v1",
+                    "$type": "DaggerfallWorkshop.Game.Utility.ModSupport.ModSettings.SliderFloatKey"
+                },
+                {
+                    "Min": 0.0,
+                    "Max": 100.0,
+                    "Value": 5.0,
+                    "Name": "ShootingStarsMaxChance",
+                    "Description": "Maximum chance of shooting stars appearing",
+                    "$version": "v1",
+                    "$type": "DaggerfallWorkshop.Game.Utility.ModSupport.ModSettings.SliderFloatKey"
                 }
             ],
             "$version": "v1"

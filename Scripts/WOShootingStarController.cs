@@ -25,13 +25,11 @@ public class WOShootingStarController : MonoBehaviour
     {
         if (dfUnity.WorldTime.Now.MinuteOfDay > my_StartTime || dfUnity.WorldTime.Now.MinuteOfDay < my_EndTime) {
             if (!ps.isPlaying) {
-                Debug.Log("Playing particle system");
                 ps.Play();
             }
         } else if (dfUnity.WorldTime.Now.MinuteOfDay <= my_StartTime || dfUnity.WorldTime.Now.MinuteOfDay >= my_EndTime) {
             if (ps.isPlaying) {
                 ps.Stop();
-                Debug.Log("Playing particle system");
             }
         }
     }
