@@ -233,7 +233,7 @@ namespace DaggerfallWorkshop
 			// Gets noise value
 			private float NoiseWeight(float worldX, float worldY, float height)
 			{
-				float woodlandsPersistanceRnd = woodlandsPersistance + ((height / maxTerrainHeight) * 1.5f) - 0.35f;
+				float woodlandsPersistanceRnd = woodlandsPersistance + ((height / maxTerrainHeight) * 1.4f) - 0.30f;
 				float mountainWoodsPersistanceRnd = mountainWoodsPersistance + ((height / maxTerrainHeight) * 1.5f) - 0.35f;
 				float hauntedWoodsPersistanceRnd = hauntedWoodsPersistance + ((height / maxTerrainHeight) * 1.5f) - 0.35f;
 				float mountainsPersistanceRnd;
@@ -329,7 +329,7 @@ namespace DaggerfallWorkshop
 				}
 				// Beach texture
 				// Adds a little +/- randomness to threshold so beach line isn't too regular
-				if (height <= beachElevation + (JobRand.Next(-15000000, 15000000) / 10000000f))
+				if (height <= beachElevation + (JobRand.Next(-100000000, -55000000) / 10000000f))
 				{
 					tileData[index] = dirt;
 					return;
