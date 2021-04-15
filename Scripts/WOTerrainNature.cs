@@ -22,6 +22,7 @@ namespace DaggerfallWorkshop
         readonly bool vegetationInLocations;
         readonly bool firefliesExist;
         readonly bool shootingStarsExist;
+        static float fireflyDistance;
         static float shootingStarsMinimum;
         static float shootingStarsMaximum;
         static float generalNatureClearance;
@@ -167,6 +168,7 @@ namespace DaggerfallWorkshop
           bool vegInLoc,
           bool fireflies,
           bool shootingStars,
+          float fireflyActivationDistance,
           float shootingStarsMin,
           float shootingStarsMax,
           float gNClearance,
@@ -195,6 +197,8 @@ namespace DaggerfallWorkshop
             Debug.Log("Wilderness Overhaul: Setting General Nature Clearance: " + generalNatureClearance);
             firefliesExist = fireflies;
             Debug.Log("Wilderness Overhaul: Generate Fireflies at Night: " + firefliesExist);
+            fireflyDistance = fireflyActivationDistance;
+            Debug.Log("Wilderness Overhaul: Activation Distance of Fireflies: " + fireflyDistance);
             shootingStarsExist = shootingStars;
             Debug.Log("Wilderness Overhaul: Generate Shooting Stars at Night: " + shootingStarsExist);
             shootingStarsMinimum = shootingStarsMin;
@@ -1097,13 +1101,7 @@ namespace DaggerfallWorkshop
             else
                 mapStyleChance = mapStyleChance5;
 
-            // Shooting Stars
-            Vector3 shootingStarPos = new Vector3(dfTerrain.transform.position.x, dfTerrain.transform.position.z, 0);
-            var shootingStarInstance = GameObject.Instantiate(shootingStar, new Vector3(shootingStarPos.x, 900, shootingStarPos.y), Quaternion.identity, dfBillboardBatch.transform);
-            shootingStarInstance.transform.rotation = Quaternion.Euler(90, 0, 0);
-            var sSps = shootingStarInstance.GetComponent<ParticleSystem>();
-            var emissionModule = sSps.emission;
-            emissionModule.rateOverTime = new ParticleSystem.MinMaxCurve(shootingStarsMinimum / 1000, shootingStarsMaximum / 1000);
+            AddShootingStar(dfTerrain, dfBillboardBatch, 90f, 900f, shootingStarsMinimum, shootingStarsMaximum); // Shooting Stars
 
             for (int y = 0; y < tDim; y++)
             {
@@ -1253,28 +1251,35 @@ namespace DaggerfallWorkshop
                                 }
                                 else if (GetWeightedRecord(weight, tempForestLimit1, tempForestLimit2) == "flower")
                                 {
-                                    if ((int)Mathf.Round(Random.Range(0.00f, 1.00f)) > 0.90f)
+                                    if (Random.Range(0.00f, 1.00f) > 0.95f)
                                     {
                                         AddBillboardToBatch(dfTerrain, dfBillboardBatch, temperateWoodlandMushroom, scale, steepness, terrain, x, y, 0.00f); // Mushroom
                                     }
 
-                                    for (int i = 0; i < Random.Range(1, 8); i++)
+                                    for (int i = 0; i < Random.Range(3, 10); i++)
                                     {
                                         AddBillboardToBatch(dfTerrain, dfBillboardBatch, temperateWoodlandFlowers, scale, steepness, terrain, x, y, 0.50f); // Flowers
                                     }
 
                                     float rndMinor = Random.Range(0, 100);
-                                    if (rndMinor < mapStyleChance1)
+                                    if (rndMinor < (mapStyleChance0 - 20 + (dfTerrain.MapData.heightmapSamples[hy, hx] * 100)))
                                     {
-                                        AddBillboardToBatch(dfTerrain, dfBillboardBatch, temperateWoodlandFlowers, scale, steepness, terrain, x, y, 1.00f); // Flowers
+                                        for (int i = 0; i < Random.Range(3, 8); i++)
+                                        {
+                                            AddBillboardToBatch(dfTerrain, dfBillboardBatch, temperateWoodlandFlowers, scale, steepness, terrain, x, y, 0.75f); // Flowers
+                                        }
                                     }
                                 }
                                 else if (GetWeightedRecord(weight, tempForestLimit1, tempForestLimit2) == "grass")
                                 {
                                     float rndMinor = Random.Range(0, 100);
-                                    if (rndMinor < mapStyleChance1)
+                                    if (rndMinor < 2)
                                     {
-                                        AddBillboardToBatch(dfTerrain, dfBillboardBatch, temperateWoodlandBushes, scale, steepness, terrain, x, y, 1.00f); // Bushes
+                                        for (int i = 0; i < Random.Range(10, 20); i++)
+                                        {
+                                            AddBillboardToBatch(dfTerrain, dfBillboardBatch, temperateWoodlandBushes, scale, steepness, terrain, x, y, 1.00f); // Bushes
+                                        }
+
                                     }
                                 }
                                 else if (GetWeightedRecord(weight, tempForestLimit1, tempForestLimit2) == "forest")
@@ -1282,68 +1287,56 @@ namespace DaggerfallWorkshop
                                     float rndMinor = Random.Range(0, 100);
                                     if (rndMinor < mapStyleChance)
                                     {
-                                        AddBillboardToBatch(dfTerrain, dfBillboardBatch, temperateWoodlandTrees, scale, steepness, terrain, x, y, 1.25f); // Trees
+                                        AddBillboardToBatch(dfTerrain, dfBillboardBatch, temperateWoodlandTrees, scale, steepness, terrain, x, y, 1.00f); // Trees
 
-                                        AddBillboardToBatch(dfTerrain, dfBillboardBatch, temperateWoodlandBushes, scale, steepness, terrain, x, y, 1.00f); // Bushes
-
-                                        float rndFirefly = Random.Range(0.0f, 100.0f);
-                                        if (rndFirefly <= 0.1f && DaggerfallUnity.Instance.WorldTime.Now.SeasonValue != DaggerfallDateTime.Seasons.Winter && firefliesExist)
-                                        { // Firefly
-                                            GameObject fireflyContainer = new GameObject();
-                                            fireflyContainer.name = "fireflyContainer";
-                                            fireflyContainer.transform.parent = dfBillboardBatch.transform;
-                                            fireflyContainer.transform.position = new Vector3(dfTerrain.transform.position.x + (x * scale), terrain.SampleHeight(new Vector3(x * scale, 0, y * scale) + terrain.transform.position), dfTerrain.transform.position.z + (y * scale));
-                                            fireflyContainer.AddComponent<WODistanceChecker>();
-                                            for (int i = 0; i < Random.Range(10, 25); i++)
-                                            {
-                                                fireflyContainer.GetComponent<WODistanceChecker>().CreateFirefly(fireflyContainer.transform.position, x, y, scale, terrain, 10); // Firefly
-                                            }
-                                            fireflyContainer.GetComponent<WODistanceChecker>().AddChildrenToArray();
-                                            fireflyContainer.GetComponent<WODistanceChecker>().DeactivateAllChildren();
+                                        for (int i = 0; i < Random.Range(0,2); i++)
+                                        {
+                                            AddBillboardToBatch(dfTerrain, dfBillboardBatch, temperateWoodlandBushes, scale, steepness, terrain, x, y, 1.25f); // Bushes
                                         }
+
+                                        AddFirefly(dfTerrain, terrain, dfBillboardBatch, Random.Range(0.0f, 100.0f), 1f * (1 - dfTerrain.MapData.heightmapSamples[hy, hx]), scale, x, y, 5, 15, 35, firefliesExist); // Fireflies
 
                                         if (rndMinor < mapStyleChance1)
                                         {
-                                            AddBillboardToBatch(dfTerrain, dfBillboardBatch, temperateWoodlandTrees, scale, steepness, terrain, x, y, 1.75f); // Trees
+                                            AddBillboardToBatch(dfTerrain, dfBillboardBatch, temperateWoodlandTrees, scale, steepness, terrain, x, y, 1.50f); // Trees
 
-                                            AddBillboardToBatch(dfTerrain, dfBillboardBatch, temperateWoodlandBushes, scale, steepness, terrain, x, y, 1.50f); // Bushes
-
-                                            rndFirefly = Random.Range(0.0f, 100.0f);
-                                            if (rndFirefly <= 0.05f && DaggerfallUnity.Instance.WorldTime.Now.SeasonValue != DaggerfallDateTime.Seasons.Winter && firefliesExist)
-                                            { // Firefly
-                                                GameObject fireflyContainer = new GameObject();
-                                                fireflyContainer.name = "fireflyContainer";
-                                                fireflyContainer.transform.parent = dfBillboardBatch.transform;
-                                                fireflyContainer.transform.position = new Vector3(dfTerrain.transform.position.x + (x * scale), terrain.SampleHeight(new Vector3(x * scale, 0, y * scale) + terrain.transform.position), dfTerrain.transform.position.z + (y * scale));
-                                                fireflyContainer.AddComponent<WODistanceChecker>();
-                                                for (int i = 0; i < Random.Range(50, 100); i++)
-                                                {
-                                                    fireflyContainer.GetComponent<WODistanceChecker>().CreateFirefly(fireflyContainer.transform.position, x, y, scale, terrain, 25); // Firefly
-                                                }
-                                                fireflyContainer.GetComponent<WODistanceChecker>().AddChildrenToArray();
+                                            for (int i = 0; i < Random.Range(0,2); i++)
+                                            {
+                                                AddBillboardToBatch(dfTerrain, dfBillboardBatch, temperateWoodlandBushes, scale, steepness, terrain, x, y, 1.75f); // Bushes
                                             }
+
+                                            if (Random.Range(0.0f, 1.0f) < dfTerrain.MapData.heightmapSamples[hy, hx] * 0.5f)
+                                            {
+                                                for (int i = 0; i < Random.Range(3,5); i++)
+                                                {
+                                                    AddBillboardToBatch(dfTerrain, dfBillboardBatch, temperateWoodlandBushes, scale, steepness, terrain, x, y, 1.75f); // Bushes
+                                                }
+                                            }
+
+                                            AddFirefly(dfTerrain, terrain, dfBillboardBatch, Random.Range(0.0f, 100.0f), 2f * (1 - dfTerrain.MapData.heightmapSamples[hy, hx]), scale, x, y, 10, 50, 100, firefliesExist); // Fireflies
                                         }
 
                                         if (rndMinor < mapStyleChance0)
                                         {
-                                            AddBillboardToBatch(dfTerrain, dfBillboardBatch, temperateWoodlandTrees, scale, steepness, terrain, x, y, 1.50f); // Trees
-
-                                            AddBillboardToBatch(dfTerrain, dfBillboardBatch, temperateWoodlandBushes, scale, steepness, terrain, x, y, 1.25f); // Bushes
-
-                                            rndFirefly = Random.Range(0.0f, 100.0f);
-                                            if (rndFirefly <= 0.025f && DaggerfallUnity.Instance.WorldTime.Now.SeasonValue != DaggerfallDateTime.Seasons.Winter && firefliesExist)
-                                            { // Firefly
-                                                GameObject fireflyContainer = new GameObject();
-                                                fireflyContainer.name = "fireflyContainer";
-                                                fireflyContainer.transform.parent = dfBillboardBatch.transform;
-                                                fireflyContainer.transform.position = new Vector3(dfTerrain.transform.position.x + (x * scale), terrain.SampleHeight(new Vector3(x * scale, 0, y * scale) + terrain.transform.position), dfTerrain.transform.position.z + (y * scale));
-                                                fireflyContainer.AddComponent<WODistanceChecker>();
-                                                for (int i = 0; i < Random.Range(100, 150); i++)
-                                                {
-                                                    fireflyContainer.GetComponent<WODistanceChecker>().CreateFirefly(fireflyContainer.transform.position, x, y, scale, terrain, 45); // Firefly
-                                                }
-                                                fireflyContainer.GetComponent<WODistanceChecker>().AddChildrenToArray();
+                                            for (int i = 0; i < Random.Range(1,3); i++)
+                                            {
+                                                AddBillboardToBatch(dfTerrain, dfBillboardBatch, temperateWoodlandTrees, scale, steepness, terrain, x, y, 1.25f); // Trees
                                             }
+
+                                            for (int i = 0; i < Random.Range(1,3); i++)
+                                            {
+                                                AddBillboardToBatch(dfTerrain, dfBillboardBatch, temperateWoodlandBushes, scale, steepness, terrain, x, y, 1.50f); // Bushes
+                                            }
+
+                                            if (Random.Range(0.0f, 1.0f) < dfTerrain.MapData.heightmapSamples[hy, hx] * 0.5f)
+                                            {
+                                                for (int i = 0; i < Random.Range(3,5); i++)
+                                                {
+                                                    AddBillboardToBatch(dfTerrain, dfBillboardBatch, temperateWoodlandBushes, scale, steepness, terrain, x, y, 1.50f); // Bushes
+                                                }
+                                            }
+
+                                            AddFirefly(dfTerrain, terrain, dfBillboardBatch, Random.Range(0.0f, 100.0f), 3f * (1 - dfTerrain.MapData.heightmapSamples[hy, hx]), scale, x, y, 15, 100, 150, firefliesExist); // Fireflies
                                         }
                                     }
 
@@ -3767,7 +3760,7 @@ namespace DaggerfallWorkshop
             float height = terrain.SampleHeight(pos + terrain.transform.position);
             pos.y = height - (steepness / slopeSinkRatio);
 
-            if (!IsOnAnyWaterTile(dfTerrain, pos, scale) && !IsCollidingWithBuilding(dfTerrain, pos, scale) && !IsOnOrCloseToStreetTile(dfTerrain, pos, scale))
+            if (!IsOnAnyWaterTile(dfTerrain, pos, scale) && !IsCollidingWithBuilding(dfTerrain, pos, scale) && !IsOnOrCloseToStreetTile(dfTerrain, pos, scale) && steepness < Random.Range(40f,50f))
             {
                 dfBillboardBatch.AddItem(billboardCollection[rnd], pos);
             }
@@ -3789,7 +3782,7 @@ namespace DaggerfallWorkshop
             float height = terrain.SampleHeight(pos + terrain.transform.position);
             pos.y = height - (steepness / slopeSinkRatio);
 
-            if (!IsOnAnyWaterTile(dfTerrain, pos, scale) && !IsCollidingWithBuilding(dfTerrain, pos, scale) && !IsOnOrCloseToStreetTile(dfTerrain, pos, scale))
+            if (!IsOnAnyWaterTile(dfTerrain, pos, scale) && !IsCollidingWithBuilding(dfTerrain, pos, scale) && !IsOnOrCloseToStreetTile(dfTerrain, pos, scale) && steepness < Random.Range(30f,45f))
             {
                 dfBillboardBatch.AddItem(billboardCollection[record], pos);
             }
@@ -3811,10 +3804,58 @@ namespace DaggerfallWorkshop
             float height = terrain.SampleHeight(pos + terrain.transform.position);
             pos.y = height - (steepness / slopeSinkRatio);
 
-            if (IsOnOrCloseToShallowWaterTile(dfTerrain, pos, scale) && !IsCollidingWithBuilding(dfTerrain, pos, scale) && !IsOnOrCloseToStreetTile(dfTerrain, pos, scale))
+            if (IsOnOrCloseToShallowWaterTile(dfTerrain, pos, scale) && !IsCollidingWithBuilding(dfTerrain, pos, scale) && !IsOnOrCloseToStreetTile(dfTerrain, pos, scale) && steepness < Random.Range(30f,45f))
             {
                 dfBillboardBatch.AddItem(billboardCollection[rnd], pos);
             }
+        }
+
+        public static void AddFirefly(
+          DaggerfallTerrain dfTerrain,
+          Terrain terrain,
+          DaggerfallBillboardBatch dfBillboardBatch,
+          float rndFirefly,
+          float fireflyChance,
+          float scale,
+          int x,
+          int y,
+          float distanceVariation,
+          int minNumber,
+          int maxNumber,
+          bool firefliesExist)
+        {
+            if (rndFirefly <= 0.1f && DaggerfallUnity.Instance.WorldTime.Now.SeasonValue != DaggerfallDateTime.Seasons.Winter && firefliesExist)
+            {
+                GameObject fireflyContainer = new GameObject();
+                fireflyContainer.name = "fireflyContainer";
+                fireflyContainer.transform.parent = dfBillboardBatch.transform;
+                fireflyContainer.transform.position = new Vector3(dfTerrain.transform.position.x + (x * scale), terrain.SampleHeight(new Vector3(x * scale, 0, y * scale) + dfTerrain.transform.position) + dfTerrain.transform.position.y, dfTerrain.transform.position.z + (y * scale));
+                fireflyContainer.AddComponent<WODistanceChecker>();
+                fireflyContainer.GetComponent<WODistanceChecker>().distance = fireflyDistance;
+                for (int i = 0; i < Random.Range(minNumber, maxNumber); i++)
+                {
+                    fireflyContainer.GetComponent<WODistanceChecker>().CreateFirefly(dfTerrain, x, y, scale, terrain, distanceVariation); // Firefly
+                }
+                fireflyContainer.GetComponent<WODistanceChecker>().AddChildrenToArray();
+                fireflyContainer.GetComponent<WODistanceChecker>().DeactivateAllChildren();
+            }
+        }
+
+        public static void AddShootingStar(
+          DaggerfallTerrain dfTerrain,
+          DaggerfallBillboardBatch dfBillboardBatch,
+          float rotationAngleX,
+          float heightInTheSky,
+          float sSMin,
+          float sSMax
+          )
+        {
+            Vector3 shootingStarPos = new Vector3(dfTerrain.transform.position.x, dfTerrain.transform.position.z, 0);
+            var shootingStarInstance = GameObject.Instantiate(Resources.Load("ShootingStars") as GameObject, new Vector3(shootingStarPos.x, heightInTheSky, shootingStarPos.y), Quaternion.identity, dfBillboardBatch.transform);
+            shootingStarInstance.transform.rotation = Quaternion.Euler(rotationAngleX, 0, 0);
+            var sSps = shootingStarInstance.GetComponent<ParticleSystem>();
+            var emissionModule = sSps.emission;
+            emissionModule.rateOverTime = new ParticleSystem.MinMaxCurve(sSMin / 1000, sSMax / 1000);
         }
 
         static public bool IsOnAnyWaterTile(DaggerfallTerrain dfTerrain, Vector3 pos, float scale)

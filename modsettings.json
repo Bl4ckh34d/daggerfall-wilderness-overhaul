@@ -98,6 +98,15 @@
                     "$type": "DaggerfallWorkshop.Game.Utility.ModSupport.ModSettings.ToggleKey"
                 },
                 {
+                    "Min": 50.0,
+                    "Max": 2000.0,
+                    "Value": 1000.0,
+                    "Name": "FireflyActivationDistance",
+                    "Description": "Distance at which fireflies will be activated/deactivated",
+                    "$version": "v1",
+                    "$type": "DaggerfallWorkshop.Game.Utility.ModSupport.ModSettings.SliderFloatKey"
+                },
+                {
                     "Value": true,
                     "Name": "ShootingStars",
                     "Description": "Activate/Deactivate shooting stars at night",

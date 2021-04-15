@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using DaggerfallWorkshop;
 
 public class WODistanceChecker : MonoBehaviour
 {
@@ -9,6 +10,7 @@ public class WODistanceChecker : MonoBehaviour
   Transform playerTransform;
   float counter;
   bool firefliesActive = false;
+  public float distance;
 
   public List<WORandomMover> allChildren;
 
@@ -16,14 +18,20 @@ public class WODistanceChecker : MonoBehaviour
 
   void Awake()
   {
-    counter = Random.Range(0.0f,5.0f);
-    //firefly = Resources.Load("Firefly") as GameObject;
+    counter = Random.Range(0.0f,2.0f);
     playerTransform = GameObject.FindGameObjectWithTag("MainCamera").transform;
   }
 
-  public void CreateFirefly(Vector3 position, int x, int y, float scale, Terrain terrain, float distance) {
-    Vector3 pos = new Vector3(position.x + Random.Range(-distance, distance), 0, position.z + Random.Range(-distance, distance));
-    pos.y = terrain.SampleHeight(pos) + Random.Range(1.5f, 4);
+  public void CreateFirefly(DaggerfallTerrain dfTerrain, int x, int y, float scale, Terrain terrain, float distance) {
+    float xVariation = Random.Range(-distance, distance);
+    float zVariation = Random.Range(-distance, distance);
+
+    Vector3 pos = new Vector3(((x + xVariation) * scale), 0, ((y + zVariation) * scale)) + dfTerrain.transform.position;
+    pos.y = terrain.SampleHeight(new Vector3((x + xVariation) * scale, 0, (y + zVariation) * scale) + dfTerrain.transform.position) + dfTerrain.transform.position.y + Random.Range(1.5f, 3f);
+
+    //Vector3 pos = new Vector3(transform.position.x + xVariation, transform.position.y, transform.position.z + zVariation);
+    //pos.y = terrain.SampleHeight(new Vector3((int)(x + xVariation) * scale, 0, (int)(y + zVariation) * scale) + dfTerrain.transform.position) + dfTerrain.transform.position.y + Random.Range(1.5f, 3f);
+
     var firefly = GameObject.Instantiate(Resources.Load("Firefly") as GameObject, pos, Quaternion.identity, transform);
     firefly.GetComponent<WORandomMover>().startPos = transform.InverseTransformPoint(pos);
   }
@@ -33,21 +41,21 @@ public class WODistanceChecker : MonoBehaviour
   }
 
   public void DeactivateAllChildren() {
-    foreach(WORandomMover rm in allChildren) {
-      rm.gameObject.SetActive(false);
+    foreach(WORandomMover firefly in allChildren) {
+      firefly.gameObject.SetActive(false);
     }
   }
 
   public void ActivateAllChildren() {
-    foreach(WORandomMover rm in allChildren) {
-      rm.gameObject.SetActive(true);
+    foreach(WORandomMover firefly in allChildren) {
+      firefly.gameObject.SetActive(true);
     }
   }
 
   void FixedUpdate()
   {
     if (counter <= 0) {
-      if (Vector3.Distance(playerTransform.position, transform.position) <= 200f) {
+      if (Vector3.Distance(playerTransform.position, transform.position) <= distance) {
         if (!firefliesActive) {
           ActivateAllChildren();
           foreach(WORandomMover firefly in allChildren) {

@@ -19,6 +19,7 @@ namespace WildernessOverhaul
 		bool vegetationInLocations;
 		bool fireflies;
 		bool shootingStars;
+        float fireflyActivationDistance;
 		float shootingStarsMin;
 		float shootingStarsMax;
 		float generalNatureClearance;
@@ -51,6 +52,7 @@ namespace WildernessOverhaul
 			vegetationInLocations = settings.GetValue<bool>("TerrainNature", "VegetationInsideJungleLocations");
 			fireflies = settings.GetValue<bool>("Nature", "Fireflies");
 			shootingStars = settings.GetValue<bool>("Nature", "ShootingStars");
+            fireflyActivationDistance = settings.GetValue<float>("Nature", "FireflyActivationDistance");
 			shootingStarsMin = settings.GetValue<float>("Nature", "ShootingStarsMinChance");
 			shootingStarsMax = settings.GetValue<float>("Nature", "ShootingStarsMaxChance");
 			generalNatureClearance = settings.GetValue<float>("TerrainNature", "GeneralNatureClearance");
@@ -66,6 +68,7 @@ namespace WildernessOverhaul
 				vegetationInLocations,
 				fireflies,
 				shootingStars,
+                fireflyActivationDistance,
 				shootingStarsMin,
 				shootingStarsMax,
 				generalNatureClearance,
