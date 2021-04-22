@@ -760,8 +760,10 @@ namespace DaggerfallWorkshop
 
         static byte GetTileByNeighbours(int bl, int br, int tr, int tl)
         {
-            TileObject tLO = new TileObject(WOTerrainTexturing.MakeLookup(0,  false, false) ,0,0,0,0);
+            TileObject tLO;
             tLO = Array.Find(tileList, obj => obj.bl == bl && obj.br == br && obj.tr == tr && obj.tl == tl);
+            if (tLO == null)
+                tLO = new TileObject(WOTerrainTexturing.MakeLookup(0,  false, false) ,0,0,0,0);
             return tLO.tile;
         }
         #endregion
