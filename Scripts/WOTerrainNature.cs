@@ -221,12 +221,12 @@ namespace DaggerfallWorkshop
 
             // Preparation of StaticGeometry for collision detection
             /* if(dfTerrain.MapData.hasLocation)
-      {
-        exterior = GameObject.Find("Exterior");
-        staticGeometryList = new List<GameObject>();
-        GameObject streamingTarget = GameObject.Find("StreamingTarget");
-        AddDescendantsWithTag(streamingTarget.transform, "StaticGeometry", staticGeometryList);
-      } */
+                {
+                exterior = GameObject.Find("Exterior");
+                staticGeometryList = new List<GameObject>();
+                GameObject streamingTarget = GameObject.Find("StreamingTarget");
+                AddDescendantsWithTag(streamingTarget.transform, "StaticGeometry", staticGeometryList);
+                } */
 
             // Declaration of local variables
             float chanceOnDirt = 0.0f;
