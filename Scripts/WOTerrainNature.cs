@@ -238,18 +238,18 @@ namespace DaggerfallWorkshop
             {
                 if (dfTerrain.MapData.LocationType == DFRegion.LocationTypes.TownCity)
                     generalNatureClearance = natureClearance1;
-                if (dfTerrain.MapData.LocationType == DFRegion.LocationTypes.TownHamlet)
+                else if (dfTerrain.MapData.LocationType == DFRegion.LocationTypes.TownHamlet)
                     generalNatureClearance = natureClearance2;
-                if (dfTerrain.MapData.LocationType == DFRegion.LocationTypes.TownVillage ||
+                else if (dfTerrain.MapData.LocationType == DFRegion.LocationTypes.TownVillage ||
                   dfTerrain.MapData.LocationType == DFRegion.LocationTypes.HomeWealthy ||
                   dfTerrain.MapData.LocationType == DFRegion.LocationTypes.ReligionCult)
                     generalNatureClearance = natureClearance3;
-                if (dfTerrain.MapData.LocationType == DFRegion.LocationTypes.HomeFarms ||
+                else if (dfTerrain.MapData.LocationType == DFRegion.LocationTypes.HomeFarms ||
                   dfTerrain.MapData.LocationType == DFRegion.LocationTypes.ReligionTemple ||
                   dfTerrain.MapData.LocationType == DFRegion.LocationTypes.Tavern ||
                   dfTerrain.MapData.LocationType == DFRegion.LocationTypes.HomePoor)
                     generalNatureClearance = natureClearance4;
-                if (dfTerrain.MapData.LocationType == DFRegion.LocationTypes.DungeonLabyrinth ||
+                else if (dfTerrain.MapData.LocationType == DFRegion.LocationTypes.DungeonLabyrinth ||
                   dfTerrain.MapData.LocationType == DFRegion.LocationTypes.DungeonKeep ||
                   dfTerrain.MapData.LocationType == DFRegion.LocationTypes.DungeonRuin ||
                   dfTerrain.MapData.LocationType == DFRegion.LocationTypes.Graveyard ||
@@ -330,7 +330,7 @@ namespace DaggerfallWorkshop
                     woodlandHillsNeedleTrees = new List<int>(new int[] { 12, 25, 12 });
                     woodlandHillsDirtPlants = new List<int>(new int[] { 22, 29, 26, 31 });
                 }
-                if (DaggerfallUnity.Instance.WorldTime.Now.SeasonValue != DaggerfallDateTime.Seasons.Winter)
+                else
                 {
                     mountainsTrees = new List<int>(new int[] { 22 });
                     mountainsNeedleTrees = new List<int>(new int[] { 12, 25, 30, 12, 25, 30 });
@@ -370,7 +370,7 @@ namespace DaggerfallWorkshop
                     woodlandHillsNeedleTrees = new List<int>(new int[] { 12, 25, 12 });
                     woodlandHillsDirtPlants = new List<int>(new int[] { 22, 29, 26, 31 });
                 }
-                if (DaggerfallUnity.Instance.WorldTime.Now.SeasonValue != DaggerfallDateTime.Seasons.Winter)
+                else
                 {
                     mountainsTrees = new List<int>(new int[] { 22, 22, 22, 22, 22, 22, 22, 22, 22, 22, 12, 25, 30 });
                     mountainsNeedleTrees = new List<int>(new int[] { 12, 25, 30, 12, 25, 30 });
@@ -409,7 +409,7 @@ namespace DaggerfallWorkshop
                     woodlandHillsNeedleTrees = new List<int>(new int[] { 12, 25, 12 });
                     woodlandHillsDirtPlants = new List<int>(new int[] { 22, 29, 26, 31 });
                 }
-                if (DaggerfallUnity.Instance.WorldTime.Now.SeasonValue != DaggerfallDateTime.Seasons.Winter)
+                else
                 {
                     mountainsTrees = new List<int>(new int[] { 22, 22, 22, 22, 22, 22, 22, 22, 22, 22, 12, 12, 25, 25, 30, 30 });
                     mountainsNeedleTrees = new List<int>(new int[] { 12, 25, 30, 12, 25, 30 });
@@ -448,7 +448,7 @@ namespace DaggerfallWorkshop
                     woodlandHillsNeedleTrees = new List<int>(new int[] { 12, 25, 12 });
                     woodlandHillsDirtPlants = new List<int>(new int[] { 22, 29, 26, 31 });
                 }
-                if (DaggerfallUnity.Instance.WorldTime.Now.SeasonValue != DaggerfallDateTime.Seasons.Winter)
+                else
                 {
                     mountainsTrees = new List<int>(new int[] { 22, 22, 22, 22, 22, 22, 22, 22, 12, 12, 25, 25, 30, 30 });
                     mountainsNeedleTrees = new List<int>(new int[] { 12, 25, 30, 12, 25, 30 });
@@ -487,7 +487,7 @@ namespace DaggerfallWorkshop
                     woodlandHillsNeedleTrees = new List<int>(new int[] { 12, 25, 12 });
                     woodlandHillsDirtPlants = new List<int>(new int[] { 22, 29, 26, 31 });
                 }
-                if (DaggerfallUnity.Instance.WorldTime.Now.SeasonValue != DaggerfallDateTime.Seasons.Winter)
+                else
                 {
                     mountainsTrees = new List<int>(new int[] { 22, 22, 22, 22, 22, 22, 22, 5, 11, 12, 12, 25, 25, 30, 30 });
                     mountainsNeedleTrees = new List<int>(new int[] { 5, 11, 12, 25, 30, 12, 25, 30 });
@@ -526,7 +526,7 @@ namespace DaggerfallWorkshop
                     woodlandHillsNeedleTrees = new List<int>(new int[] { 12, 25, 12 });
                     woodlandHillsDirtPlants = new List<int>(new int[] { 22, 29, 26, 31 });
                 }
-                if (DaggerfallUnity.Instance.WorldTime.Now.SeasonValue != DaggerfallDateTime.Seasons.Winter)
+                else
                 {
                     mountainsTrees = new List<int>(new int[] { 22, 22, 22, 22, 22, 22, 5, 11, 12, 12, 25, 25, 30, 30 });
                     mountainsNeedleTrees = new List<int>(new int[] { 5, 11, 12, 25, 30, 12, 25, 30 });
@@ -565,7 +565,7 @@ namespace DaggerfallWorkshop
                     woodlandHillsNeedleTrees = new List<int>(new int[] { 12, 25, 12 });
                     woodlandHillsDirtPlants = new List<int>(new int[] { 22, 29, 26, 31 });
                 }
-                if (DaggerfallUnity.Instance.WorldTime.Now.SeasonValue != DaggerfallDateTime.Seasons.Winter)
+                else
                 {
                     mountainsTrees = new List<int>(new int[] { 22, 22, 22, 22, 22, 5, 11, 12, 13, 21, 25, 25, 30, 30 });
                     mountainsNeedleTrees = new List<int>(new int[] { 5, 11, 12, 12, 25, 25, 30, 30 });
@@ -604,7 +604,7 @@ namespace DaggerfallWorkshop
                     woodlandHillsNeedleTrees = new List<int>(new int[] { 12, 25, 12 });
                     woodlandHillsDirtPlants = new List<int>(new int[] { 22, 29, 26, 31 });
                 }
-                if (DaggerfallUnity.Instance.WorldTime.Now.SeasonValue != DaggerfallDateTime.Seasons.Winter)
+                else
                 {
                     mountainsTrees = new List<int>(new int[] { 22, 22, 22, 22, 5, 11, 12, 13, 21, 25, 25, 30, 30 });
                     mountainsNeedleTrees = new List<int>(new int[] { 5, 11, 12, 12, 25, 25, 30, 30 });
@@ -643,7 +643,7 @@ namespace DaggerfallWorkshop
                     woodlandHillsNeedleTrees = new List<int>(new int[] { 12, 25, 12 });
                     woodlandHillsDirtPlants = new List<int>(new int[] { 22, 29, 26, 31 });
                 }
-                if (DaggerfallUnity.Instance.WorldTime.Now.SeasonValue != DaggerfallDateTime.Seasons.Winter)
+                else
                 {
                     mountainsTrees = new List<int>(new int[] { 22, 22, 22, 5, 11, 12, 13, 21, 25, 25, 30, 30 });
                     mountainsNeedleTrees = new List<int>(new int[] { 5, 11, 12, 12, 25, 25, 30, 30 });
@@ -682,7 +682,7 @@ namespace DaggerfallWorkshop
                     woodlandHillsNeedleTrees = new List<int>(new int[] { 12, 25, 12 });
                     woodlandHillsDirtPlants = new List<int>(new int[] { 22, 29, 26, 9, 31 });
                 }
-                if (DaggerfallUnity.Instance.WorldTime.Now.SeasonValue != DaggerfallDateTime.Seasons.Winter)
+                else
                 {
                     mountainsTrees = new List<int>(new int[] { 22, 22, 5, 11, 12, 13, 21, 25, 30 });
                     mountainsNeedleTrees = new List<int>(new int[] { 5, 11, 12, 25, 30 });
@@ -721,7 +721,7 @@ namespace DaggerfallWorkshop
                     woodlandHillsNeedleTrees = new List<int>(new int[] { 5, 11, 12, 25, 12 });
                     woodlandHillsDirtPlants = new List<int>(new int[] { 22, 29, 26, 9, 31 });
                 }
-                if (DaggerfallUnity.Instance.WorldTime.Now.SeasonValue != DaggerfallDateTime.Seasons.Winter)
+                else
                 {
                     mountainsTrees = new List<int>(new int[] { 22, 5, 11, 12, 13, 15, 21, 25, 30 });
                     mountainsNeedleTrees = new List<int>(new int[] { 5, 11, 12, 25, 30, 12, 25, 30 });
@@ -760,7 +760,7 @@ namespace DaggerfallWorkshop
                     woodlandHillsNeedleTrees = new List<int>(new int[] { 5, 5, 11, 11, 12, 25, 12 });
                     woodlandHillsDirtPlants = new List<int>(new int[] { 22, 29, 26, 9, 31 });
                 }
-                if (DaggerfallUnity.Instance.WorldTime.Now.SeasonValue != DaggerfallDateTime.Seasons.Winter)
+                else
                 {
                     mountainsTrees = new List<int>(new int[] { 5, 5, 11, 11, 12, 13, 13, 15, 15, 15, 21, 30 });
                     mountainsNeedleTrees = new List<int>(new int[] { 5, 5, 11, 11, 12, 12, 30 });
@@ -799,7 +799,7 @@ namespace DaggerfallWorkshop
                     woodlandHillsNeedleTrees = new List<int>(new int[] { 5, 5, 11, 11, 11, 12, 25, 12 });
                     woodlandHillsDirtPlants = new List<int>(new int[] { 22, 29, 26, 9 });
                 }
-                if (DaggerfallUnity.Instance.WorldTime.Now.SeasonValue != DaggerfallDateTime.Seasons.Winter)
+                else
                 {
                     mountainsTrees = new List<int>(new int[] { 5, 5, 11, 11, 12, 13, 13, 15, 15, 15, 21, 30 });
                     mountainsNeedleTrees = new List<int>(new int[] { 5, 5, 11, 11, 12, 12, 30 });
@@ -838,7 +838,7 @@ namespace DaggerfallWorkshop
                     woodlandHillsNeedleTrees = new List<int>(new int[] { 5, 5, 11, 11, 12 });
                     woodlandHillsDirtPlants = new List<int>(new int[] { 22, 29, 26, 9, 31 });
                 }
-                if (DaggerfallUnity.Instance.WorldTime.Now.SeasonValue != DaggerfallDateTime.Seasons.Winter)
+                else
                 {
                     mountainsTrees = new List<int>(new int[] { 5, 5, 11, 11, 12, 13, 13, 15, 15, 15, 21, 30 });
                     mountainsNeedleTrees = new List<int>(new int[] { 5, 5, 11, 11, 12, 12, 30 });
@@ -877,7 +877,7 @@ namespace DaggerfallWorkshop
                     woodlandHillsNeedleTrees = new List<int>(new int[] { 5, 11, 11 });
                     woodlandHillsDirtPlants = new List<int>(new int[] { 22, 29, 26, 9 });
                 }
-                if (DaggerfallUnity.Instance.WorldTime.Now.SeasonValue != DaggerfallDateTime.Seasons.Winter)
+                else
                 {
                     mountainsTrees = new List<int>(new int[] { 5, 5, 11, 11, 12, 13, 13, 15, 15, 15, 21, 30 });
                     mountainsNeedleTrees = new List<int>(new int[] { 5, 5, 11, 11, 12, 12, 30 });
@@ -917,7 +917,7 @@ namespace DaggerfallWorkshop
                     woodlandHillsNeedleTrees = new List<int>(new int[] { 5, 11, 11 });
                     woodlandHillsDirtPlants = new List<int>(new int[] { 22, 29, 26, 9 });
                 }
-                if (DaggerfallUnity.Instance.WorldTime.Now.SeasonValue != DaggerfallDateTime.Seasons.Winter)
+                else
                 {
                     mountainsTrees = new List<int>(new int[] { 5, 5, 9, 9, 11, 11, 12, 13, 13, 15, 15, 15, 21, 30 });
                     mountainsNeedleTrees = new List<int>(new int[] { 5, 5, 11, 11, 12, 12, 30 });
@@ -966,7 +966,7 @@ namespace DaggerfallWorkshop
             }
 
             //Adjustment to mountain climate in respect to world height
-            if (climate.WorldClimate == (int)MapsFile.Climates.Mountain)
+            else if (climate.WorldClimate == (int)MapsFile.Climates.Mountain)
             {
                 if (terrainElevation > treeLine)
                 {
@@ -1001,7 +1001,7 @@ namespace DaggerfallWorkshop
             }
 
             //Adjustment to desert climate in respect to world height
-            if (climate.WorldClimate == (int)MapsFile.Climates.Desert)
+            else if (climate.WorldClimate == (int)MapsFile.Climates.Desert)
             {
                 chanceOnGrass = Mathf.Clamp(Random.Range(0.100f, 0.150f), 0f, 1f);
                 chanceOnDirt = Mathf.Clamp(Random.Range(0.100f, 0.150f), 0f, 1f);
@@ -1009,7 +1009,7 @@ namespace DaggerfallWorkshop
             }
 
             //Adjustment to desert climate in respect to world height
-            if (climate.WorldClimate == (int)MapsFile.Climates.Desert2)
+            else if (climate.WorldClimate == (int)MapsFile.Climates.Desert2)
             {
                 chanceOnGrass = Mathf.Clamp(Random.Range(0.05f, 0.25f), 0f, 1f);
                 chanceOnDirt = Mathf.Clamp(Random.Range(0.05f, 0.25f), 0f, 1f);
@@ -1017,7 +1017,7 @@ namespace DaggerfallWorkshop
             }
 
             // Adjustment to temperate woodlands climate in respect to world height
-            if (climate.WorldClimate == (int)MapsFile.Climates.HauntedWoodlands)
+            else if (climate.WorldClimate == (int)MapsFile.Climates.HauntedWoodlands)
             {
                 chanceOnGrass = Random.Range(0.05f, 0.09f);
                 chanceOnDirt = Random.Range(0.045f, 0.065f);
@@ -1025,7 +1025,7 @@ namespace DaggerfallWorkshop
             }
 
             //Adjustment to mountain woodland climate in respect to world height
-            if (climate.WorldClimate == (int)MapsFile.Climates.MountainWoods)
+            else if (climate.WorldClimate == (int)MapsFile.Climates.MountainWoods)
             {
                 if (terrainElevation > 0.475f)
                 {
@@ -1068,7 +1068,7 @@ namespace DaggerfallWorkshop
             }
 
             //Adjustment to rainforest climate in respect to world height
-            if (climate.WorldClimate == (int)MapsFile.Climates.Rainforest)
+            else if (climate.WorldClimate == (int)MapsFile.Climates.Rainforest)
             {
                 chanceOnGrass = /* Random.Range(0.035f,  */0.30f/* ) */;
                 chanceOnDirt = /* Random.Range(0.120f,  */0.30f/* ) */;
@@ -1076,7 +1076,7 @@ namespace DaggerfallWorkshop
             }
 
             //Adjustment to subtropical climate in respect to world height
-            if (climate.WorldClimate == (int)MapsFile.Climates.Subtropical)
+            else if (climate.WorldClimate == (int)MapsFile.Climates.Subtropical)
             {
                 chanceOnStone = Mathf.Clamp(Random.Range(0.00f, 0.00f), 0f, 1f);
                 chanceOnDirt = Mathf.Clamp(Random.Range(0.00f, 0.00f), 0f, 1f);
@@ -1090,13 +1090,13 @@ namespace DaggerfallWorkshop
 
             if (mapStyle < 1)
                 mapStyleChance = mapStyleChance0;
-            if (mapStyle < 2)
+            else if (mapStyle < 2)
                 mapStyleChance = mapStyleChance1;
-            if (mapStyle < 3)
+            else if (mapStyle < 3)
                 mapStyleChance = mapStyleChance2;
-            if (mapStyle < 4)
+            else if (mapStyle < 4)
                 mapStyleChance = mapStyleChance3;
-            if (mapStyle < 5)
+            else if (mapStyle < 5)
                 mapStyleChance = mapStyleChance4;
             else
                 mapStyleChance = mapStyleChance5;
