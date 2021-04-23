@@ -701,9 +701,9 @@ namespace DaggerfallWorkshop
         static bool SteepnessTooHigh(float steepness, NativeArray<float> heightmapData, float maxTerrainHeight, int hx, int hy, int hDim, int upperBound, int index, int tdDim, NativeArray<byte> tileData)
         {
             if (JobA.Row(index, tdDim) < 0 ||
-                JobA.Col(index, tdDim) +1 >= tdDim ||
-                JobA.Row(index, tdDim) +1 >= tdDim ||
-                JobA.Col(index, tdDim) < 0)
+                JobA.Col(index, tdDim) < 0 ||
+                JobA.Col(index, tdDim) + 1 >= tdDim ||
+                JobA.Row(index, tdDim) + 1 >= tdDim)
             {
                 return false;
             }
