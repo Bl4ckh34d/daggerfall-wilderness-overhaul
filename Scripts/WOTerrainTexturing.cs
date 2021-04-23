@@ -201,7 +201,7 @@ namespace DaggerfallWorkshop
                     int tr = tileData[JobA.Idx(x + 1, y + 1, tdDim)];
                     int tl = tileData[JobA.Idx(x, y + 1, tdDim)];
 
-                    tilemapData[index] = GetTileByNeighbours(tl, tr, br, bl);
+                    tilemapData[index] = GetTileByNeighbours(bl, br, tr, tl);
                 }
                 else
                 {
@@ -396,153 +396,200 @@ namespace DaggerfallWorkshop
         // Creates lookup table
         void CreateLookupTable()
         {
-            tileList = new TileObject[88];
+            tileList = new TileObject[112];
             lookupTable = new byte[1];
             lookupTable[0] = MakeLookup(0,  false, false);
             //water > dirt
-            tileList[0] = new TileObject(MakeLookup(0,  false, false) ,0,0,0,0); //w,w,w,w
-            tileList[1] = new TileObject(MakeLookup(5,  true,  false) ,0,0,0,1); //w,w,w,d
-            tileList[2] = new TileObject(MakeLookup(5,  false, true)  ,0,0,1,0); //w,w,d,w
-            tileList[3] = new TileObject(MakeLookup(6,  true,  false) ,0,0,1,1); //w,w,d,d
-            tileList[4] = new TileObject(MakeLookup(5,  true,  true)  ,0,1,0,0); //w,d,w,w
-            tileList[5] = new TileObject(MakeLookup(48, true,  false) ,0,1,0,1); //w,d,w,d
-            tileList[6] = new TileObject(MakeLookup(6,  false, true)  ,0,1,1,0); //w,d,d,w
-            tileList[7] = new TileObject(MakeLookup(7,  false, true)  ,0,1,1,1); //w,d,d,d
-            tileList[8] = new TileObject(MakeLookup(5,  false, false) ,1,0,0,0); //d,w,w,w
-            tileList[9] = new TileObject(MakeLookup(6,  false, false) ,1,0,0,1); //d,w,w,d
-            tileList[10] = new TileObject(MakeLookup(48, false, false) ,1,0,1,0); //d,w,d,w
-            tileList[11] = new TileObject(MakeLookup(7,  true,  false) ,1,0,1,1); //d,w,d,d
-            tileList[12] = new TileObject(MakeLookup(6,  true,  true)  ,1,1,0,0); //d,d,w,w
-            tileList[13] = new TileObject(MakeLookup(7,  false, false) ,1,1,0,1); //d,d,w,d
-            tileList[14] = new TileObject(MakeLookup(7,  true,  true)  ,1,1,1,0); //d,d,d,w
+            tileList[0] = new TileObject(MakeLookup(0,  false, false)  ,0,0,0,0); //w,w,w,w
+            tileList[1] = new TileObject(MakeLookup(5,  true,  false)  ,1,0,0,0); //d,w,w,w
+            tileList[2] = new TileObject(MakeLookup(5,  false, true)   ,0,1,0,0); //w,d,w,w
+            tileList[3] = new TileObject(MakeLookup(6,  true,  false)  ,1,1,0,0); //d,d,w,w
+            tileList[4] = new TileObject(MakeLookup(5,  true,  true)   ,0,0,1,0); //w,w,d,w
+            tileList[5] = new TileObject(MakeLookup(48, true,  false)  ,1,0,1,0); //d,w,d,w
+            tileList[6] = new TileObject(MakeLookup(6,  false, true)   ,0,1,1,0); //w,d,d,w
+            tileList[7] = new TileObject(MakeLookup(7,  false, true)   ,1,1,1,0); //d,d,d,w
+            tileList[8] = new TileObject(MakeLookup(5,  false, false)  ,0,0,0,1); //w,w,w,d
+            tileList[9] = new TileObject(MakeLookup(6,  false, false)  ,1,0,0,1); //d,w,w,d
+            tileList[10] = new TileObject(MakeLookup(48, false, false) ,0,1,0,1); //w,d,w,d
+            tileList[11] = new TileObject(MakeLookup(7,  true,  false) ,1,1,0,1); //d,d,w,d
+            tileList[12] = new TileObject(MakeLookup(6,  true,  true)  ,0,0,1,1); //w,w,d,d
+            tileList[13] = new TileObject(MakeLookup(7,  false, false) ,1,0,1,1); //d,w,d,d
+            tileList[14] = new TileObject(MakeLookup(7,  true,  true)  ,0,1,1,1); //w,d,d,w
             tileList[15] = new TileObject(MakeLookup(1,  false, false) ,1,1,1,1); //d,d,d,d
             //water > grass
-            tileList[16] = new TileObject(MakeLookup(20, true,  false) ,0,0,0,2); //w,w,w,g
-            tileList[17] = new TileObject(MakeLookup(20, false, true)  ,0,0,2,0); //w,w,g,w
-            tileList[18] = new TileObject(MakeLookup(21, true,  false) ,0,0,2,2); //w,w,g,g
-            tileList[19] = new TileObject(MakeLookup(20, true,  true)  ,0,2,0,0); //w,g,w,w
-            tileList[20] = new TileObject(MakeLookup(49, true,  false) ,0,2,0,2); //w,g,w,g
+            tileList[16] = new TileObject(MakeLookup(20, true,  false) ,2,0,0,0); //g,w,w,w
+            tileList[17] = new TileObject(MakeLookup(20, false, true)  ,0,2,0,0); //w,g,w,w
+            tileList[18] = new TileObject(MakeLookup(21, true,  false) ,2,2,0,0); //g,g,w,w
+            tileList[19] = new TileObject(MakeLookup(20, true,  true)  ,0,0,2,0); //w,w,g,w
+            tileList[20] = new TileObject(MakeLookup(49, true,  false) ,2,0,2,0); //g,w,g,w
             tileList[21] = new TileObject(MakeLookup(21, false, true)  ,0,2,2,0); //w,g,g,w
-            tileList[22] = new TileObject(MakeLookup(22, false, true)  ,0,2,2,2); //w,g,g,g
-            tileList[23] = new TileObject(MakeLookup(20, false, false) ,2,0,0,0); //g,w,w,w
+            tileList[22] = new TileObject(MakeLookup(22, false, true)  ,2,2,2,0); //g,g,g,w
+            tileList[23] = new TileObject(MakeLookup(20, false, false) ,0,0,0,2); //w,w,w,g
             tileList[24] = new TileObject(MakeLookup(21, false, false) ,2,0,0,2); //g,w,w,g
-            tileList[25] = new TileObject(MakeLookup(49, false, false) ,2,0,2,0); //g,w,g,w
-            tileList[26] = new TileObject(MakeLookup(22, true,  false) ,2,0,2,2); //g,w,g,g
-            tileList[27] = new TileObject(MakeLookup(21, true,  true)  ,2,2,0,0); //g,g,w,w
-            tileList[28] = new TileObject(MakeLookup(22, false, false) ,2,2,0,2); //g,g,w,g
-            tileList[29] = new TileObject(MakeLookup(22, true,  true)  ,2,2,2,0); //g,g,g,w
+            tileList[25] = new TileObject(MakeLookup(49, false, false) ,0,2,0,2); //w,g,w,g
+            tileList[26] = new TileObject(MakeLookup(22, true,  false) ,2,2,0,2); //g,g,w,g
+            tileList[27] = new TileObject(MakeLookup(21, true,  true)  ,0,0,2,2); //w,w,g,g
+            tileList[28] = new TileObject(MakeLookup(22, false, false) ,2,0,2,2); //g,w,g,g
+            tileList[29] = new TileObject(MakeLookup(22, true,  true)  ,0,2,2,2); //w,g,g,g
             tileList[30] = new TileObject(MakeLookup(2,  false, false) ,2,2,2,2); //g,g,g,g
             //water > stone
-            tileList[31] = new TileObject(MakeLookup(30, true,  false) ,0,0,0,3); //w,w,w,s
-            tileList[32] = new TileObject(MakeLookup(30, false, true)  ,0,0,3,0); //w,w,s,w
-            tileList[33] = new TileObject(MakeLookup(31, true,  false) ,0,0,3,3); //w,w,s,s
-            tileList[34] = new TileObject(MakeLookup(30, true,  true)  ,0,3,0,0); //w,s,w,w
-            tileList[35] = new TileObject(MakeLookup(50, true,  false) ,0,3,0,3); //w,s,w,s
+            tileList[31] = new TileObject(MakeLookup(30, true,  false) ,3,0,0,0); //s,w,w,w
+            tileList[32] = new TileObject(MakeLookup(30, false, true)  ,0,3,0,0); //w,s,w,w
+            tileList[33] = new TileObject(MakeLookup(31, true,  false) ,3,3,0,0); //s,s,w,w
+            tileList[34] = new TileObject(MakeLookup(30, true,  true)  ,0,0,3,0); //w,w,s,w
+            tileList[35] = new TileObject(MakeLookup(50, true,  false) ,3,0,3,0); //s,w,s,w
             tileList[36] = new TileObject(MakeLookup(31, false, true)  ,0,3,3,0); //w,s,s,w
-            tileList[37] = new TileObject(MakeLookup(32, false, true)  ,0,3,3,3); //w,s,s,s
-            tileList[38] = new TileObject(MakeLookup(30, false, false) ,3,0,0,0); //s,w,w,w
+            tileList[37] = new TileObject(MakeLookup(32, false, true)  ,3,3,3,0); //s,s,s,w
+            tileList[38] = new TileObject(MakeLookup(30, false, false) ,0,0,0,3); //w,w,w,s
             tileList[39] = new TileObject(MakeLookup(31, false, false) ,3,0,0,3); //s,w,w,s
-            tileList[40] = new TileObject(MakeLookup(50, false, false) ,3,0,3,0); //s,w,s,w
-            tileList[41] = new TileObject(MakeLookup(32, true,  false) ,3,0,3,3); //s,w,s,s
-            tileList[42] = new TileObject(MakeLookup(31, true,  true)  ,3,3,0,0); //s,s,w,w
-            tileList[43] = new TileObject(MakeLookup(32, false, false) ,3,3,0,3); //s,s,w,s
-            tileList[44] = new TileObject(MakeLookup(32, true,  true)  ,3,3,3,0); //s,s,s,w
+            tileList[40] = new TileObject(MakeLookup(50, false, false) ,0,3,0,3); //w,s,w,s
+            tileList[41] = new TileObject(MakeLookup(32, true,  false) ,3,3,0,3); //s,s,w,s
+            tileList[42] = new TileObject(MakeLookup(31, true,  true)  ,0,0,3,3); //w,w,s,s
+            tileList[43] = new TileObject(MakeLookup(32, false, false) ,3,0,3,3); //s,w,s,s
+            tileList[44] = new TileObject(MakeLookup(32, true,  true)  ,0,3,3,3); //w,s,s,s
             tileList[45] = new TileObject(MakeLookup(3,  false, false) ,3,3,3,3); //s,s,s,s
             //dirt > grass
-            tileList[46] = new TileObject(MakeLookup(10, true,  false) ,1,1,1,2); //d,d,d,g
-            tileList[47] = new TileObject(MakeLookup(10, false, true)  ,1,1,2,1); //d,d,g,d
-            tileList[48] = new TileObject(MakeLookup(11, true,  false) ,1,1,2,2); //d,d,g,g
-            tileList[49] = new TileObject(MakeLookup(10, true,  true)  ,1,2,1,1); //d,g,d,d
-            tileList[50] = new TileObject(MakeLookup(51, true,  false) ,1,2,1,2); //d,g,d,g
+            tileList[46] = new TileObject(MakeLookup(10, true,  false) ,2,1,1,1); //g,d,d,d
+            tileList[47] = new TileObject(MakeLookup(10, false, true)  ,1,2,1,1); //d,g,d,d
+            tileList[48] = new TileObject(MakeLookup(11, true,  false) ,2,2,1,1); //g,g,d,d
+            tileList[49] = new TileObject(MakeLookup(10, true,  true)  ,1,1,2,1); //d,d,g,d
+            tileList[50] = new TileObject(MakeLookup(51, true,  false) ,2,1,2,1); //g,d,g,d
             tileList[51] = new TileObject(MakeLookup(11, false, true)  ,1,2,2,1); //d,g,g,d
-            tileList[52] = new TileObject(MakeLookup(12, false, true)  ,1,2,2,2); //d,g,g,g
-            tileList[53] = new TileObject(MakeLookup(10, false, false) ,2,1,1,1); //g,d,d,d
+            tileList[52] = new TileObject(MakeLookup(12, false, true)  ,2,2,2,1); //g,g,g,d
+            tileList[53] = new TileObject(MakeLookup(10, false, false) ,1,1,1,2); //d,d,d,g
             tileList[54] = new TileObject(MakeLookup(11, false, false) ,2,1,1,2); //g,d,d,g
-            tileList[55] = new TileObject(MakeLookup(51, false, false) ,2,1,2,1); //g,d,g,d
-            tileList[56] = new TileObject(MakeLookup(12, true,  false) ,2,1,2,2); //g,d,g,g
-            tileList[57] = new TileObject(MakeLookup(11, true,  true)  ,2,2,1,1); //g,g,d,d
-            tileList[58] = new TileObject(MakeLookup(12, false, false) ,2,2,1,2); //g,g,d,g
-            tileList[59] = new TileObject(MakeLookup(12, true,  true)  ,2,2,2,1); //g,g,g,d
+            tileList[55] = new TileObject(MakeLookup(51, false, false) ,1,2,1,2); //d,g,d,g
+            tileList[56] = new TileObject(MakeLookup(12, true,  false) ,2,2,1,2); //g,g,d,g
+            tileList[57] = new TileObject(MakeLookup(11, true,  true)  ,1,1,2,2); //d,d,g,g
+            tileList[58] = new TileObject(MakeLookup(12, false, false) ,2,1,2,2); //g,d,g,g
+            tileList[59] = new TileObject(MakeLookup(12, true,  true)  ,1,2,2,2); //d,g,g,g
             //dirt > stone
-            tileList[60] = new TileObject(MakeLookup(25, true,  false) ,1,1,1,3); //d,d,d,s
-            tileList[61] = new TileObject(MakeLookup(25, false, true)  ,1,1,3,1); //d,d,s,d
-            tileList[62] = new TileObject(MakeLookup(26, true,  false) ,1,1,3,3); //d,d,s,s
-            tileList[63] = new TileObject(MakeLookup(25, true,  true)  ,1,3,1,1); //d,s,d,d
-            tileList[64] = new TileObject(MakeLookup(52, true,  false) ,1,3,1,3); //d,s,d,s
+            tileList[60] = new TileObject(MakeLookup(25, true,  false) ,3,1,1,1); //s,d,d,d
+            tileList[61] = new TileObject(MakeLookup(25, false, true)  ,1,3,1,1); //d,s,d,d
+            tileList[62] = new TileObject(MakeLookup(26, true,  false) ,3,3,1,1); //s,s,d,d
+            tileList[63] = new TileObject(MakeLookup(25, true,  true)  ,1,1,3,1); //d,d,s,d
+            tileList[64] = new TileObject(MakeLookup(52, true,  false) ,3,1,3,1); //s,d,s,d
             tileList[65] = new TileObject(MakeLookup(26, false, true)  ,1,3,3,1); //d,s,s,d
-            tileList[66] = new TileObject(MakeLookup(27, false, true)  ,1,3,3,3); //d,s,s,s
-            tileList[67] = new TileObject(MakeLookup(25, false, false) ,3,1,1,1); //s,d,d,d
+            tileList[66] = new TileObject(MakeLookup(27, false, true)  ,3,3,3,1); //s,s,s,d
+            tileList[67] = new TileObject(MakeLookup(25, false, false) ,1,1,1,3); //d,d,d,s
             tileList[68] = new TileObject(MakeLookup(26, false, false) ,3,1,1,3); //s,d,d,s
-            tileList[69] = new TileObject(MakeLookup(52, false, false) ,3,1,3,1); //s,d,s,d
-            tileList[70] = new TileObject(MakeLookup(27, true,  false) ,3,1,3,3); //s,d,s,s
-            tileList[71] = new TileObject(MakeLookup(26, true,  true)  ,3,3,1,1); //s,s,d,d
-            tileList[72] = new TileObject(MakeLookup(27, false, false) ,3,3,1,3); //s,s,d,s
-            tileList[73] = new TileObject(MakeLookup(27, true,  true)  ,3,3,3,1); //s,s,s,d
+            tileList[69] = new TileObject(MakeLookup(52, false, false) ,1,3,1,3); //d,s,d,s
+            tileList[70] = new TileObject(MakeLookup(27, true,  false) ,3,3,1,3); //s,s,d,s
+            tileList[71] = new TileObject(MakeLookup(26, true,  true)  ,1,1,3,3); //d,d,s,s
+            tileList[72] = new TileObject(MakeLookup(27, false, false) ,3,1,3,3); //s,d,s,s
+            tileList[73] = new TileObject(MakeLookup(27, true,  true)  ,1,3,3,3); //d,s,s,s
             //grass > stone
-            tileList[74] = new TileObject(MakeLookup(15, true,  false) ,2,2,2,3); //g,g,g,s
-            tileList[75] = new TileObject(MakeLookup(15, false, true)  ,2,2,3,2); //g,g,s,g
-            tileList[76] = new TileObject(MakeLookup(16, true,  false) ,2,2,3,3); //g,g,s,s
-            tileList[77] = new TileObject(MakeLookup(15, true,  true)  ,2,3,2,2); //g,s,g,g
-            tileList[78] = new TileObject(MakeLookup(53, true,  false) ,2,3,2,3); //g,s,g,s
+            tileList[74] = new TileObject(MakeLookup(15, true,  false) ,3,2,2,2); //s,g,g,g
+            tileList[75] = new TileObject(MakeLookup(15, false, true)  ,2,3,2,2); //g,s,g,g
+            tileList[76] = new TileObject(MakeLookup(16, true,  false) ,3,3,2,2); //s,s,g,g
+            tileList[77] = new TileObject(MakeLookup(15, true,  true)  ,2,2,3,2); //g,g,s,g
+            tileList[78] = new TileObject(MakeLookup(53, true,  false) ,3,2,3,2); //s,g,s,g
             tileList[79] = new TileObject(MakeLookup(16, false, true)  ,2,3,3,2); //g,s,s,g
-            tileList[80] = new TileObject(MakeLookup(17, false, true)  ,2,3,3,3); //g,s,s,s
-            tileList[81] = new TileObject(MakeLookup(15, false, false) ,3,2,2,2); //s,g,g,g
+            tileList[80] = new TileObject(MakeLookup(17, false, true)  ,3,3,3,2); //s,s,s,g
+            tileList[81] = new TileObject(MakeLookup(15, false, false) ,2,2,2,3); //g,g,g,s
             tileList[82] = new TileObject(MakeLookup(16, false, false) ,3,2,2,3); //s,g,g,s
-            tileList[83] = new TileObject(MakeLookup(53, false, false) ,3,2,3,2); //s,g,s,g
-            tileList[84] = new TileObject(MakeLookup(17, true,  false) ,3,2,3,3); //s,g,s,s
-            tileList[85] = new TileObject(MakeLookup(16, true,  true)  ,3,3,2,2); //s,s,g,g
-            tileList[86] = new TileObject(MakeLookup(17, false, false) ,3,3,2,3); //s,s,g,s
-            tileList[87] = new TileObject(MakeLookup(17, true,  true)  ,3,3,3,2); //s,s,s,g
+            tileList[83] = new TileObject(MakeLookup(53, false, false) ,2,3,2,3); //g,s,g,s
+            tileList[84] = new TileObject(MakeLookup(17, true,  false) ,3,3,2,3); //s,s,g,s
+            tileList[85] = new TileObject(MakeLookup(16, true,  true)  ,2,2,3,3); //g,g,s,s
+            tileList[86] = new TileObject(MakeLookup(17, false, false) ,3,2,3,3); //s,g,s,s
+            tileList[87] = new TileObject(MakeLookup(17, true,  true)  ,2,3,3,3); //g,s,s,s
 
             //water > dirt > grass
-            /* tileList[88] = new TileObject(MakeLookup(X, X, X) ,0,0,2,1); //w,w,g,d
-            tileList[89] = new TileObject(MakeLookup(X, X, X) ,0,2,0,1); //w,g,w,d
-            tileList[90] = new TileObject(MakeLookup(X, X, X) ,0,2,2,1); //w,g,g,d
-            tileList[91] = new TileObject(MakeLookup(X, X, X) ,2,0,0,1); //g,w,w,d
-            tileList[92] = new TileObject(MakeLookup(X, X, X) ,2,0,2,1); //g,w,g,d
-            tileList[93] = new TileObject(MakeLookup(X, X, X) ,2,2,0,1); //g,g,w,d
+            //tileList[88] = new TileObject(MakeLookup(34, true, false) ,0,0,2,1); //w,w,g,d (impossible)
+            //tileList[89] = new TileObject(MakeLookup(X, X, X) ,0,2,0,1); //w,g,w,d (tile does not exist)
+            //tileList[89] = new TileObject(MakeLookup(40, false, true) ,0,2,2,1); //w,g,g,d (impossible)
+            tileList[88] = new TileObject(MakeLookup(34, false, false) ,2,0,0,1); //g,w,w,d
+            //tileList[92] = new TileObject(MakeLookup(X, X, X) ,2,0,2,1); //g,w,g,d (tile does not exist)
+            tileList[89] = new TileObject(MakeLookup(40, true, false) ,2,2,0,1); //g,g,w,d
 
-            tileList[94] = new TileObject(MakeLookup(X, X, X) ,0,0,1,2); //w,w,d,g
-            tileList[95] = new TileObject(MakeLookup(X, X, X) ,0,2,1,0); //w,g,d,w
-            tileList[96] = new TileObject(MakeLookup(X, X, X) ,0,2,1,2); //w,g,d,g
-            tileList[97] = new TileObject(MakeLookup(X, X, X) ,2,0,1,0); //g,w,d,w
-            tileList[98] = new TileObject(MakeLookup(X, X, X) ,2,0,1,2); //g,w,d,g
-            tileList[99] = new TileObject(MakeLookup(X, X, X) ,2,2,1,0); //g,g,d,w
+            tileList[90] = new TileObject(MakeLookup(34, true, true) ,0,0,1,2); //w,w,d,g
+            //tileList[93] = new TileObject(MakeLookup(34, false, true) ,0,2,1,0); //w,g,d,w (impossible)
+            //tileList[96] = new TileObject(MakeLookup(X, X, X) ,0,2,1,2); //w,g,d,g (tile does not exist)
+            //tileList[97] = new TileObject(MakeLookup(X, X, X) ,2,0,1,0); //g,w,d,w (tile does not exist)
+            tileList[91] = new TileObject(MakeLookup(40, false, false) ,2,0,1,2); //g,w,d,g
+            //tileList[95] = new TileObject(MakeLookup(40, true, true) ,2,2,1,0); //g,g,d,w (impossible)
 
-            tileList[100] = new TileObject(MakeLookup(X, X, X) ,0,1,0,2); //w,d,w,g
-            tileList[101] = new TileObject(MakeLookup(X, X, X) ,0,1,2,0); //w,d,g,w
-            tileList[102] = new TileObject(MakeLookup(X, X, X) ,0,1,2,2); //w,d,g,g
-            tileList[103] = new TileObject(MakeLookup(X, X, X) ,2,1,0,0); //g,d,w,w
-            tileList[104] = new TileObject(MakeLookup(X, X, X) ,2,1,0,2); //g,d,w,g
-            tileList[105] = new TileObject(MakeLookup(X, X, X) ,2,1,2,0); //g,d,g,w
+            //tileList[100] = new TileObject(MakeLookup(X, X, X) ,0,1,0,2); //w,d,w,g (tile does not exist)
+            tileList[92] = new TileObject(MakeLookup(34, false, true) ,0,1,2,0); //w,d,g,w
+            tileList[93] = new TileObject(MakeLookup(40, true, true) ,0,1,2,2); //w,d,g,g
+            //tileList[98] = new TileObject(MakeLookup(34, true, true) ,2,1,0,0); //g,d,w,w (impossible)
+            //tileList[99] = new TileObject(MakeLookup(40, false, false) ,2,1,0,2); //g,d,w,g (impossible)
+            //tileList[105] = new TileObject(MakeLookup(X, X, X) ,2,1,2,0); //g,d,g,w (tile does not exist)
 
-            tileList[106] = new TileObject(MakeLookup(X, X, X) ,1,0,0,2); //d,w,w,g
-            tileList[107] = new TileObject(MakeLookup(X, X, X) ,1,0,2,0); //d,w,g,w
-            tileList[108] = new TileObject(MakeLookup(X, X, X) ,1,0,2,2); //d,w,g,g
-            tileList[109] = new TileObject(MakeLookup(X, X, X) ,1,2,0,0); //d,g,w,w
-            tileList[110] = new TileObject(MakeLookup(X, X, X) ,1,2,0,2); //d,g,w,g
-            tileList[111] = new TileObject(MakeLookup(X, X, X) ,1,2,2,0); //d,g,g,w
+            //tileList[100] = new TileObject(MakeLookup(34, false, false) ,1,0,0,2); //d,w,w,g (impossible)
+            //tileList[107] = new TileObject(MakeLookup(X, X, X) ,1,0,2,0); //d,w,g,w (tile does not exist)
+            //tileList[101] = new TileObject(MakeLookup(40, true, true) ,1,0,2,2); //d,w,g,g (impossible)
+            tileList[94] = new TileObject(MakeLookup(34, true, false) ,1,2,0,0); //d,g,w,w
+            //tileList[110] = new TileObject(MakeLookup(X, X, X) ,1,2,0,2); //d,g,w,g (tile does not exist)
+            tileList[95] = new TileObject(MakeLookup(40, false, true) ,1,2,2,0); //d,g,g,w
 
-            tileList[112] = new TileObject(MakeLookup(X, X, X) ,0,2,1,1); //w,g,d,d
-            tileList[113] = new TileObject(MakeLookup(X, X, X) ,2,0,1,1); //g,w,d,d
+            tileList[96] = new TileObject(MakeLookup(37, true, false) ,0,2,1,1); //w,g,d,d
+            //tileList[105] = new TileObject(MakeLookup(37, true, false) ,2,0,1,1); //g,w,d,d (impossible)
 
-            tileList[114] = new TileObject(MakeLookup(X, X, X) ,0,1,1,2); //w,d,d,g
-            tileList[115] = new TileObject(MakeLookup(X, X, X) ,2,1,1,0); //g,d,d,w
+            //tileList[106] = new TileObject(MakeLookup(37, false, true) ,0,1,1,2); //w,d,d,g (impossible)
+            tileList[97] = new TileObject(MakeLookup(37, false, true) ,2,1,1,0); //g,d,d,w
 
-            tileList[116] = new TileObject(MakeLookup(X, X, X) ,1,1,0,2); //d,d,w,g
-            tileList[117] = new TileObject(MakeLookup(X, X, X) ,1,1,2,0); //d,d,g,w
+            tileList[98] = new TileObject(MakeLookup(37, true, false) ,1,1,0,2); //d,d,w,g
+            //tileList[109] = new TileObject(MakeLookup(37, true, false) ,1,1,2,0); //d,d,g,w (impossible)
 
-            tileList[118] = new TileObject(MakeLookup(X, X, X) ,0,1,2,1); //w,d,g,d
-            tileList[119] = new TileObject(MakeLookup(X, X, X) ,2,1,0,1); //g,d,w,d
+            //tileList[118] = new TileObject(MakeLookup(X, X, X) ,0,1,2,1); //w,d,g,d (tile does not exist)
+            //tileList[119] = new TileObject(MakeLookup(X, X, X) ,2,1,0,1); //g,d,w,d (tile does not exist)
 
-            tileList[120] = new TileObject(MakeLookup(X, X, X) ,1,0,1,2); //d,w,d,g
-            tileList[121] = new TileObject(MakeLookup(X, X, X) ,1,2,1,0); //d,g,d,w
+            //tileList[120] = new TileObject(MakeLookup(X, X, X) ,1,0,1,2); //d,w,d,g (tile does not exist)
+            //tileList[121] = new TileObject(MakeLookup(X, X, X) ,1,2,1,0); //d,g,d,w (tile does not exist)
 
-            tileList[122] = new TileObject(MakeLookup(X, X, X) ,1,0,2,1); //d,w,g,d
-            tileList[123] = new TileObject(MakeLookup(X, X, X) ,1,2,0,1); //d,g,w,d
+            tileList[99] = new TileObject(MakeLookup(37, false, false) ,1,0,2,1); //d,w,g,d
+            //tileList[111] = new TileObject(MakeLookup(37, false, false) ,1,2,0,1); //d,g,w,d (impossible)
+
+            //dirt > grass > stone
+            tileList[100] = new TileObject(MakeLookup(39, true, false) ,1,1,2,3); //d,d,g,s
+            //tileList[161] = new TileObject(MakeLookup(X, X, X) ,1,2,1,3); //d,g,d,s (tile does not exist)
+            //tileList[113] = new TileObject(MakeLookup(42, false, true) ,1,2,2,3); //d,g,g,s (impossible)
+            //tileList[114] = new TileObject(MakeLookup(39, false, true) ,2,1,1,3); //g,d,d,s (impossible)
+            //tileList[164] = new TileObject(MakeLookup(X, X, X) ,2,1,2,3); //g,d,g,s (tile does not exist)
+            tileList[101] = new TileObject(MakeLookup(42, true, false) ,2,2,1,3); //g,g,d,s
+
+            //tileList[116] = new TileObject(MakeLookup(39, true, false) ,1,1,3,2); //d,d,s,g (impossible)
+            tileList[102] = new TileObject(MakeLookup(39, false, false) ,1,2,3,1); //d,g,s,d
+            //tileList[168] = new TileObject(MakeLookup(X, X, X) ,1,2,3,2); //d,g,s,g (tile does not exist)
+            //tileList[169] = new TileObject(MakeLookup(X, X, X) ,2,1,3,1); //g,d,s,d (tile does not exist)
+            tileList[103] = new TileObject(MakeLookup(42, false, false) ,2,1,3,2); //g,d,s,g
+            //tileList[119] = new TileObject(MakeLookup(42, true, false) ,2,2,3,1); //g,g,s,d (impossible)
+
+            //tileList[172] = new TileObject(MakeLookup(X, X, X) ,1,3,1,2); //d,s,d,g (tile does not exist)
+            //tileList[120] = new TileObject(MakeLookup(39, false, false) ,1,3,2,1); //d,s,g,d (impossible)
+            tileList[104] = new TileObject(MakeLookup(42, true, true) ,1,3,2,2); //d,s,g,g
+            tileList[105] = new TileObject(MakeLookup(39, true, false) ,2,3,1,1); //g,s,d,d
+            //tileList[123] = new TileObject(MakeLookup(42, false, false) ,2,3,1,2); //g,s,d,g (impossible)
+            //tileList[177] = new TileObject(MakeLookup(X, X, X) ,2,3,2,1); //g,s,g,d (tile does not exist)
+
+            tileList[106] = new TileObject(MakeLookup(39, false, true) ,3,1,1,2); //s,d,d,g
+            //tileList[179] = new TileObject(MakeLookup(X, X, X) ,3,1,2,1); //s,d,g,d (tile does not exist)
+            //tileList[125] = new TileObject(MakeLookup(42, true, true) ,3,1,2,2); //s,d,g,g (impossible)
+            //tileList[126] = new TileObject(MakeLookup(39, true, false) ,3,2,1,1); //s,g,d,d (impossible)
+            //tileList[182] = new TileObject(MakeLookup(X, X, X) ,3,2,1,2); //s,g,d,g (tile does not exist)
+            tileList[107] = new TileObject(MakeLookup(42, false, true) ,3,2,2,1); //s,g,g,d
+
+            tileList[108] = new TileObject(MakeLookup(45, true, true) ,1,2,3,3); //d,g,s,s
+            //tileList[129] = new TileObject(MakeLookup(45, true, true) ,2,1,3,3); //g,d,s,s (impossible)
+
+            //tileList[130] = new TileObject(MakeLookup(45, false, true) ,1,3,3,2); //d,s,s,g (impossible)
+            tileList[109] = new TileObject(MakeLookup(45, false, true) ,2,3,3,1); //g,s,s,d
+
+            tileList[110] = new TileObject(MakeLookup(45, true, false) ,3,3,1,2); //s,s,d,g
+            //tileList[133] = new TileObject(MakeLookup(45, true, false) ,3,3,2,1); //s,s,g,d (impossible)
+
+            //tileList[190] = new TileObject(MakeLookup(X, X, X) ,1,3,2,3); //d,s,g,s (tile does not exist)
+            //tileList[191] = new TileObject(MakeLookup(X, X, X) ,2,3,1,3); //g,s,d,s (tile does not exist)
+
+            //tileList[192] = new TileObject(MakeLookup(X, X, X) ,3,1,3,2); //s,d,s,g (tile does not exist)
+            //tileList[193] = new TileObject(MakeLookup(X, X, X) ,3,2,3,1); //s,g,s,d (tile does not exist)
+
+            tileList[111] = new TileObject(MakeLookup(45, false, false) ,3,1,2,3); //s,d,g,s
+            //tileList[135] = new TileObject(MakeLookup(45, false, false) ,3,2,1,3); //s,g,d,s (impossible)
 
             //water > grass > stone
-            tileList[124] = new TileObject(MakeLookup(X, X, X) ,0,0,2,3); //w,w,g,s
+            /* tileList[124] = new TileObject(MakeLookup(X, X, X) ,0,0,2,3); //w,w,g,s
             tileList[125] = new TileObject(MakeLookup(X, X, X) ,0,2,0,3); //w,g,w,s
             tileList[126] = new TileObject(MakeLookup(X, X, X) ,0,2,2,3); //w,g,g,s
             tileList[127] = new TileObject(MakeLookup(X, X, X) ,2,0,0,3); //g,w,w,s
@@ -586,54 +633,7 @@ namespace DaggerfallWorkshop
             tileList[157] = new TileObject(MakeLookup(X, X, X) ,3,2,3,0); //s,g,s,w
 
             tileList[158] = new TileObject(MakeLookup(X, X, X) ,3,0,2,3); //s,w,g,s
-            tileList[159] = new TileObject(MakeLookup(X, X, X) ,3,2,0,3); //s,g,w,s
-
-            //dirt > grass > stone
-            tileList[160] = new TileObject(MakeLookup(X, X, X) ,1,1,2,3); //d,d,g,s
-            tileList[161] = new TileObject(MakeLookup(X, X, X) ,1,2,1,3); //d,g,d,s
-            tileList[162] = new TileObject(MakeLookup(X, X, X) ,1,2,2,3); //d,g,g,s
-            tileList[163] = new TileObject(MakeLookup(X, X, X) ,2,1,1,3); //g,d,d,s
-            tileList[164] = new TileObject(MakeLookup(X, X, X) ,2,1,2,3); //g,d,g,s
-            tileList[165] = new TileObject(MakeLookup(X, X, X) ,2,2,1,3); //g,g,d,s
-
-            tileList[166] = new TileObject(MakeLookup(X, X, X) ,1,1,3,2); //d,d,s,g
-            tileList[167] = new TileObject(MakeLookup(X, X, X) ,1,2,3,1); //d,g,s,d
-            tileList[168] = new TileObject(MakeLookup(X, X, X) ,1,2,3,2); //d,g,s,g
-            tileList[169] = new TileObject(MakeLookup(X, X, X) ,2,1,3,1); //g,d,s,d
-            tileList[170] = new TileObject(MakeLookup(X, X, X) ,2,1,3,2); //g,d,s,g
-            tileList[171] = new TileObject(MakeLookup(X, X, X) ,2,2,3,1); //g,g,s,d
-
-            tileList[172] = new TileObject(MakeLookup(X, X, X) ,1,3,1,2); //d,s,d,g
-            tileList[173] = new TileObject(MakeLookup(X, X, X) ,1,3,2,1); //d,s,g,d
-            tileList[174] = new TileObject(MakeLookup(X, X, X) ,1,3,2,2); //d,s,g,g
-            tileList[175] = new TileObject(MakeLookup(X, X, X) ,2,3,1,1); //g,s,d,d
-            tileList[176] = new TileObject(MakeLookup(X, X, X) ,2,3,1,2); //g,s,d,g
-            tileList[177] = new TileObject(MakeLookup(X, X, X) ,2,3,2,1); //g,s,g,d
-
-            tileList[178] = new TileObject(MakeLookup(X, X, X) ,3,1,1,2); //s,d,d,g
-            tileList[179] = new TileObject(MakeLookup(X, X, X) ,3,1,2,1); //s,d,g,d
-            tileList[180] = new TileObject(MakeLookup(X, X, X) ,3,1,2,2); //s,d,g,g
-            tileList[181] = new TileObject(MakeLookup(X, X, X) ,3,2,1,1); //s,g,d,d
-            tileList[182] = new TileObject(MakeLookup(X, X, X) ,3,2,1,2); //s,g,d,g
-            tileList[183] = new TileObject(MakeLookup(X, X, X) ,3,2,2,1); //s,g,g,d
-
-            tileList[184] = new TileObject(MakeLookup(X, X, X) ,1,2,3,3); //d,g,s,s
-            tileList[185] = new TileObject(MakeLookup(X, X, X) ,2,1,3,3); //g,d,s,s
-
-            tileList[186] = new TileObject(MakeLookup(X, X, X) ,1,3,3,2); //d,s,s,g
-            tileList[187] = new TileObject(MakeLookup(X, X, X) ,2,3,3,1); //g,s,s,d
-
-            tileList[188] = new TileObject(MakeLookup(X, X, X) ,3,3,1,2); //s,s,d,g
-            tileList[189] = new TileObject(MakeLookup(X, X, X) ,3,3,2,1); //s,s,g,d
-
-            tileList[190] = new TileObject(MakeLookup(X, X, X) ,1,3,2,3); //d,s,g,s
-            tileList[191] = new TileObject(MakeLookup(X, X, X) ,2,3,1,3); //g,s,d,s
-
-            tileList[192] = new TileObject(MakeLookup(X, X, X) ,3,1,3,2); //s,d,s,g
-            tileList[193] = new TileObject(MakeLookup(X, X, X) ,3,2,3,1); //s,g,s,d
-
-            tileList[194] = new TileObject(MakeLookup(X, X, X) ,3,1,2,3); //s,d,g,s
-            tileList[195] = new TileObject(MakeLookup(X, X, X) ,3,2,1,3); //s,g,d,s */
+            tileList[159] = new TileObject(MakeLookup(X, X, X) ,3,2,0,3); //s,g,w,s */
         }
 
         // Encodes a byte with Daggerfall tile lookup
@@ -700,10 +700,10 @@ namespace DaggerfallWorkshop
 
         static bool SteepnessTooHigh(float steepness, NativeArray<float> heightmapData, float maxTerrainHeight, int hx, int hy, int hDim, int upperBound, int index, int tdDim, NativeArray<byte> tileData)
         {
-            if (JobA.Row(index, tdDim) <= 0 ||
-                JobA.Col(index, tdDim) + 1 >= tdDim ||
-                JobA.Row(index, tdDim) + 1 >= tdDim ||
-                JobA.Col(index, tdDim) <= 0)
+            if (JobA.Row(index, tdDim) < 0 ||
+                JobA.Col(index, tdDim) +1 >= tdDim ||
+                JobA.Row(index, tdDim) +1 >= tdDim ||
+                JobA.Col(index, tdDim) < 0)
             {
                 return false;
             }

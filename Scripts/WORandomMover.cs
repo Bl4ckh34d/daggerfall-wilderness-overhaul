@@ -11,17 +11,17 @@ public class WORandomMover : MonoBehaviour
   [SerializeField] [Range(0.1f, 10f)] float posChangeTime;
   [SerializeField] [Range(0f, 5f)] float maxRoamingRangeVertical;
   [SerializeField] [Range(0f, 2.5f)] float maxRoamingRangeHorizontal;
-  [SerializeField] bool randomizePosChangeTime = false;
 
-  Rigidbody rb;
   DaggerfallUnity dfUnity;
-  SpriteRenderer sRenderer;
-  Camera m_Camera;
+  WeatherManager weatherManager;
+  GameObject player;
+  Camera mainCam;
+  Rigidbody rb;
+  Transform halo;
+  SpriteRenderer m_Renderer;
+  SpriteRenderer h_Renderer;
   Material m_Material;
   Material h_Material;
-  GameObject player;
-  Transform glowLight;
-  WeatherManager weatherManager;
 
   int my_StartTime;
   int my_EndTime;
@@ -32,7 +32,6 @@ public class WORandomMover : MonoBehaviour
 
   public Vector3 startPos;
   Vector3 targetPos;
-  Vector3 dirVect;
 
   bool isOn = false;
   bool init = true;
@@ -57,12 +56,13 @@ public class WORandomMover : MonoBehaviour
   {
     dfUnity = GameObject.Find("DaggerfallUnity").GetComponent<DaggerfallUnity>();
     weatherManager = GameObject.Find("WeatherManager").GetComponent<WeatherManager>();
-    m_Camera = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<Camera>();
+    mainCam = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<Camera>();
     rb = GetComponent<Rigidbody>();
-    sRenderer = GetComponent<SpriteRenderer>();
+    m_Renderer = GetComponent<SpriteRenderer>();
     m_Material = GetComponent<SpriteRenderer>().material;
     h_Material = transform.GetChild(0).GetComponent<SpriteRenderer>().material;
-    glowLight = transform.GetChild(0);
+    halo = transform.GetChild(0);
+    h_Renderer = halo.GetComponent<SpriteRenderer>();
   }
 
   void Start()
@@ -106,7 +106,7 @@ public class WORandomMover : MonoBehaviour
 
       if (isOn && init)
       {
-        sRenderer.enabled = true;
+        m_Renderer.enabled = true;
         if (m_Alpha < 10f)
         {
           m_Alpha += Time.fixedDeltaTime * 5;
@@ -131,7 +131,7 @@ public class WORandomMover : MonoBehaviour
         {
           init = false;
         }
-        sRenderer.enabled = false;
+        m_Renderer.enabled = false;
       }
 
       if (isOn && !init)
@@ -140,49 +140,27 @@ public class WORandomMover : MonoBehaviour
 
         m_Alpha = -10 + (Mathf.PingPong(Time.time * pulseFactor, 1f) * 20);
         m_Material.SetColor("_Color", new Color(1f, 1f, 1f, m_Alpha));
-        glowLight.transform.localScale = new Vector3(m_Alpha, m_Alpha, m_Alpha);
+        halo.transform.localScale = new Vector3(m_Alpha, m_Alpha, m_Alpha);
 
         if (m_Alpha > 0) {
-          glowLight.GetComponent<SpriteRenderer>().enabled = true;
+          h_Renderer.enabled = true;
         } else {
-          glowLight.GetComponent<SpriteRenderer>().enabled = false;
+          h_Renderer.enabled = false;
         }
 
-        if (randomizePosChangeTime)
+        if (t > Random.Range(0.3f, 3))
         {
-          if (t > Random.Range(0.3f, 3))
-          {
-            t = 0f;
-            targetPos = new Vector3(
-            startPos.x + Random.Range(-maxRoamingRangeHorizontal, maxRoamingRangeHorizontal),
-            startPos.y + Random.Range(-maxRoamingRangeVertical, maxRoamingRangeVertical),
-            startPos.z + Random.Range(-maxRoamingRangeHorizontal, maxRoamingRangeHorizontal));
-          }
-        }
-        else
-        {
-          if (t > posChangeTime)
-          {
-            t = 0f;
-            targetPos = new Vector3(
-            startPos.x + Random.Range(-maxRoamingRangeHorizontal, maxRoamingRangeHorizontal),
-            startPos.y + Random.Range(-maxRoamingRangeVertical, maxRoamingRangeVertical),
-            startPos.z + Random.Range(-maxRoamingRangeHorizontal, maxRoamingRangeHorizontal));
-            if (randomizePosChangeTime)
-            {
-              speed = Random.Range(0.1f, 1.5f);
-            }
-          }
+          t = 0f;
+          targetPos = new Vector3(
+          startPos.x + Random.Range(-maxRoamingRangeHorizontal, maxRoamingRangeHorizontal),
+          startPos.y + Random.Range(-maxRoamingRangeVertical, maxRoamingRangeVertical),
+          startPos.z + Random.Range(-maxRoamingRangeHorizontal, maxRoamingRangeHorizontal));
         }
 
-        dirVect = targetPos - transform.localPosition;
-        if (Time.timeScale == 1f)
-        {
-          rb.AddForce(dirVect * speed);
-        }
+        rb.AddForce((targetPos - transform.localPosition) * speed);
       }
 
-      transform.LookAt(transform.position + m_Camera.transform.rotation * Vector3.forward, m_Camera.transform.rotation * Vector3.up);
+      transform.LookAt(transform.position + mainCam.transform.rotation * Vector3.forward, mainCam.transform.rotation * Vector3.up);
     }
   }
 }

@@ -29,9 +29,6 @@ public class WODistanceChecker : MonoBehaviour
     Vector3 pos = new Vector3(((x + xVariation) * scale), 0, ((y + zVariation) * scale)) + dfTerrain.transform.position;
     pos.y = terrain.SampleHeight(new Vector3((x + xVariation) * scale, 0, (y + zVariation) * scale) + dfTerrain.transform.position) + dfTerrain.transform.position.y + Random.Range(1.5f, 3f);
 
-    //Vector3 pos = new Vector3(transform.position.x + xVariation, transform.position.y, transform.position.z + zVariation);
-    //pos.y = terrain.SampleHeight(new Vector3((int)(x + xVariation) * scale, 0, (int)(y + zVariation) * scale) + dfTerrain.transform.position) + dfTerrain.transform.position.y + Random.Range(1.5f, 3f);
-
     var firefly = GameObject.Instantiate(Resources.Load("Firefly") as GameObject, pos, Quaternion.identity, transform);
     firefly.GetComponent<WORandomMover>().startPos = transform.InverseTransformPoint(pos);
   }
