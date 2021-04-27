@@ -258,6 +258,8 @@ namespace WildernessOverhaul
             else
                 mapStyleChanceRnd = mapStyleChance[5];
 
+            float flowerTreeSwap = Random.Range(0.00f, 1.00f);
+
             AddShootingStar(dfTerrain, dfBillboardBatch, 90f, 900f, shootingStarsMinimum, shootingStarsMaximum); // Shooting Stars
 
             for (int y = 0; y < tDim; y++)
@@ -420,7 +422,6 @@ namespace WildernessOverhaul
                                     pos.y = height2 - (steepness / slopeSinkRatio);
                                     dfBillboardBatch.AddItem(23, pos);
                                 }
-                                float flowerTreeSwap = Random.Range(0.00f, 1.00f);
                                 else if (GetWeightedRecord(weight, tempForestLimit[0], tempForestLimit[1]) == "flower")
                                 {
                                     if (flowerTreeSwap > 0.2f) {
