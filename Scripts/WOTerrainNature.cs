@@ -457,9 +457,9 @@ namespace WildernessOverhaul
                                         {
                                             AddBillboardToBatch(dfTerrain, dfBillboardBatch, vegetationList.temperateWoodlandTrees, scale, steepness, terrain, x, y, Random.Range(0.75f,1.15f)); // Trees
 
-                                            for (int i = 0; i < Random.Range(0,2); i++)
+                                            for (int i = 0; i < Random.Range(1,3); i++)
                                             {
-                                                AddBillboardToBatch(dfTerrain, dfBillboardBatch, vegetationList.temperateWoodlandBushes, scale, steepness, terrain, x, y, Random.Range(1.00f,1.40f)); // Bushes
+                                                AddBillboardToBatch(dfTerrain, dfBillboardBatch, vegetationList.temperateWoodlandBushes, scale, steepness, terrain, x, y, Random.Range(1.20f,1.60f)); // Bushes
                                             }
 
                                             AddFirefly(dfTerrain, terrain, dfBillboardBatch, Random.Range(0.0f, 100.0f), 1f * (1 - dfTerrain.MapData.heightmapSamples[hy, hx]), scale, x, y, 5, 15, 35, firefliesExist); // Fireflies
@@ -468,18 +468,18 @@ namespace WildernessOverhaul
                                             {
                                                 AddBillboardToBatch(dfTerrain, dfBillboardBatch, vegetationList.temperateWoodlandTrees, scale, steepness, terrain, x, y, Random.Range(1.25f,1.65f)); // Trees
 
-                                                for (int i = 0; i < Random.Range(0,2); i++)
+                                                for (int i = 0; i < Random.Range(1,3); i++)
                                                 {
-                                                    AddBillboardToBatch(dfTerrain, dfBillboardBatch, vegetationList.temperateWoodlandBushes, scale, steepness, terrain, x, y, Random.Range(1.50f,1.80f)); // Bushes
+                                                    AddBillboardToBatch(dfTerrain, dfBillboardBatch, vegetationList.temperateWoodlandBushes, scale, steepness, terrain, x, y, Random.Range(1.80f,2.30f)); // Bushes
                                                 }
 
                                                 AddBillboardToBatch(dfTerrain, dfBillboardBatch, vegetationList.temperateWoodlandBeach, scale, steepness, terrain, x, y, Random.Range(0.10f,0.30f)); // Beach
 
                                                 if (Random.Range(0.0f, 1.0f) < dfTerrain.MapData.heightmapSamples[hy, hx] * 0.5f)
                                                 {
-                                                    for (int i = 0; i < Random.Range(1,3); i++)
+                                                    for (int i = 0; i < Random.Range(2,4); i++)
                                                     {
-                                                        AddBillboardToBatch(dfTerrain, dfBillboardBatch, vegetationList.temperateWoodlandBushes, scale, steepness, terrain, x, y, Random.Range(1.50f,1.80f)); // Bushes
+                                                        AddBillboardToBatch(dfTerrain, dfBillboardBatch, vegetationList.temperateWoodlandBushes, scale, steepness, terrain, x, y, Random.Range(1.80f,2.30f)); // Bushes
                                                     }
                                                 }
 
@@ -488,9 +488,9 @@ namespace WildernessOverhaul
 
                                             if (rndMinor < mapStyleChance[0])
                                             {
-                                                for (int i = 0; i < Random.Range(1,3); i++)
+                                                for (int i = 0; i < Random.Range(3,5); i++)
                                                 {
-                                                    AddBillboardToBatch(dfTerrain, dfBillboardBatch, vegetationList.temperateWoodlandTrees, scale, steepness, terrain, x, y, Random.Range(1.00f,1.40f)); // Trees
+                                                    AddBillboardToBatch(dfTerrain, dfBillboardBatch, vegetationList.temperateWoodlandTrees, scale, steepness, terrain, x, y, Random.Range(1.30f,1.80f)); // Trees
                                                 }
 
                                                 AddBillboardToBatch(dfTerrain, dfBillboardBatch, vegetationList.temperateWoodlandDeadTrees, scale, steepness, terrain, x, y, Random.Range(0.10f,0.30f)); // Dead Trees
@@ -609,7 +609,7 @@ namespace WildernessOverhaul
                                             AddBillboardToBatch(dfTerrain, dfBillboardBatch, vegetationList.temperateWoodlandMushroom, scale, steepness, terrain, x, y, 0.00f); // Mushroom
                                         }
 
-                                        for (int i = 0; i < Random.Range(3, 10); i++)
+                                        for (int i = 0; i < Random.Range(1, 3); i++)
                                         {
                                             AddBillboardToBatch(dfTerrain, dfBillboardBatch, vegetationList.temperateWoodlandFlowers, scale, steepness, terrain, x, y, Random.Range(0.30f,0.50f)); // Flowers
                                         }
@@ -617,14 +617,14 @@ namespace WildernessOverhaul
                                         float rndMinor = Random.Range(0, 100);
                                         if (rndMinor < (mapStyleChance[0] - 20 + (dfTerrain.MapData.heightmapSamples[hy, hx] * 100)))
                                         {
-                                            for (int i = 0; i < Random.Range(3, 8); i++)
+                                            for (int i = 0; i < Random.Range(1, 3); i++)
                                             {
                                                 AddBillboardToBatch(dfTerrain, dfBillboardBatch, vegetationList.temperateWoodlandFlowers, scale, steepness, terrain, x, y, Random.Range(0.50f,0.80f)); // Flowers
                                             }
                                         }
                                         if (rndMinor < 20 * (0.4f - dfTerrain.MapData.heightmapSamples[hy, hx]))
                                         {
-                                            for (int i = 0; i < Random.Range(0,5); i++)
+                                            for (int i = 0; i < Random.Range(0,2); i++)
                                             {
                                                 AddBillboardToBatch(dfTerrain, dfBillboardBatch, vegetationList.temperateWoodlandBushes, scale, steepness, terrain, x, y, Random.Range(0.75f,1.15f)); // Bushes
                                             }
