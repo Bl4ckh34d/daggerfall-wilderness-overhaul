@@ -11,9 +11,15 @@ namespace WildernessOverhaul
 		static Mod mod;
 		static WOTerrainTexturing woTexturing;
 		static WOTerrainNature woNature;
+		static WOTilemapTextureArrayTerrainMaterialProvider woMatProvider;
+		static TilemapTextureArrayTerrainMaterialProvider standardMatProvider;
 
 		static Mod DREAMMod;
 		static bool DREAMModEnabled;
+
+        static Mod InterestingTerrainMod;
+        static bool InterestingTerrainModEnabled;
+        static Material terrainMaterial;
 
 		bool dynamicVegetationClearance;
 		bool vegetationInLocations;
@@ -29,23 +35,31 @@ namespace WildernessOverhaul
 		float natureClearance4;
 		float natureClearance5;
 
-		[Invoke(StateManager.StateTypes.Start, 0)]
+		[Invoke(StateManager.StateTypes.Start , 0)]
 		public static void Init(InitParams initParams)
 		{
 			mod = initParams.Mod;
-			var go = new GameObject(mod.Title);
-			go.AddComponent<WildernessOverhaulMod>();
+			var modGameObject = new GameObject(mod.Title);
+			modGameObject.AddComponent<WildernessOverhaulMod>();
 			if (ModManager.Instance.GetModFromGUID("5e1af2fc-2c12-4d05-829c-12b37f396e19") != null)
 			{
 				DREAMMod = ModManager.Instance.GetModFromGUID("5e1af2fc-2c12-4d05-829c-12b37f396e19");
 				if (DREAMMod != null && DREAMMod.Enabled)
 					DREAMModEnabled = true;
+                    Debug.Log("Wilderness Overhaul: DREAM Mod is active");
+			}
+            if (ModManager.Instance.GetModFromGUID("d08bb628-ff2e-4e2f-ae57-1d4981e61843") != null)
+			{
+				InterestingTerrainMod = ModManager.Instance.GetModFromGUID("d08bb628-ff2e-4e2f-ae57-1d4981e61843");
+				if (InterestingTerrainMod != null && InterestingTerrainMod.Enabled)
+					InterestingTerrainModEnabled = true;
+                    Debug.Log("Wilderness Overhaul: Interesting Terrain Mod is active");
 			}
 		}
 
-		void Awake()
+		void Start()
 		{
-			Debug.Log("Wilderness Overhaul: initiating mod");
+			Debug.Log("Wilderness Overhaul: Initiating Mod");
 
 			ModSettings settings = mod.GetSettings();
 			dynamicVegetationClearance = settings.GetValue<bool>("TerrainNature", "DynamicVegetationClearance");
@@ -77,12 +91,16 @@ namespace WildernessOverhaul
 				natureClearance3,
 				natureClearance4,
 				natureClearance5);
-			woTexturing = new WOTerrainTexturing();
+			woTexturing = new WOTerrainTexturing(
+                InterestingTerrainModEnabled);
+            woMatProvider = new WOTilemapTextureArrayTerrainMaterialProvider(mod);
+
+            DaggerfallUnity.Instance.TerrainMaterialProvider = woMatProvider;
 			DaggerfallUnity.Instance.TerrainNature = woNature;
 			DaggerfallUnity.Instance.TerrainTexturing = woTexturing;
 
 			mod.IsReady = true;
-			Debug.Log("Wilderness Overhaul: mod initiated");
+			Debug.Log("Wilderness Overhaul: Mod Initiated");
 		}
 	}
 }

@@ -12,6 +12,27 @@
         "Assets/Game/Mods/Wilderness Overhaul/Scripts/WOTerrainTexturing.cs",
         "Assets/Game/Mods/Wilderness Overhaul/Wilderness Overhaul.dfmod.json",
         "Assets/Game/Mods/Wilderness Overhaul/modsettings.json",
-        "Assets/Game/Mods/Wilderness Overhaul/Resources/Firefly.prefab"
+        "Assets/Game/Mods/Wilderness Overhaul/Resources/Firefly.prefab",
+        "Assets/Game/Mods/Wilderness Overhaul/Resources/ShootingStars.prefab",
+        "Assets/Game/Mods/Wilderness Overhaul/Materials/Firefly.mat",
+        "Assets/Game/Mods/Wilderness Overhaul/Materials/ShootingStarTrail.mat",
+        "Assets/Game/Mods/Wilderness Overhaul/Images/firefly.png",
+        "Assets/Game/Mods/Wilderness Overhaul/Scripts/WOTilemapTextureArrayTerrainMaterialProvider.cs",
+        "Assets/Game/Mods/Wilderness Overhaul/Scripts/WORandomMover.cs",
+        "Assets/Game/Mods/Wilderness Overhaul/Scripts/WOShootingStarController.cs",
+        "Assets/Game/Mods/Wilderness Overhaul/Scripts/WODistanceChecker.cs",
+        "Assets/Game/Mods/Wilderness Overhaul/Scripts/WOTilemapTerrainMaterialProvider.cs",
+        "Assets/Game/Mods/Wilderness Overhaul/Textures/TEXTURE.302.asset",
+        "Assets/Game/Mods/Wilderness Overhaul/Textures/TEXTURE.102.asset",
+        "Assets/Game/Mods/Wilderness Overhaul/Textures/TEXTURE.402.asset",
+        "Assets/Game/Mods/Wilderness Overhaul/Textures/TEXTURE.404.asset",
+        "Assets/Game/Mods/Wilderness Overhaul/Textures/TEXTURE.403.asset",
+        "Assets/Game/Mods/Wilderness Overhaul/Textures/TEXTURE.303.asset",
+        "Assets/Game/Mods/Wilderness Overhaul/Textures/TEXTURE.002.asset",
+        "Assets/Game/Mods/Wilderness Overhaul/Textures/TEXTURE.304.asset",
+        "Assets/Game/Mods/Wilderness Overhaul/Textures/TEXTURE.103.asset",
+        "Assets/Game/Mods/Wilderness Overhaul/Textures/TEXTURE.004.asset",
+        "Assets/Game/Mods/Wilderness Overhaul/Textures/TEXTURE.104.asset",
+        "Assets/Game/Mods/Wilderness Overhaul/Textures/TEXTURE.003.asset"
     ]
 }

@@ -14,13 +14,10 @@ using System;
 using DaggerfallConnect.Arena2;
 using Unity.Jobs;
 using Unity.Collections;
+using DaggerfallWorkshop;
 
-namespace DaggerfallWorkshop
+namespace WildernessOverhaul
 {
-    /// <summary>
-    /// Generates texture tiles for terrains and uses marching squares for tile transitions.
-    /// These features are very much in early stages of development.
-    /// </summary>
     public class WOTerrainTexturing : ITerrainTexturing
     {
         // Use same seed to ensure continuous tiles
@@ -30,85 +27,17 @@ namespace DaggerfallWorkshop
         const byte grass = 2;
         const byte stone = 3;
 
-        const float desert1Frequency = 0.02f;
-        const float desert1Amplitude = 0.3f;
-        const float desert1Persistance = 0.5f;
-        const int desert1Octaves = 5;
-        const float desert1UpperWaterSpread = -1.0f;
-        const float desert1LowerGrassSpread = 0.4f;
-        const float desert1UpperGrassSpread = 0.5f;
+        static bool interestingTerrainEnabled;
 
-        const float desert2Frequency = 0.02f;
-        const float desert2Amplitude = 0.3f;
-        const float desert2Persistance = 0.55f;
-        const int desert2Octaves = 5;
-        const float desert2UpperWaterSpread = -1.0f;
-        const float desert2LowerGrassSpread = 0.35f;
-        const float desert2UpperGrassSpread = 0.5f;
-
-        const float mountainFrequency = 0.025f;
-        const float mountainAmplitude = 0.3f;
-        const float mountainPersistance = 0.95f;
-        const int mountainOctaves = 5;
-        const float mountainUpperWaterSpread = 0.0f;
-        const float mountainLowerGrassSpread = 0.35f;
-        const float mountainUpperGrassSpread = 0.95f;
-
-        const float rainforestFrequency = 0.035f;
-        const float rainforestAmplitude = 0.4f;
-        const float rainforestPersistance = 0.8f;
-        const int rainforestOctaves = 5;
-        const float rainforestUpperWaterSpread = 0.0f;
-        const float rainforestLowerGrassSpread = 0.35f;
-        const float rainforestUpperGrassSpread = 0.95f;
-
-        const float swampFrequency = 0.02f;
-        const float swampAmplitude = 0.3f;
-        const float swampPersistance = 0.5f;
-        const int swampOctaves = 5;
-        const float swampUpperWaterSpread = -1.0f;
-        const float swampLowerGrassSpread = 0.4f;
-        const float swampUpperGrassSpread = 0.5f;
-
-        const float subtropicalFrequency = 0.02f;
-        const float subtropicalAmplitude = 0.3f;
-        const float subtropicalPersistance = 0.5f;
-        const int subtropicalOctaves = 5;
-        const float subtropicalUpperWaterSpread = -1.0f;
-        const float subtropicalLowerGrassSpread = 0.4f;
-        const float subtropicalUpperGrassSpread = 0.5f;
-
-        const float mountainWoodsFrequency = 0.035f;
-        const float mountainWoodsAmplitude = 0.4f;
-        const float mountainWoodsPersistance = 0.8f;
-        const int mountainWoodsOctaves = 5;
-        const float mountainWoodsUpperWaterSpread = 0.0f;
-        const float mountainWoodsLowerGrassSpread = 0.35f;
-        const float mountainWoodsUpperGrassSpread = 0.95f;
-
-        const float woodlandsFrequency = 0.035f;
-        const float woodlandsAmplitude = 0.4f;
-        const float woodlandsPersistance = 0.8f;
-        const int woodlandsOctaves = 5;
-        const float woodlandsUpperWaterSpread = 0.0f;
-        const float woodlandsLowerGrassSpread = 0.35f;
-        const float woodlandsUpperGrassSpread = 0.95f;
-
-        const float hauntedWoodsFrequency = 0.035f;
-        const float hauntedWoodsAmplitude = 0.4f;
-        const float hauntedWoodsPersistance = 0.8f;
-        const int hauntedWoodsOctaves = 5;
-        const float hauntedWoodsUpperWaterSpread = 0.0f;
-        const float hauntedWoodsLowerGrassSpread = 0.35f;
-        const float hauntedWoodsUpperGrassSpread = 0.95f;
-
-        const float oceanFrequency = 0.1f;
-        const float oceanAmplitude = 0.95f;
-        const float oceanPersistance = 0.3f;
-        const int oceanOctaves = 5;
-        const float oceanUpperWaterSpread = 0.0f;
-        const float oceanLowerGrassSpread = 0.35f;
-        const float oceanUpperGrassSpread = 0.95f;
+        // Order: Deser1, Desert2, Mountains, Rainforest, Swamp,
+        // Subtropics, Mountain Woods, Woodland, Haunted Woods, Ocean
+        static float[] frequency = {0.02f, 0.02f, 0.025f, 0.035f, 0.02f, 0.02f, 0.035f, 0.035f, 0.035f, 0.1f};
+        static float[] amplitude = {0.3f, 0.3f, 0.3f, 0.4f, 0.3f, 0.3f, 0.4f, 0.4f, 0.4f, 0.95f};
+        static float[] persistance = {0.5f, 0.55f, 0.95f, 0.8f, 0.5f, 0.5f, 0.8f, 0.8f, 0.8f, 0.3f};
+        static int octaves = 5;
+        static float[] upperWaterSpread = {-1.0f, -1.0f, 0.0f, 0.0f, -1.0f, -1.0f, 0.0f, 0.0f, 0.0f, 0.0f};
+        static float[] lowerGrassSpread = {0.4f, 0.35f, 0.35f, 0.35f, 0.4f, 0.4f, 0.35f, 0.35f, 0.35f, 0.35f};
+        static float[] upperGrassSpread = {0.5f, 0.5f, 0.95f, 0.95f, 0.5f, 0.5f, 0.95f, 0.95f, 0.95f, 0.95f};
 
         public static float treeLine = UnityEngine.Random.Range(0.815f, 0.835f);
 
@@ -116,10 +45,13 @@ namespace DaggerfallWorkshop
         protected static readonly int assignTilesDim = MapsFile.WorldMapTileDim;
 
         protected byte[] lookupTable;
-        static public TileObject[] tileList;
+        static TileObject[] tileTable;
+        static MapPixelData currentMapData;
 
-        public WOTerrainTexturing()
+        public WOTerrainTexturing(
+            bool ITEnabled)
         {
+            interestingTerrainEnabled = ITEnabled;
             CreateLookupTable();
         }
 
@@ -127,9 +59,15 @@ namespace DaggerfallWorkshop
         {
             // Cache tile data to minimise noise sampling during march.
             NativeArray<byte> tileData = new NativeArray<byte>(tileDataDim * tileDataDim, Allocator.TempJob);
+            currentMapData = mapData;
+
+            float mapRandom = 0f;
+            if (mapData.worldClimate == (int)MapsFile.Climates.Woodlands)
+                mapRandom = UnityEngine.Random.Range(0.45f, 0.6f);
 
             GenerateTileDataJob tileDataJob = new GenerateTileDataJob
             {
+                mapRnd = mapRandom,
                 heightmapData = mapData.heightmapData,
                 tileData = tileData,
                 tdDim = tileDataDim,
@@ -165,11 +103,6 @@ namespace DaggerfallWorkshop
 
         }
 
-        #region Marching Squares - WIP
-
-        // Very basic marching squares for water > dirt > grass > stone transitions.
-        // Cannot handle water > grass or water > stone, etc.
-        // Will improve this at later date to use a wider range of transitions.
         protected struct AssignTilesJob : IJobParallelFor
         {
             [ReadOnly]
@@ -184,6 +117,8 @@ namespace DaggerfallWorkshop
             public bool march;
             public Rect locationRect;
 
+
+
             public void Execute(int index)
             {
                 int x = JobA.Row(index, tDim);
@@ -196,12 +131,28 @@ namespace DaggerfallWorkshop
                 // Assign tile texture
                 if (march)
                 {
-                    int bl = tileData[JobA.Idx(x, y, tdDim)];
-                    int br = tileData[JobA.Idx(x + 1, y, tdDim)];
-                    int tr = tileData[JobA.Idx(x + 1, y + 1, tdDim)];
-                    int tl = tileData[JobA.Idx(x, y + 1, tdDim)];
+                    if(!currentMapData.hasLocation) {
 
-                    tilemapData[index] = GetTileByNeighbours(bl, br, tr, tl);
+                        int bl = tileData[JobA.Idx(x, y, tdDim)];
+                        int br = tileData[JobA.Idx(x + 1, y, tdDim)];
+                        int tr = tileData[JobA.Idx(x + 1, y + 1, tdDim)];
+                        int tl = tileData[JobA.Idx(x, y + 1, tdDim)];
+
+                        tilemapData[index] = tileTable[FindTileIndex(bl, br, tr, tl)].Tile;
+
+                    } else {
+
+                        int tdIdx = JobA.Idx(x, y, tdDim);
+                        int b0 = tileData[tdIdx];               // tileData[x, y]
+                        int b1 = tileData[tdIdx + 1];           // tileData[x + 1, y]
+                        int b2 = tileData[tdIdx + tdDim];       // tileData[x, y + 1]
+                        int b3 = tileData[tdIdx + tdDim + 1];   // tileData[x + 1, y + 1]
+                        int shape = (b0 & 1) | (b1 & 1) << 1 | (b2 & 1) << 2 | (b3 & 1) << 3;
+                        int ring = (b0 + b1 + b2 + b3) >> 2;
+                        int tileID = shape | ring << 4;
+
+                        tilemapData[index] = lookupTable[tileID];
+                    }
                 }
                 else
                 {
@@ -227,51 +178,62 @@ namespace DaggerfallWorkshop
             public int mapPixelY;
             public int worldClimate;
 
+            public float mapRnd;
+
             // Gets noise value
             private float NoiseWeight(float worldX, float worldY, float height)
             {
-                float woodlandsPersistanceRnd = woodlandsPersistance + ((height / maxTerrainHeight) * 1.4f) - 0.30f;
-                float mountainWoodsPersistanceRnd = mountainWoodsPersistance + ((height / maxTerrainHeight) * 1.5f) - 0.35f;
-                float hauntedWoodsPersistanceRnd = hauntedWoodsPersistance + ((height / maxTerrainHeight) * 1.5f) - 0.35f;
-                float mountainsPersistanceRnd;
-                if ((height / maxTerrainHeight) + JobRand.Next(-5, 5) / 1000f > treeLine)
-                {
-                    mountainsPersistanceRnd = mountainPersistance - treeLine + ((height / maxTerrainHeight) * 1.2f);
-                }
-                else
-                {
-                    mountainsPersistanceRnd = mountainPersistance - (1 - (height / maxTerrainHeight)) * 0.4f;
-                }
-                float desert1PersistanceRnd = desert1Persistance + ((height / maxTerrainHeight) * 2) - 0.25f;
-                float desert2PersistanceRnd = desert2Persistance + ((height / maxTerrainHeight) * 2) - 0.25f;
-                float subtropicalPersistanceRnd = subtropicalPersistance + ((height / maxTerrainHeight) * 2) - 0.25f;
-                float swampPersistanceRnd = swampPersistance + ((height / maxTerrainHeight) * 3) - 0.25f;
-                float rainforestPersistanceRnd = rainforestPersistance + ((height / maxTerrainHeight) * 1.5f) - 0.35f;
-
-                switch (worldClimate)
-                {
+                float persistanceRnd = 0.95f;
+                int climateNum = 9;
+                switch (worldClimate) {
                     case (int)MapsFile.Climates.Desert:
-                        return GetNoise(worldX, worldY, desert1Frequency, desert1Amplitude, desert1PersistanceRnd, desert1Octaves, seed);
+                        climateNum = 0;
+                        persistanceRnd = persistance[climateNum] + ((height / maxTerrainHeight) * 2) - 0.25f;
+                        break;
                     case (int)MapsFile.Climates.Desert2:
-                        return GetNoise(worldX, worldY, desert2Frequency, desert2Amplitude, desert2PersistanceRnd, desert2Octaves, seed);
+                        climateNum = 1;
+                        persistanceRnd = persistance[climateNum] + ((height / maxTerrainHeight) * 2) - 0.25f;
+                        break;
                     case (int)MapsFile.Climates.Mountain:
-                        return GetNoise(worldX, worldY, mountainFrequency, mountainAmplitude, mountainsPersistanceRnd, mountainOctaves, seed);
+                        climateNum = 2;
+                        if ((height / maxTerrainHeight) + JobRand.Next(-5, 5) / 1000f > treeLine)
+                            persistanceRnd = persistance[climateNum] - treeLine + ((height / maxTerrainHeight) * 1.2f);
+                        else
+                            persistanceRnd = persistance[climateNum] - (1 - (height / maxTerrainHeight)) * 0.4f;
+                        break;
                     case (int)MapsFile.Climates.Rainforest:
-                        return GetNoise(worldX, worldY, rainforestFrequency, rainforestAmplitude, rainforestPersistance, rainforestOctaves, seed);
+                        climateNum = 3;
+                        persistanceRnd = persistance[climateNum] + ((height / maxTerrainHeight) * 1.5f) - 0.35f;
+                        break;
                     case (int)MapsFile.Climates.Swamp:
-                        return GetNoise(worldX, worldY, swampFrequency, swampAmplitude, swampPersistance, swampOctaves, seed);
+                        climateNum = 4;
+                        persistanceRnd = persistance[climateNum] + ((height / maxTerrainHeight) * 3) - 0.25f;
+                        break;
                     case (int)MapsFile.Climates.Subtropical:
-                        return GetNoise(worldX, worldY, subtropicalFrequency, subtropicalAmplitude, subtropicalPersistanceRnd, subtropicalOctaves, seed);
+                        climateNum = 5;
+                        persistanceRnd = persistance[climateNum] + ((height / maxTerrainHeight) * 2) - 0.25f;
+                        break;
                     case (int)MapsFile.Climates.MountainWoods:
-                        return GetNoise(worldX, worldY, mountainWoodsFrequency, mountainWoodsAmplitude, mountainWoodsPersistanceRnd, mountainWoodsOctaves, seed);
+                        climateNum = 6;
+                        persistanceRnd = persistance[climateNum] + ((height / maxTerrainHeight) * 1.5f) - 0.35f;
+                        break;
                     case (int)MapsFile.Climates.Woodlands:
-                        return GetNoise(worldX, worldY, woodlandsFrequency, woodlandsAmplitude, woodlandsPersistanceRnd, woodlandsOctaves, seed);
+                        climateNum = 7;
+                        if (interestingTerrainEnabled)
+                            persistanceRnd = mapRnd + ((height / maxTerrainHeight) * 3f); //persistance[climateNum] + ((height / maxTerrainHeight) * 2f) - 0.20f;
+                        else
+                            persistanceRnd = persistance[climateNum] + ((height / maxTerrainHeight) * 1.4f) - 0.30f;
+                        break;
                     case (int)MapsFile.Climates.HauntedWoodlands:
-                        return GetNoise(worldX, worldY, hauntedWoodsFrequency, hauntedWoodsAmplitude, hauntedWoodsPersistanceRnd, hauntedWoodsOctaves, seed);
+                        climateNum = 8;
+                        persistanceRnd = persistance[climateNum] + ((height / maxTerrainHeight) * 1.5f) - 0.35f;
+                        break;
                     case (int)MapsFile.Climates.Ocean:
-                        return GetNoise(worldX, worldY, oceanFrequency, oceanAmplitude, oceanPersistance, oceanOctaves, seed);
+                        climateNum = 9;
+                        persistanceRnd = persistance[climateNum] + ((height / maxTerrainHeight) * 1.5f) - 0.35f;
+                        break;
                 }
-                return GetNoise(worldX, worldY, 0.1f, 0.95f, 0.3f, 5, seed); //worldX, worldY, 0.05f, 0.9f, 0.4f, 3, seed
+                return GetNoise(worldX, worldY, frequency[climateNum], amplitude[climateNum], persistanceRnd, octaves, seed);
             }
 
             // Sets texture by range
@@ -318,18 +280,27 @@ namespace DaggerfallWorkshop
                 int hy = (int)Mathf.Clamp(hDim * ((float)y / (float)tdDim), 0, hDim - 1);
                 float height = heightmapData[JobA.Idx(hy, hx, hDim)] * maxTerrainHeight;  // x & y swapped in heightmap for TerrainData.SetHeights()
 
-                // Ocean texture
-                if (height <= oceanElevation)
-                {
-                    tileData[index] = water;
-                    return;
-                }
-                // Beach texture
-                // Adds a little +/- randomness to threshold so beach line isn't too regular
-                if (height <= beachElevation + (JobRand.Next(-100000000, -55000000) / 10000000f))
-                {
-                    tileData[index] = dirt;
-                    return;
+                // Ocean and Beach texture
+                if (interestingTerrainEnabled) {
+                    if (height <= 100.1f) {
+                        tileData[index] = water;
+                        return;
+                    }
+                    // Adds a little +/- randomness to threshold so beach line isn't too regular
+                    if (height <= beachElevation + (JobRand.Next(-50000000, -25000000) / 10000000f)) {
+                        tileData[index] = dirt;
+                        return;
+                    }
+                } else {
+                    if (height <= oceanElevation) {
+                        tileData[index] = water;
+                        return;
+                    }
+                    // Adds a little +/- randomness to threshold so beach line isn't too regular
+                    if (height <= beachElevation + (JobRand.Next(-100000000, -55000000) / 10000000f)) {
+                        tileData[index] = dirt;
+                        return;
+                    }
                 }
 
                 // Get latitude and longitude of this tile
@@ -341,39 +312,42 @@ namespace DaggerfallWorkshop
 
                 weight += NoiseWeight(latitude, longitude, height);
 
+                int climateNum = 9;
                 switch (worldClimate)
                 {
                     case (int)MapsFile.Climates.Desert:
-                        tileData[index] = GetWeightedRecord(weight, desert1UpperWaterSpread, desert1LowerGrassSpread, desert1UpperGrassSpread);
+                        climateNum = 0;
                         break;
                     case (int)MapsFile.Climates.Desert2:
-                        tileData[index] = GetWeightedRecord(weight, desert2UpperWaterSpread, desert2LowerGrassSpread, desert2UpperGrassSpread);
+                        climateNum = 1;
                         break;
                     case (int)MapsFile.Climates.Mountain:
-                        tileData[index] = GetWeightedRecord(weight, mountainUpperWaterSpread, mountainLowerGrassSpread, mountainUpperGrassSpread);
+                        climateNum = 2;
                         break;
                     case (int)MapsFile.Climates.Rainforest:
-                        tileData[index] = GetWeightedRecord(weight, rainforestUpperWaterSpread, rainforestLowerGrassSpread, rainforestUpperGrassSpread);
+                        climateNum = 3;
                         break;
                     case (int)MapsFile.Climates.Swamp:
-                        tileData[index] = GetWeightedRecord(weight, swampUpperWaterSpread, swampLowerGrassSpread, swampUpperGrassSpread);
+                        climateNum = 4;
                         break;
                     case (int)MapsFile.Climates.Subtropical:
-                        tileData[index] = GetWeightedRecord(weight, subtropicalUpperWaterSpread, subtropicalLowerGrassSpread, subtropicalUpperGrassSpread);
+                        climateNum = 5;
                         break;
                     case (int)MapsFile.Climates.MountainWoods:
-                        tileData[index] = GetWeightedRecord(weight, mountainWoodsUpperWaterSpread, mountainWoodsLowerGrassSpread, mountainWoodsUpperGrassSpread);
+                        climateNum = 6;
                         break;
                     case (int)MapsFile.Climates.Woodlands:
-                        tileData[index] = GetWeightedRecord(weight, woodlandsUpperWaterSpread, woodlandsLowerGrassSpread, woodlandsUpperGrassSpread);
+                        climateNum = 7;
                         break;
                     case (int)MapsFile.Climates.HauntedWoodlands:
-                        tileData[index] = GetWeightedRecord(weight, hauntedWoodsUpperWaterSpread, hauntedWoodsLowerGrassSpread, hauntedWoodsUpperGrassSpread);
+                        climateNum = 8;
                         break;
                     case (int)MapsFile.Climates.Ocean:
-                        tileData[index] = GetWeightedRecord(weight, oceanUpperWaterSpread, oceanLowerGrassSpread, oceanUpperGrassSpread);
+                        climateNum = 9;
                         break;
                 }
+                tileData[index] = GetWeightedRecord(weight, upperWaterSpread[climateNum], lowerGrassSpread[climateNum], upperGrassSpread[climateNum]);
+
                 // Check for lowest local point in desert to place oasis
                 if (worldClimate == (int)MapsFile.Climates.Desert2 &&
                     LowestPointFound(30, heightmapData, maxTerrainHeight, hx, hy, hDim, uB, index, tdDim, tileData))
@@ -386,9 +360,23 @@ namespace DaggerfallWorkshop
                     tileData[index] = water;
                 }
                 // Rock Mountain Face
-                if (SteepnessTooHigh(55f, heightmapData, maxTerrainHeight, hx, hy, hDim, uB, index, tdDim, tileData))
-                {
-                    tileData[index] = stone;
+                if (interestingTerrainEnabled) {
+                    if (SteepnessTooHigh(Mathf.Clamp(100f - ((height / maxTerrainHeight) * 500f),15f,100f), heightmapData, maxTerrainHeight, hx, hy, hDim, uB, index, tdDim, tileData))
+                    {
+                        tileData[index] = stone;
+                    }
+                    if (tileData[index] == dirt && SteepnessTooLow(Mathf.Clamp(((height / maxTerrainHeight) * 250f),0f,45f), heightmapData, maxTerrainHeight, hx, hy, hDim, uB, index, tdDim, tileData))
+                    {
+                        tileData[index] = dirt;
+                    } else if (tileData[index] == dirt && !SteepnessTooLow(Mathf.Clamp(((height / maxTerrainHeight) * 250f),0f,45f), heightmapData, maxTerrainHeight, hx, hy, hDim, uB, index, tdDim, tileData))
+                    {
+                        tileData[index] = grass;
+                    }
+                } else {
+                    if (SteepnessTooHigh(55f, heightmapData, maxTerrainHeight, hx, hy, hDim, uB, index, tdDim, tileData))
+                    {
+                        tileData[index] = stone;
+                    }
                 }
             }
         }
@@ -396,248 +384,239 @@ namespace DaggerfallWorkshop
         // Creates lookup table
         void CreateLookupTable()
         {
-            tileList = new TileObject[112];
-            lookupTable = new byte[1];
-            lookupTable[0] = MakeLookup(0,  false, false);
-            //water > dirt
-            tileList[0] = new TileObject(MakeLookup(0,  false, false)  ,0,0,0,0); //w,w,w,w
-            tileList[1] = new TileObject(MakeLookup(5,  true,  false)  ,1,0,0,0); //d,w,w,w
-            tileList[2] = new TileObject(MakeLookup(5,  false, true)   ,0,1,0,0); //w,d,w,w
-            tileList[3] = new TileObject(MakeLookup(6,  true,  false)  ,1,1,0,0); //d,d,w,w
-            tileList[4] = new TileObject(MakeLookup(5,  true,  true)   ,0,0,1,0); //w,w,d,w
-            tileList[5] = new TileObject(MakeLookup(48, true,  false)  ,1,0,1,0); //d,w,d,w
-            tileList[6] = new TileObject(MakeLookup(6,  false, true)   ,0,1,1,0); //w,d,d,w
-            tileList[7] = new TileObject(MakeLookup(7,  false, true)   ,1,1,1,0); //d,d,d,w
-            tileList[8] = new TileObject(MakeLookup(5,  false, false)  ,0,0,0,1); //w,w,w,d
-            tileList[9] = new TileObject(MakeLookup(6,  false, false)  ,1,0,0,1); //d,w,w,d
-            tileList[10] = new TileObject(MakeLookup(48, false, false) ,0,1,0,1); //w,d,w,d
-            tileList[11] = new TileObject(MakeLookup(7,  true,  false) ,1,1,0,1); //d,d,w,d
-            tileList[12] = new TileObject(MakeLookup(6,  true,  true)  ,0,0,1,1); //w,w,d,d
-            tileList[13] = new TileObject(MakeLookup(7,  false, false) ,1,0,1,1); //d,w,d,d
-            tileList[14] = new TileObject(MakeLookup(7,  true,  true)  ,0,1,1,1); //w,d,d,w
-            tileList[15] = new TileObject(MakeLookup(1,  false, false) ,1,1,1,1); //d,d,d,d
-            //water > grass
-            tileList[16] = new TileObject(MakeLookup(20, true,  false) ,2,0,0,0); //g,w,w,w
-            tileList[17] = new TileObject(MakeLookup(20, false, true)  ,0,2,0,0); //w,g,w,w
-            tileList[18] = new TileObject(MakeLookup(21, true,  false) ,2,2,0,0); //g,g,w,w
-            tileList[19] = new TileObject(MakeLookup(20, true,  true)  ,0,0,2,0); //w,w,g,w
-            tileList[20] = new TileObject(MakeLookup(49, true,  false) ,2,0,2,0); //g,w,g,w
-            tileList[21] = new TileObject(MakeLookup(21, false, true)  ,0,2,2,0); //w,g,g,w
-            tileList[22] = new TileObject(MakeLookup(22, false, true)  ,2,2,2,0); //g,g,g,w
-            tileList[23] = new TileObject(MakeLookup(20, false, false) ,0,0,0,2); //w,w,w,g
-            tileList[24] = new TileObject(MakeLookup(21, false, false) ,2,0,0,2); //g,w,w,g
-            tileList[25] = new TileObject(MakeLookup(49, false, false) ,0,2,0,2); //w,g,w,g
-            tileList[26] = new TileObject(MakeLookup(22, true,  false) ,2,2,0,2); //g,g,w,g
-            tileList[27] = new TileObject(MakeLookup(21, true,  true)  ,0,0,2,2); //w,w,g,g
-            tileList[28] = new TileObject(MakeLookup(22, false, false) ,2,0,2,2); //g,w,g,g
-            tileList[29] = new TileObject(MakeLookup(22, true,  true)  ,0,2,2,2); //w,g,g,g
-            tileList[30] = new TileObject(MakeLookup(2,  false, false) ,2,2,2,2); //g,g,g,g
-            //water > stone
-            tileList[31] = new TileObject(MakeLookup(30, true,  false) ,3,0,0,0); //s,w,w,w
-            tileList[32] = new TileObject(MakeLookup(30, false, true)  ,0,3,0,0); //w,s,w,w
-            tileList[33] = new TileObject(MakeLookup(31, true,  false) ,3,3,0,0); //s,s,w,w
-            tileList[34] = new TileObject(MakeLookup(30, true,  true)  ,0,0,3,0); //w,w,s,w
-            tileList[35] = new TileObject(MakeLookup(50, true,  false) ,3,0,3,0); //s,w,s,w
-            tileList[36] = new TileObject(MakeLookup(31, false, true)  ,0,3,3,0); //w,s,s,w
-            tileList[37] = new TileObject(MakeLookup(32, false, true)  ,3,3,3,0); //s,s,s,w
-            tileList[38] = new TileObject(MakeLookup(30, false, false) ,0,0,0,3); //w,w,w,s
-            tileList[39] = new TileObject(MakeLookup(31, false, false) ,3,0,0,3); //s,w,w,s
-            tileList[40] = new TileObject(MakeLookup(50, false, false) ,0,3,0,3); //w,s,w,s
-            tileList[41] = new TileObject(MakeLookup(32, true,  false) ,3,3,0,3); //s,s,w,s
-            tileList[42] = new TileObject(MakeLookup(31, true,  true)  ,0,0,3,3); //w,w,s,s
-            tileList[43] = new TileObject(MakeLookup(32, false, false) ,3,0,3,3); //s,w,s,s
-            tileList[44] = new TileObject(MakeLookup(32, true,  true)  ,0,3,3,3); //w,s,s,s
-            tileList[45] = new TileObject(MakeLookup(3,  false, false) ,3,3,3,3); //s,s,s,s
-            //dirt > grass
-            tileList[46] = new TileObject(MakeLookup(10, true,  false) ,2,1,1,1); //g,d,d,d
-            tileList[47] = new TileObject(MakeLookup(10, false, true)  ,1,2,1,1); //d,g,d,d
-            tileList[48] = new TileObject(MakeLookup(11, true,  false) ,2,2,1,1); //g,g,d,d
-            tileList[49] = new TileObject(MakeLookup(10, true,  true)  ,1,1,2,1); //d,d,g,d
-            tileList[50] = new TileObject(MakeLookup(51, true,  false) ,2,1,2,1); //g,d,g,d
-            tileList[51] = new TileObject(MakeLookup(11, false, true)  ,1,2,2,1); //d,g,g,d
-            tileList[52] = new TileObject(MakeLookup(12, false, true)  ,2,2,2,1); //g,g,g,d
-            tileList[53] = new TileObject(MakeLookup(10, false, false) ,1,1,1,2); //d,d,d,g
-            tileList[54] = new TileObject(MakeLookup(11, false, false) ,2,1,1,2); //g,d,d,g
-            tileList[55] = new TileObject(MakeLookup(51, false, false) ,1,2,1,2); //d,g,d,g
-            tileList[56] = new TileObject(MakeLookup(12, true,  false) ,2,2,1,2); //g,g,d,g
-            tileList[57] = new TileObject(MakeLookup(11, true,  true)  ,1,1,2,2); //d,d,g,g
-            tileList[58] = new TileObject(MakeLookup(12, false, false) ,2,1,2,2); //g,d,g,g
-            tileList[59] = new TileObject(MakeLookup(12, true,  true)  ,1,2,2,2); //d,g,g,g
-            //dirt > stone
-            tileList[60] = new TileObject(MakeLookup(25, true,  false) ,3,1,1,1); //s,d,d,d
-            tileList[61] = new TileObject(MakeLookup(25, false, true)  ,1,3,1,1); //d,s,d,d
-            tileList[62] = new TileObject(MakeLookup(26, true,  false) ,3,3,1,1); //s,s,d,d
-            tileList[63] = new TileObject(MakeLookup(25, true,  true)  ,1,1,3,1); //d,d,s,d
-            tileList[64] = new TileObject(MakeLookup(52, true,  false) ,3,1,3,1); //s,d,s,d
-            tileList[65] = new TileObject(MakeLookup(26, false, true)  ,1,3,3,1); //d,s,s,d
-            tileList[66] = new TileObject(MakeLookup(27, false, true)  ,3,3,3,1); //s,s,s,d
-            tileList[67] = new TileObject(MakeLookup(25, false, false) ,1,1,1,3); //d,d,d,s
-            tileList[68] = new TileObject(MakeLookup(26, false, false) ,3,1,1,3); //s,d,d,s
-            tileList[69] = new TileObject(MakeLookup(52, false, false) ,1,3,1,3); //d,s,d,s
-            tileList[70] = new TileObject(MakeLookup(27, true,  false) ,3,3,1,3); //s,s,d,s
-            tileList[71] = new TileObject(MakeLookup(26, true,  true)  ,1,1,3,3); //d,d,s,s
-            tileList[72] = new TileObject(MakeLookup(27, false, false) ,3,1,3,3); //s,d,s,s
-            tileList[73] = new TileObject(MakeLookup(27, true,  true)  ,1,3,3,3); //d,s,s,s
-            //grass > stone
-            tileList[74] = new TileObject(MakeLookup(15, true,  false) ,3,2,2,2); //s,g,g,g
-            tileList[75] = new TileObject(MakeLookup(15, false, true)  ,2,3,2,2); //g,s,g,g
-            tileList[76] = new TileObject(MakeLookup(16, true,  false) ,3,3,2,2); //s,s,g,g
-            tileList[77] = new TileObject(MakeLookup(15, true,  true)  ,2,2,3,2); //g,g,s,g
-            tileList[78] = new TileObject(MakeLookup(53, true,  false) ,3,2,3,2); //s,g,s,g
-            tileList[79] = new TileObject(MakeLookup(16, false, true)  ,2,3,3,2); //g,s,s,g
-            tileList[80] = new TileObject(MakeLookup(17, false, true)  ,3,3,3,2); //s,s,s,g
-            tileList[81] = new TileObject(MakeLookup(15, false, false) ,2,2,2,3); //g,g,g,s
-            tileList[82] = new TileObject(MakeLookup(16, false, false) ,3,2,2,3); //s,g,g,s
-            tileList[83] = new TileObject(MakeLookup(53, false, false) ,2,3,2,3); //g,s,g,s
-            tileList[84] = new TileObject(MakeLookup(17, true,  false) ,3,3,2,3); //s,s,g,s
-            tileList[85] = new TileObject(MakeLookup(16, true,  true)  ,2,2,3,3); //g,g,s,s
-            tileList[86] = new TileObject(MakeLookup(17, false, false) ,3,2,3,3); //s,g,s,s
-            tileList[87] = new TileObject(MakeLookup(17, true,  true)  ,2,3,3,3); //g,s,s,s
+            lookupTable = new byte[64];
+            AddLookupRange(0, 1, 5, 48, false, 0);
+            AddLookupRange(2, 1, 10, 51, true, 16);
+            AddLookupRange(2, 3, 15, 53, false, 32);
+            AddLookupRange(3, 3, 15, 53, true, 48);
 
-            //water > dirt > grass
-            //tileList[88] = new TileObject(MakeLookup(34, true, false) ,0,0,2,1); //w,w,g,d (impossible)
-            //tileList[89] = new TileObject(MakeLookup(X, X, X) ,0,2,0,1); //w,g,w,d (tile does not exist)
-            //tileList[89] = new TileObject(MakeLookup(40, false, true) ,0,2,2,1); //w,g,g,d (impossible)
-            tileList[88] = new TileObject(MakeLookup(34, false, false) ,2,0,0,1); //g,w,w,d
-            //tileList[92] = new TileObject(MakeLookup(X, X, X) ,2,0,2,1); //g,w,g,d (tile does not exist)
-            tileList[89] = new TileObject(MakeLookup(40, true, false) ,2,2,0,1); //g,g,w,d
+            tileTable = new TileObject[114];
+            // Water - Dirt
+            tileTable[0]   = new TileObject(MakeLookup(0, false, false),  0,0,0,0);
 
-            tileList[90] = new TileObject(MakeLookup(34, true, true) ,0,0,1,2); //w,w,d,g
-            //tileList[93] = new TileObject(MakeLookup(34, false, true) ,0,2,1,0); //w,g,d,w (impossible)
-            //tileList[96] = new TileObject(MakeLookup(X, X, X) ,0,2,1,2); //w,g,d,g (tile does not exist)
-            //tileList[97] = new TileObject(MakeLookup(X, X, X) ,2,0,1,0); //g,w,d,w (tile does not exist)
-            tileList[91] = new TileObject(MakeLookup(40, false, false) ,2,0,1,2); //g,w,d,g
-            //tileList[95] = new TileObject(MakeLookup(40, true, true) ,2,2,1,0); //g,g,d,w (impossible)
+            tileTable[1]   = new TileObject(MakeLookup(4, true, false),   1,0,0,0);
+            tileTable[2]   = new TileObject(MakeLookup(4, false, true),   0,1,0,0);
+            tileTable[3]   = new TileObject(MakeLookup(4, true, true),    0,0,1,0);
+            tileTable[4]   = new TileObject(MakeLookup(4, false, false),  0,0,0,1);
 
-            //tileList[100] = new TileObject(MakeLookup(X, X, X) ,0,1,0,2); //w,d,w,g (tile does not exist)
-            tileList[92] = new TileObject(MakeLookup(34, false, true) ,0,1,2,0); //w,d,g,w
-            tileList[93] = new TileObject(MakeLookup(40, true, true) ,0,1,2,2); //w,d,g,g
-            //tileList[98] = new TileObject(MakeLookup(34, true, true) ,2,1,0,0); //g,d,w,w (impossible)
-            //tileList[99] = new TileObject(MakeLookup(40, false, false) ,2,1,0,2); //g,d,w,g (impossible)
-            //tileList[105] = new TileObject(MakeLookup(X, X, X) ,2,1,2,0); //g,d,g,w (tile does not exist)
+            tileTable[5]   = new TileObject(MakeLookup(5, true, false),   1,1,0,0);
+            tileTable[6]   = new TileObject(MakeLookup(5, false, true),   0,1,1,0);
+            tileTable[7]   = new TileObject(MakeLookup(5, true, true),    0,0,1,1);
+            tileTable[8]   = new TileObject(MakeLookup(5, false, false),  1,0,0,1);
 
-            //tileList[100] = new TileObject(MakeLookup(34, false, false) ,1,0,0,2); //d,w,w,g (impossible)
-            //tileList[107] = new TileObject(MakeLookup(X, X, X) ,1,0,2,0); //d,w,g,w (tile does not exist)
-            //tileList[101] = new TileObject(MakeLookup(40, true, true) ,1,0,2,2); //d,w,g,g (impossible)
-            tileList[94] = new TileObject(MakeLookup(34, true, false) ,1,2,0,0); //d,g,w,w
-            //tileList[110] = new TileObject(MakeLookup(X, X, X) ,1,2,0,2); //d,g,w,g (tile does not exist)
-            tileList[95] = new TileObject(MakeLookup(40, false, true) ,1,2,2,0); //d,g,g,w
+            tileTable[9]   = new TileObject(MakeLookup(6, false, true),   1,1,1,0);
+            tileTable[10]  = new TileObject(MakeLookup(6, true, true),    0,1,1,1);
+            tileTable[11]  = new TileObject(MakeLookup(6, false, false),  1,0,1,1);
+            tileTable[12]  = new TileObject(MakeLookup(6, true, false),   1,1,0,1);
 
-            tileList[96] = new TileObject(MakeLookup(37, true, false) ,0,2,1,1); //w,g,d,d
-            //tileList[105] = new TileObject(MakeLookup(37, true, false) ,2,0,1,1); //g,w,d,d (impossible)
+            tileTable[13]  = new TileObject(MakeLookup(21, false, false), 0,1,0,1);
+            tileTable[14]  = new TileObject(MakeLookup(21, true, false),  1,0,1,0);
 
-            //tileList[106] = new TileObject(MakeLookup(37, false, true) ,0,1,1,2); //w,d,d,g (impossible)
-            tileList[97] = new TileObject(MakeLookup(37, false, true) ,2,1,1,0); //g,d,d,w
+            tileTable[15]  = new TileObject(MakeLookup(1, false, false),  1,1,1,1);
 
-            tileList[98] = new TileObject(MakeLookup(37, true, false) ,1,1,0,2); //d,d,w,g
-            //tileList[109] = new TileObject(MakeLookup(37, true, false) ,1,1,2,0); //d,d,g,w (impossible)
+            // Dirt - Grass
+            tileTable[16]  = new TileObject(MakeLookup(7, true, false),   2,1,1,1);
+            tileTable[17]  = new TileObject(MakeLookup(7, false, true),   1,2,1,1);
+            tileTable[18]  = new TileObject(MakeLookup(7, true, true),    1,1,2,1);
+            tileTable[19]  = new TileObject(MakeLookup(7, false, false),  1,1,1,2);
 
-            //tileList[118] = new TileObject(MakeLookup(X, X, X) ,0,1,2,1); //w,d,g,d (tile does not exist)
-            //tileList[119] = new TileObject(MakeLookup(X, X, X) ,2,1,0,1); //g,d,w,d (tile does not exist)
+            tileTable[20]  = new TileObject(MakeLookup(8, true, false),   2,2,1,1);
+            tileTable[21]  = new TileObject(MakeLookup(8, false, true),   1,2,2,1);
+            tileTable[22]  = new TileObject(MakeLookup(8, true, true),    1,1,2,2);
+            tileTable[23]  = new TileObject(MakeLookup(8, false, false),  2,1,1,2);
 
-            //tileList[120] = new TileObject(MakeLookup(X, X, X) ,1,0,1,2); //d,w,d,g (tile does not exist)
-            //tileList[121] = new TileObject(MakeLookup(X, X, X) ,1,2,1,0); //d,g,d,w (tile does not exist)
+            tileTable[24]  = new TileObject(MakeLookup(9, false, true),   2,2,2,1);
+            tileTable[25]  = new TileObject(MakeLookup(9, true, true),    1,2,2,2);
+            tileTable[26]  = new TileObject(MakeLookup(9, false, false),  2,1,2,2);
+            tileTable[27]  = new TileObject(MakeLookup(9, true, false),   2,2,1,2);
 
-            tileList[99] = new TileObject(MakeLookup(37, false, false) ,1,0,2,1); //d,w,g,d
-            //tileList[111] = new TileObject(MakeLookup(37, false, false) ,1,2,0,1); //d,g,w,d (impossible)
+            tileTable[28]  = new TileObject(MakeLookup(22, true, false),  2,1,2,1);
+            tileTable[29]  = new TileObject(MakeLookup(22, false, false), 1,2,1,2);
 
-            //dirt > grass > stone
-            tileList[100] = new TileObject(MakeLookup(39, true, false) ,1,1,2,3); //d,d,g,s
-            //tileList[161] = new TileObject(MakeLookup(X, X, X) ,1,2,1,3); //d,g,d,s (tile does not exist)
-            //tileList[113] = new TileObject(MakeLookup(42, false, true) ,1,2,2,3); //d,g,g,s (impossible)
-            //tileList[114] = new TileObject(MakeLookup(39, false, true) ,2,1,1,3); //g,d,d,s (impossible)
-            //tileList[164] = new TileObject(MakeLookup(X, X, X) ,2,1,2,3); //g,d,g,s (tile does not exist)
-            tileList[101] = new TileObject(MakeLookup(42, true, false) ,2,2,1,3); //g,g,d,s
+            tileTable[30]  = new TileObject(MakeLookup(2, false, false),  2,2,2,2);
 
-            //tileList[116] = new TileObject(MakeLookup(39, true, false) ,1,1,3,2); //d,d,s,g (impossible)
-            tileList[102] = new TileObject(MakeLookup(39, false, false) ,1,2,3,1); //d,g,s,d
-            //tileList[168] = new TileObject(MakeLookup(X, X, X) ,1,2,3,2); //d,g,s,g (tile does not exist)
-            //tileList[169] = new TileObject(MakeLookup(X, X, X) ,2,1,3,1); //g,d,s,d (tile does not exist)
-            tileList[103] = new TileObject(MakeLookup(42, false, false) ,2,1,3,2); //g,d,s,g
-            //tileList[119] = new TileObject(MakeLookup(42, true, false) ,2,2,3,1); //g,g,s,d (impossible)
+            // Grass - Stone
+            tileTable[31]  = new TileObject(MakeLookup(10, true, false),  3,2,2,2);
+            tileTable[32]  = new TileObject(MakeLookup(10, false, true),  2,3,2,2);
+            tileTable[33]  = new TileObject(MakeLookup(10, true, true),   2,2,3,2);
+            tileTable[34]  = new TileObject(MakeLookup(10, false, false), 2,2,2,3);
 
-            //tileList[172] = new TileObject(MakeLookup(X, X, X) ,1,3,1,2); //d,s,d,g (tile does not exist)
-            //tileList[120] = new TileObject(MakeLookup(39, false, false) ,1,3,2,1); //d,s,g,d (impossible)
-            tileList[104] = new TileObject(MakeLookup(42, true, true) ,1,3,2,2); //d,s,g,g
-            tileList[105] = new TileObject(MakeLookup(39, true, false) ,2,3,1,1); //g,s,d,d
-            //tileList[123] = new TileObject(MakeLookup(42, false, false) ,2,3,1,2); //g,s,d,g (impossible)
-            //tileList[177] = new TileObject(MakeLookup(X, X, X) ,2,3,2,1); //g,s,g,d (tile does not exist)
+            tileTable[35]  = new TileObject(MakeLookup(11, true, false),  3,3,2,2);
+            tileTable[36]  = new TileObject(MakeLookup(11, false, true),  2,3,3,2);
+            tileTable[37]  = new TileObject(MakeLookup(11, true, true),   2,2,3,3);
+            tileTable[38]  = new TileObject(MakeLookup(11, false, false), 3,2,2,3);
 
-            tileList[106] = new TileObject(MakeLookup(39, false, true) ,3,1,1,2); //s,d,d,g
-            //tileList[179] = new TileObject(MakeLookup(X, X, X) ,3,1,2,1); //s,d,g,d (tile does not exist)
-            //tileList[125] = new TileObject(MakeLookup(42, true, true) ,3,1,2,2); //s,d,g,g (impossible)
-            //tileList[126] = new TileObject(MakeLookup(39, true, false) ,3,2,1,1); //s,g,d,d (impossible)
-            //tileList[182] = new TileObject(MakeLookup(X, X, X) ,3,2,1,2); //s,g,d,g (tile does not exist)
-            tileList[107] = new TileObject(MakeLookup(42, false, true) ,3,2,2,1); //s,g,g,d
+            tileTable[39]  = new TileObject(MakeLookup(12, false, true),  3,3,3,2);
+            tileTable[40]  = new TileObject(MakeLookup(12, true, true),   2,3,3,3);
+            tileTable[41]  = new TileObject(MakeLookup(12, false, false), 3,2,3,3);
+            tileTable[42]  = new TileObject(MakeLookup(12, true, false),  3,3,2,3);
 
-            tileList[108] = new TileObject(MakeLookup(45, true, true) ,1,2,3,3); //d,g,s,s
-            //tileList[129] = new TileObject(MakeLookup(45, true, true) ,2,1,3,3); //g,d,s,s (impossible)
+            tileTable[43]  = new TileObject(MakeLookup(24, true, false),  3,2,3,2);
+            tileTable[44]  = new TileObject(MakeLookup(24, false, false), 2,3,2,3);
 
-            //tileList[130] = new TileObject(MakeLookup(45, false, true) ,1,3,3,2); //d,s,s,g (impossible)
-            tileList[109] = new TileObject(MakeLookup(45, false, true) ,2,3,3,1); //g,s,s,d
+            tileTable[45]  = new TileObject(MakeLookup(3, false, false),  3,3,3,3);
 
-            tileList[110] = new TileObject(MakeLookup(45, true, false) ,3,3,1,2); //s,s,d,g
-            //tileList[133] = new TileObject(MakeLookup(45, true, false) ,3,3,2,1); //s,s,g,d (impossible)
+            // Dirt - Stone
+            tileTable[46]  = new TileObject(MakeLookup(13, true, false),  3,1,1,1);
+            tileTable[47]  = new TileObject(MakeLookup(13, false, true),  1,3,1,1);
+            tileTable[48]  = new TileObject(MakeLookup(13, true, true),   1,1,3,1);
+            tileTable[49]  = new TileObject(MakeLookup(13, false, false), 1,1,1,3);
 
-            //tileList[190] = new TileObject(MakeLookup(X, X, X) ,1,3,2,3); //d,s,g,s (tile does not exist)
-            //tileList[191] = new TileObject(MakeLookup(X, X, X) ,2,3,1,3); //g,s,d,s (tile does not exist)
+            tileTable[50]  = new TileObject(MakeLookup(14, true, false),  3,3,1,1);
+            tileTable[51]  = new TileObject(MakeLookup(14, false, true),  1,3,3,1);
+            tileTable[52]  = new TileObject(MakeLookup(14, true, true),   1,1,3,3);
+            tileTable[53]  = new TileObject(MakeLookup(14, false, false), 3,1,1,3);
 
-            //tileList[192] = new TileObject(MakeLookup(X, X, X) ,3,1,3,2); //s,d,s,g (tile does not exist)
-            //tileList[193] = new TileObject(MakeLookup(X, X, X) ,3,2,3,1); //s,g,s,d (tile does not exist)
+            tileTable[54]  = new TileObject(MakeLookup(15, false, true),  3,3,3,1);
+            tileTable[55]  = new TileObject(MakeLookup(15, true, true),   1,3,3,3);
+            tileTable[56]  = new TileObject(MakeLookup(15, false, false), 3,1,3,3);
+            tileTable[57]  = new TileObject(MakeLookup(15, true, false),  3,3,1,3);
 
-            tileList[111] = new TileObject(MakeLookup(45, false, false) ,3,1,2,3); //s,d,g,s
-            //tileList[135] = new TileObject(MakeLookup(45, false, false) ,3,2,1,3); //s,g,d,s (impossible)
+            tileTable[58]  = new TileObject(MakeLookup(23, true, false),  3,1,3,1);
+            tileTable[59]  = new TileObject(MakeLookup(23, false, false), 1,3,1,3);
 
-            //water > grass > stone
-            /* tileList[124] = new TileObject(MakeLookup(X, X, X) ,0,0,2,3); //w,w,g,s
-            tileList[125] = new TileObject(MakeLookup(X, X, X) ,0,2,0,3); //w,g,w,s
-            tileList[126] = new TileObject(MakeLookup(X, X, X) ,0,2,2,3); //w,g,g,s
-            tileList[127] = new TileObject(MakeLookup(X, X, X) ,2,0,0,3); //g,w,w,s
-            tileList[128] = new TileObject(MakeLookup(X, X, X) ,2,0,2,3); //g,w,g,s
-            tileList[129] = new TileObject(MakeLookup(X, X, X) ,2,2,0,3); //g,g,w,s
+            //Dirt - Grass - Stone
+            tileTable[60]  = new TileObject(MakeLookup(16, true, false),  1,1,2,3);
+            tileTable[61]  = new TileObject(MakeLookup(16, false, true),  3,1,1,2);
+            tileTable[62]  = new TileObject(MakeLookup(16, true, true),   2,3,1,1);
+            tileTable[63]  = new TileObject(MakeLookup(16, false, false), 1,2,3,1);
 
-            tileList[130] = new TileObject(MakeLookup(X, X, X) ,0,0,3,2); //w,w,s,g
-            tileList[131] = new TileObject(MakeLookup(X, X, X) ,0,2,3,0); //w,g,s,w
-            tileList[132] = new TileObject(MakeLookup(X, X, X) ,0,2,3,2); //w,g,s,g
-            tileList[133] = new TileObject(MakeLookup(X, X, X) ,2,0,3,0); //g,w,s,w
-            tileList[134] = new TileObject(MakeLookup(X, X, X) ,2,0,3,2); //g,w,s,g
-            tileList[135] = new TileObject(MakeLookup(X, X, X) ,2,2,3,0); //g,g,s,w
+            tileTable[64]  = new TileObject(MakeLookup(27, true, false),  1,1,3,2);
+            tileTable[65]  = new TileObject(MakeLookup(27, false, true),  2,1,1,3);
+            tileTable[66]  = new TileObject(MakeLookup(27, true, true),   3,2,1,1);
+            tileTable[67]  = new TileObject(MakeLookup(27, false, false), 1,3,2,1);
 
-            tileList[136] = new TileObject(MakeLookup(X, X, X) ,0,3,0,2); //w,s,w,g
-            tileList[137] = new TileObject(MakeLookup(X, X, X) ,0,3,2,0); //w,s,g,w
-            tileList[138] = new TileObject(MakeLookup(X, X, X) ,0,3,2,2); //w,s,g,g
-            tileList[139] = new TileObject(MakeLookup(X, X, X) ,2,3,0,0); //g,s,w,w
-            tileList[140] = new TileObject(MakeLookup(X, X, X) ,2,3,0,2); //g,s,w,g
-            tileList[141] = new TileObject(MakeLookup(X, X, X) ,2,3,2,0); //g,s,g,w
+            tileTable[68]  = new TileObject(MakeLookup(17, true, false),  2,2,1,3);
+            tileTable[69]  = new TileObject(MakeLookup(17, false, true),  3,2,2,1);
+            tileTable[70]  = new TileObject(MakeLookup(17, true, true),   1,3,2,2);
+            tileTable[71]  = new TileObject(MakeLookup(17, false, false), 2,1,3,2);
 
-            tileList[142] = new TileObject(MakeLookup(X, X, X) ,3,0,0,2); //s,w,w,g
-            tileList[143] = new TileObject(MakeLookup(X, X, X) ,3,0,2,0); //s,w,g,w
-            tileList[144] = new TileObject(MakeLookup(X, X, X) ,3,0,2,2); //s,w,g,g
-            tileList[145] = new TileObject(MakeLookup(X, X, X) ,3,2,0,0); //s,g,w,w
-            tileList[146] = new TileObject(MakeLookup(X, X, X) ,3,2,0,2); //s,g,w,g
-            tileList[147] = new TileObject(MakeLookup(X, X, X) ,3,2,2,0); //s,g,g,w
+            tileTable[72]  = new TileObject(MakeLookup(28, true, false),  2,2,3,1);
+            tileTable[73]  = new TileObject(MakeLookup(28, false, true),  1,2,2,3);
+            tileTable[74]  = new TileObject(MakeLookup(28, true, true),   3,1,2,2);
+            tileTable[75]  = new TileObject(MakeLookup(28, false, false), 2,3,1,2);
 
-            tileList[148] = new TileObject(MakeLookup(X, X, X) ,0,2,3,3); //w,g,s,s
-            tileList[149] = new TileObject(MakeLookup(X, X, X) ,2,0,3,3); //g,w,s,s
+            tileTable[76]  = new TileObject(MakeLookup(18, true, false),  3,3,1,2);
+            tileTable[77]  = new TileObject(MakeLookup(18, false, true),  2,3,3,1);
+            tileTable[78]  = new TileObject(MakeLookup(18, true, true),   1,2,3,3);
+            tileTable[79]  = new TileObject(MakeLookup(18, false, false), 3,1,2,3);
 
-            tileList[150] = new TileObject(MakeLookup(X, X, X) ,0,3,3,2); //w,s,s,g
-            tileList[151] = new TileObject(MakeLookup(X, X, X) ,2,3,3,0); //g,s,s,w
+            tileTable[80]  = new TileObject(MakeLookup(29, true, false),  3,3,2,1);
+            tileTable[81]  = new TileObject(MakeLookup(29, false, true),  1,3,3,2);
+            tileTable[82]  = new TileObject(MakeLookup(29, true, true),   2,1,3,3);
+            tileTable[83]  = new TileObject(MakeLookup(29, false, false), 3,2,1,3);
 
-            tileList[152] = new TileObject(MakeLookup(X, X, X) ,3,3,0,2); //s,s,w,g
-            tileList[153] = new TileObject(MakeLookup(X, X, X) ,3,3,2,0); //s,s,g,w
+            //Dirt - Stone & Grass
+            tileTable[84]  = new TileObject(MakeLookup(30, true, false),  3,1,2,1);
+            tileTable[85]  = new TileObject(MakeLookup(30, false, true),  1,3,1,2);
+            tileTable[86]  = new TileObject(MakeLookup(30, true, true),   2,1,3,1);
+            tileTable[87]  = new TileObject(MakeLookup(30, false, false), 1,2,1,3);
 
-            tileList[154] = new TileObject(MakeLookup(X, X, X) ,0,3,2,3); //w,s,g,s
-            tileList[155] = new TileObject(MakeLookup(X, X, X) ,2,3,0,3); //g,s,w,s
+            //Dirt - Water & Grass
+            tileTable[88]  = new TileObject(MakeLookup(31, true, false),  2,1,0,1);
+            tileTable[89]  = new TileObject(MakeLookup(31, false, true),  1,2,1,0);
+            tileTable[90]  = new TileObject(MakeLookup(31, true, true),   0,1,2,1);
+            tileTable[91]  = new TileObject(MakeLookup(31, false, false), 1,0,1,2);
 
-            tileList[156] = new TileObject(MakeLookup(X, X, X) ,3,0,3,2); //s,w,s,g
-            tileList[157] = new TileObject(MakeLookup(X, X, X) ,3,2,3,0); //s,g,s,w
+            //Dirt - Water & Stone
+            tileTable[92]  = new TileObject(MakeLookup(32, true, false),  3,1,0,1);
+            tileTable[93]  = new TileObject(MakeLookup(32, false, true),  1,3,1,0);
+            tileTable[94]  = new TileObject(MakeLookup(32, true, true),   0,1,3,1);
+            tileTable[95]  = new TileObject(MakeLookup(32, false, false), 1,0,1,3);
 
-            tileList[158] = new TileObject(MakeLookup(X, X, X) ,3,0,2,3); //s,w,g,s
-            tileList[159] = new TileObject(MakeLookup(X, X, X) ,3,2,0,3); //s,g,w,s */
+            //Grass - Dirt & Stone
+            tileTable[96]  = new TileObject(MakeLookup(33, true, false),  3,2,1,2);
+            tileTable[97]  = new TileObject(MakeLookup(33, false, true),  2,3,2,1);
+            tileTable[98]  = new TileObject(MakeLookup(33, true, true),   1,2,3,2);
+            tileTable[99]  = new TileObject(MakeLookup(33, false, false), 2,1,2,3);
+
+            //Stone - Dirt & Grass
+            tileTable[100] = new TileObject(MakeLookup(34, true, false),  2,3,1,3);
+            tileTable[101] = new TileObject(MakeLookup(34, false, true),  3,2,3,1);
+            tileTable[102] = new TileObject(MakeLookup(34, true, true),   1,3,2,3);
+            tileTable[103] = new TileObject(MakeLookup(34, false, false), 3,1,3,2);
+
+            //Road - Dirt & Grass
+            tileTable[105] = new TileObject(MakeLookup(19, false, false), 19,19,19,19);
+
+            tileTable[106] = new TileObject(MakeLookup(20, true, false),  1,20,19,20);
+            tileTable[107] = new TileObject(MakeLookup(20, false, true),  20,1,20,19);
+            tileTable[108] = new TileObject(MakeLookup(20, true, true),   19,20,1,20);
+            tileTable[109] = new TileObject(MakeLookup(20, false, false), 20,19,20,1);
+
+            tileTable[110] = new TileObject(MakeLookup(26, true, false),  2,26,19,26);
+            tileTable[111] = new TileObject(MakeLookup(26, false, true),  26,2,26,19);
+            tileTable[112] = new TileObject(MakeLookup(26, true, true),   19,26,2,26);
+            tileTable[113] = new TileObject(MakeLookup(26, false, false), 26,19,26,2);
+        }
+
+        // Adds range of 16 values to lookup table
+        void AddLookupRange(int baseStart, int baseEnd, int shapeStart, int saddleIndex, bool reverse, int offset)
+        {
+            if (reverse)
+            {
+                // high > low
+                lookupTable[offset] = MakeLookup2(baseStart, false, false);
+                lookupTable[offset + 1] = MakeLookup2(shapeStart + 2, true, true);
+                lookupTable[offset + 2] = MakeLookup2(shapeStart + 2, false, false);
+                lookupTable[offset + 3] = MakeLookup2(shapeStart + 1, true, true);
+                lookupTable[offset + 4] = MakeLookup2(shapeStart + 2, false, true);
+                lookupTable[offset + 5] = MakeLookup2(shapeStart + 1, false, true);
+                lookupTable[offset + 6] = MakeLookup2(saddleIndex, true, false); //d
+                lookupTable[offset + 7] = MakeLookup2(shapeStart, true, true);
+                lookupTable[offset + 8] = MakeLookup2(shapeStart + 2, true, false);
+                lookupTable[offset + 9] = MakeLookup2(saddleIndex, false, false); //d
+                lookupTable[offset + 10] = MakeLookup2(shapeStart + 1, false, false);
+                lookupTable[offset + 11] = MakeLookup2(shapeStart, false, false);
+                lookupTable[offset + 12] = MakeLookup2(shapeStart + 1, true, false);
+                lookupTable[offset + 13] = MakeLookup2(shapeStart, false, true);
+                lookupTable[offset + 14] = MakeLookup2(shapeStart, true, false);
+                lookupTable[offset + 15] = MakeLookup2(baseEnd, false, false);
+            }
+            else
+            {
+                // low > high
+                lookupTable[offset] = MakeLookup2(baseStart, false, false);
+                lookupTable[offset + 1] = MakeLookup2(shapeStart, true, false);
+                lookupTable[offset + 2] = MakeLookup2(shapeStart, false, true);
+                lookupTable[offset + 3] = MakeLookup2(shapeStart + 1, true, false);
+                lookupTable[offset + 4] = MakeLookup2(shapeStart, false, false);
+                lookupTable[offset + 5] = MakeLookup2(shapeStart + 1, false, false);
+                lookupTable[offset + 6] = MakeLookup2(saddleIndex, false, false); //d
+                lookupTable[offset + 7] = MakeLookup2(shapeStart + 2, true, false);
+                lookupTable[offset + 8] = MakeLookup2(shapeStart, true, true);
+                lookupTable[offset + 9] = MakeLookup2(saddleIndex, true, false); //d
+                lookupTable[offset + 10] = MakeLookup2(shapeStart + 1, false, true);
+                lookupTable[offset + 11] = MakeLookup2(shapeStart + 2, false, true);
+                lookupTable[offset + 12] = MakeLookup2(shapeStart + 1, true, true);
+                lookupTable[offset + 13] = MakeLookup2(shapeStart + 2, false, false);
+                lookupTable[offset + 14] = MakeLookup2(shapeStart + 2, true, true);
+                lookupTable[offset + 15] = MakeLookup2(baseEnd, false, false);
+            }
+        }
+
+        // Encodes a byte with Daggerfall tile neighbours
+        static int FindTileIndex(int bl, int br, int tr, int tl)
+        {
+            if (Array.FindIndex(tileTable, tile => tile.Bl == bl && tile.Br == br && tile.Tr == tr && tile.Tl == tl) != -1)
+                return Array.FindIndex(tileTable, tile => tile.Bl == bl && tile.Br == br && tile.Tr == tr && tile.Tl == tl);
+            else
+                return 0;
         }
 
         // Encodes a byte with Daggerfall tile lookup
-        static byte MakeLookup(int index, bool rotate, bool flip)
+        byte MakeLookup(int index, bool rotate, bool flip)
+        {
+            if (index > 255)
+                throw new IndexOutOfRangeException("Index out of range. Valid range 0-255");
+            if (rotate) index += 64;
+            if (flip) index += 128;
+
+            return (byte)index;
+        }
+
+        // Encodes a byte with Daggerfall tile lookup
+        byte MakeLookup2(int index, bool rotate, bool flip)
         {
             if (index > 55)
                 throw new IndexOutOfRangeException("Index out of range. Valid range 0-55");
@@ -758,32 +737,77 @@ namespace DaggerfallWorkshop
             }
         }
 
-        static byte GetTileByNeighbours(int bl, int br, int tr, int tl)
+        static bool SteepnessTooLow(float steepness, NativeArray<float> heightmapData, float maxTerrainHeight, int hx, int hy, int hDim, int upperBound, int index, int tdDim, NativeArray<byte> tileData)
         {
-            TileObject tLO;
-            tLO = Array.Find(tileList, obj => obj.bl == bl && obj.br == br && obj.tr == tr && obj.tl == tl);
-            if (tLO == null)
-                tLO = new TileObject(WOTerrainTexturing.MakeLookup(0,  false, false) ,0,0,0,0);
-            return tLO.tile;
+            if (JobA.Row(index, tdDim) < 0 ||
+                JobA.Col(index, tdDim) < 0 ||
+                JobA.Col(index, tdDim) + 1 >= tdDim ||
+                JobA.Row(index, tdDim) + 1 >= tdDim)
+            {
+                return false;
+            }
+            else
+            {
+                if (JobA.Idx(hy, hx, hDim) < 0 ||
+                    JobA.Idx(hy, hx, hDim) > upperBound ||
+                    JobA.Idx(hy, hx + 1, hDim) < 0 ||
+                    JobA.Idx(hy, hx + 1, hDim) > upperBound ||
+                    JobA.Idx(hy + 1, hx, hDim) < 0 ||
+                    JobA.Idx(hy + 1, hx, hDim) > upperBound ||
+                    JobA.Idx(hy + 1, hx + 1, hDim) < 0 ||
+                    JobA.Idx(hy + 1, hx + 1, hDim) > upperBound
+                    )
+                {
+                    return false;
+                }
+                else
+                {
+                    float minSmpl = 0;
+                    float maxSmpl = 0;
+                    float smpl = minSmpl = maxSmpl = heightmapData[JobA.Idx(hy, hx, hDim)] * maxTerrainHeight;
+                    for (int a = 0; a <= 1; a++)
+                    {
+                        for (int b = 0; b <= 1; b++)
+                        {
+                            smpl = heightmapData[JobA.Idx(hy + a, hx + b, hDim)] * maxTerrainHeight;
+
+                            if (smpl < minSmpl)
+                            {
+                                minSmpl = smpl;
+                            }
+                            if (smpl > maxSmpl)
+                            {
+                                maxSmpl = smpl;
+                            }
+
+                        }
+                    }
+
+                    float diff = (maxSmpl - minSmpl) * 10f;
+
+                    if (diff < steepness)
+                    {
+                        return true;
+                    }
+                    else
+                    {
+                        return false;
+                    }
+                }
+            }
         }
-        #endregion
     }
 
-    public class TileObject
-    {
-        public byte tile { get; set; }
-        public int bl { get; set; }
-        public int br { get; set; }
-        public int tr { get; set; }
-        public int tl { get; set; }
+    public class TileObject {
+        public byte Tile;
+        public int Bl, Br, Tr, Tl;
 
-        public TileObject(byte Tile, int Bl, int Br, int Tr, int Tl)
-        {
-            tile = Tile;
-            bl = Bl;
-            br = Br;
-            tr = Tr;
-            tl = Tl;
+        public TileObject(byte tile, int bl, int br, int tr, int tl) {
+            Tile = tile;
+            Bl = bl;
+            Br = br;
+            Tr = tr;
+            Tl = tl;
         }
     }
 }
