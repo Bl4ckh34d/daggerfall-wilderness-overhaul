@@ -78,6 +78,7 @@ namespace WildernessOverhaul
 
 			woNature = new WOTerrainNature(
 				DREAMModEnabled,
+                InterestingTerrainModEnabled,
 				dynamicVegetationClearance,
 				vegetationInLocations,
 				fireflies,

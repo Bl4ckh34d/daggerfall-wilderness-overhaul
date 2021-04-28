@@ -61,13 +61,8 @@ namespace WildernessOverhaul
             NativeArray<byte> tileData = new NativeArray<byte>(tileDataDim * tileDataDim, Allocator.TempJob);
             currentMapData = mapData;
 
-            float mapRandom = 0f;
-            if (mapData.worldClimate == (int)MapsFile.Climates.Woodlands)
-                mapRandom = UnityEngine.Random.Range(0.45f, 0.6f);
-
             GenerateTileDataJob tileDataJob = new GenerateTileDataJob
             {
-                mapRnd = mapRandom,
                 heightmapData = mapData.heightmapData,
                 tileData = tileData,
                 tdDim = tileDataDim,
@@ -178,8 +173,6 @@ namespace WildernessOverhaul
             public int mapPixelY;
             public int worldClimate;
 
-            public float mapRnd;
-
             // Gets noise value
             private float NoiseWeight(float worldX, float worldY, float height)
             {
@@ -220,7 +213,7 @@ namespace WildernessOverhaul
                     case (int)MapsFile.Climates.Woodlands:
                         climateNum = 7;
                         if (interestingTerrainEnabled)
-                            persistanceRnd = mapRnd + ((height / maxTerrainHeight) * 3f); //persistance[climateNum] + ((height / maxTerrainHeight) * 2f) - 0.20f;
+                            persistanceRnd = 0.6f + ((height / maxTerrainHeight) * 2f); //persistance[climateNum] + ((height / maxTerrainHeight) * 2f) - 0.20f;
                         else
                             persistanceRnd = persistance[climateNum] + ((height / maxTerrainHeight) * 1.4f) - 0.30f;
                         break;
@@ -275,32 +268,23 @@ namespace WildernessOverhaul
                 int y = JobA.Col(index, tdDim);
                 int uB = heightmapData.Length;
 
+                if (interestingTerrainEnabled)
+                    maxTerrainHeight = 4890;
+
                 // Height sample for ocean and beach tiles
                 int hx = (int)Mathf.Clamp(hDim * ((float)x / (float)tdDim), 0, hDim - 1);
                 int hy = (int)Mathf.Clamp(hDim * ((float)y / (float)tdDim), 0, hDim - 1);
-                float height = heightmapData[JobA.Idx(hy, hx, hDim)] * maxTerrainHeight;  // x & y swapped in heightmap for TerrainData.SetHeights()
+                float height = heightmapData[JobA.Idx(hy, hx, hDim)] * maxTerrainHeight;
 
                 // Ocean and Beach texture
-                if (interestingTerrainEnabled) {
-                    if (height <= 100.1f) {
-                        tileData[index] = water;
-                        return;
-                    }
-                    // Adds a little +/- randomness to threshold so beach line isn't too regular
-                    if (height <= beachElevation + (JobRand.Next(-50000000, -25000000) / 10000000f)) {
-                        tileData[index] = dirt;
-                        return;
-                    }
-                } else {
-                    if (height <= oceanElevation) {
-                        tileData[index] = water;
-                        return;
-                    }
-                    // Adds a little +/- randomness to threshold so beach line isn't too regular
-                    if (height <= beachElevation + (JobRand.Next(-100000000, -55000000) / 10000000f)) {
-                        tileData[index] = dirt;
-                        return;
-                    }
+                if (height <= oceanElevation) {
+                    tileData[index] = water;
+                    return;
+                }
+                // Adds a little +/- randomness to threshold so beach line isn't too regular
+                if (height <= beachElevation + (JobRand.Next(-100000000, -55000000) / 10000000f)) {
+                    tileData[index] = dirt;
+                    return;
                 }
 
                 // Get latitude and longitude of this tile
@@ -309,8 +293,11 @@ namespace WildernessOverhaul
 
                 // Set texture tile using weighted noise
                 float weight = 0;
+                if (interestingTerrainEnabled)
+                    weight += NoiseWeight(latitude, longitude, height/1.05f);
+                else
+                    weight += NoiseWeight(latitude, longitude, height);
 
-                weight += NoiseWeight(latitude, longitude, height);
 
                 int climateNum = 9;
                 switch (worldClimate)
@@ -349,35 +336,25 @@ namespace WildernessOverhaul
                 tileData[index] = GetWeightedRecord(weight, upperWaterSpread[climateNum], lowerGrassSpread[climateNum], upperGrassSpread[climateNum]);
 
                 // Check for lowest local point in desert to place oasis
-                if (worldClimate == (int)MapsFile.Climates.Desert2 &&
-                    LowestPointFound(30, heightmapData, maxTerrainHeight, hx, hy, hDim, uB, index, tdDim, tileData))
-                {
+                if (worldClimate == (int)MapsFile.Climates.Desert2 && LowestPointFound(30, heightmapData, maxTerrainHeight, hx, hy, hDim, uB, index, tdDim, tileData))
                     tileData[index] = water;
-                }
-                if (worldClimate == (int)MapsFile.Climates.Desert &&
-                    LowestPointFound(80, heightmapData, maxTerrainHeight, hx, hy, hDim, uB, index, tdDim, tileData))
-                {
+                if (worldClimate == (int)MapsFile.Climates.Desert && LowestPointFound(80, heightmapData, maxTerrainHeight, hx, hy, hDim, uB, index, tdDim, tileData))
                     tileData[index] = water;
-                }
+
                 // Rock Mountain Face
-                if (interestingTerrainEnabled) {
-                    if (SteepnessTooHigh(Mathf.Clamp(100f - ((height / maxTerrainHeight) * 500f),15f,100f), heightmapData, maxTerrainHeight, hx, hy, hDim, uB, index, tdDim, tileData))
-                    {
-                        tileData[index] = stone;
-                    }
-                    if (tileData[index] == dirt && SteepnessTooLow(Mathf.Clamp(((height / maxTerrainHeight) * 250f),0f,45f), heightmapData, maxTerrainHeight, hx, hy, hDim, uB, index, tdDim, tileData))
-                    {
-                        tileData[index] = dirt;
-                    } else if (tileData[index] == dirt && !SteepnessTooLow(Mathf.Clamp(((height / maxTerrainHeight) * 250f),0f,45f), heightmapData, maxTerrainHeight, hx, hy, hDim, uB, index, tdDim, tileData))
-                    {
-                        tileData[index] = grass;
-                    }
-                } else {
-                    if (SteepnessTooHigh(55f, heightmapData, maxTerrainHeight, hx, hy, hDim, uB, index, tdDim, tileData))
-                    {
-                        tileData[index] = stone;
-                    }
-                }
+                if (SteepnessWithinLimits(true, Mathf.Clamp(90f - ((height / maxTerrainHeight)/0.85f * 100f),40f,90f), heightmapData, maxTerrainHeight, hx, hy, hDim, uB, index, tdDim, tileData))
+                    tileData[index] = stone;
+
+                int rnd = JobRand.Next(25,35);
+                if (tileData[index] == stone && SteepnessWithinLimits(false, Mathf.Clamp(90f - ((height / maxTerrainHeight)/0.85f * 100f),40f,90f), heightmapData, maxTerrainHeight, hx, hy, hDim, uB, index, tdDim, tileData))
+                    tileData[index] = grass;
+
+                // Max angle for dirt patches
+                rnd = JobRand.Next(20,25);
+                if (tileData[index] == dirt && SteepnessWithinLimits(false, rnd, heightmapData, maxTerrainHeight, hx, hy, hDim, uB, index, tdDim, tileData))
+                    tileData[index] = dirt;
+                else if (tileData[index] == dirt && !SteepnessWithinLimits(false, rnd, heightmapData, maxTerrainHeight, hx, hy, hDim, uB, index, tdDim, tileData))
+                    tileData[index] = grass;
             }
         }
 
@@ -677,137 +654,61 @@ namespace WildernessOverhaul
             }
         }
 
-        static bool SteepnessTooHigh(float steepness, NativeArray<float> heightmapData, float maxTerrainHeight, int hx, int hy, int hDim, int upperBound, int index, int tdDim, NativeArray<byte> tileData)
+        static bool SteepnessWithinLimits(bool bigger, float steepness, NativeArray<float> heightmapData, float maxTerrainHeight, int hx, int hy, int hDim, int upperBound, int index, int tdDim, NativeArray<byte> tileData)
         {
-            if (JobA.Row(index, tdDim) < 0 ||
-                JobA.Col(index, tdDim) < 0 ||
-                JobA.Col(index, tdDim) + 1 >= tdDim ||
-                JobA.Row(index, tdDim) + 1 >= tdDim)
+            int offsetX = 0;
+            int offsetY = 0;
+            if (JobA.Col(index, tdDim) + 1 >= tdDim)
             {
-                return false;
+                offsetY = -1;
             }
-            else
+            if (JobA.Row(index, tdDim) + 1 >= tdDim)
             {
-                if (JobA.Idx(hy, hx, hDim) < 0 ||
-                    JobA.Idx(hy, hx, hDim) > upperBound ||
-                    JobA.Idx(hy, hx + 1, hDim) < 0 ||
-                    JobA.Idx(hy, hx + 1, hDim) > upperBound ||
-                    JobA.Idx(hy + 1, hx, hDim) < 0 ||
-                    JobA.Idx(hy + 1, hx, hDim) > upperBound ||
-                    JobA.Idx(hy + 1, hx + 1, hDim) < 0 ||
-                    JobA.Idx(hy + 1, hx + 1, hDim) > upperBound
-                    )
+                offsetX = -1;
+            }
+
+            float minSmpl = 0;
+            float maxSmpl = 0;
+            float smpl = minSmpl = maxSmpl = heightmapData[JobA.Idx(hy, hx, hDim)] * maxTerrainHeight;
+            for (int a = 0; a <= 1; a++)
+            {
+                for (int b = 0; b <= 1; b++)
                 {
-                    return false;
+                    smpl = heightmapData[JobA.Idx(hy + a + offsetY, hx + b + offsetX, hDim)] * maxTerrainHeight;
+
+                    if (smpl < minSmpl)
+                    {
+                        minSmpl = smpl;
+                    }
+                    if (smpl > maxSmpl)
+                    {
+                        maxSmpl = smpl;
+                    }
+
+                }
+            }
+
+            float diff = (maxSmpl - minSmpl) * 10f;
+
+            if (bigger) {
+                if (diff >= steepness)
+                {
+                    return true;
                 }
                 else
                 {
-                    float minSmpl = 0;
-                    float maxSmpl = 0;
-                    float smpl = minSmpl = maxSmpl = heightmapData[JobA.Idx(hy, hx, hDim)] * maxTerrainHeight;
-                    for (int a = 0; a <= 1; a++)
-                    {
-                        for (int b = 0; b <= 1; b++)
-                        {
-                            smpl = heightmapData[JobA.Idx(hy + a, hx + b, hDim)] * maxTerrainHeight;
-
-                            if (smpl < minSmpl)
-                            {
-                                minSmpl = smpl;
-                            }
-                            if (smpl > maxSmpl)
-                            {
-                                maxSmpl = smpl;
-                            }
-
-                        }
-                    }
-
-                    float diff = (maxSmpl - minSmpl) * 10f;
-
-                    if (diff > steepness)
-                    {
-                        return true;
-                    }
-                    else
-                    {
-                        return false;
-                    }
-                }
-            }
-        }
-
-        static bool SteepnessTooLow(float steepness, NativeArray<float> heightmapData, float maxTerrainHeight, int hx, int hy, int hDim, int upperBound, int index, int tdDim, NativeArray<byte> tileData)
-        {
-            if (JobA.Row(index, tdDim) < 0 ||
-                JobA.Col(index, tdDim) < 0 ||
-                JobA.Col(index, tdDim) + 1 >= tdDim ||
-                JobA.Row(index, tdDim) + 1 >= tdDim)
-            {
-                return false;
-            }
-            else
-            {
-                if (JobA.Idx(hy, hx, hDim) < 0 ||
-                    JobA.Idx(hy, hx, hDim) > upperBound ||
-                    JobA.Idx(hy, hx + 1, hDim) < 0 ||
-                    JobA.Idx(hy, hx + 1, hDim) > upperBound ||
-                    JobA.Idx(hy + 1, hx, hDim) < 0 ||
-                    JobA.Idx(hy + 1, hx, hDim) > upperBound ||
-                    JobA.Idx(hy + 1, hx + 1, hDim) < 0 ||
-                    JobA.Idx(hy + 1, hx + 1, hDim) > upperBound
-                    )
-                {
                     return false;
+                }
+            } else {
+                if (diff <= steepness)
+                {
+                    return true;
                 }
                 else
                 {
-                    float minSmpl = 0;
-                    float maxSmpl = 0;
-                    float smpl = minSmpl = maxSmpl = heightmapData[JobA.Idx(hy, hx, hDim)] * maxTerrainHeight;
-                    for (int a = 0; a <= 1; a++)
-                    {
-                        for (int b = 0; b <= 1; b++)
-                        {
-                            smpl = heightmapData[JobA.Idx(hy + a, hx + b, hDim)] * maxTerrainHeight;
-
-                            if (smpl < minSmpl)
-                            {
-                                minSmpl = smpl;
-                            }
-                            if (smpl > maxSmpl)
-                            {
-                                maxSmpl = smpl;
-                            }
-
-                        }
-                    }
-
-                    float diff = (maxSmpl - minSmpl) * 10f;
-
-                    if (diff < steepness)
-                    {
-                        return true;
-                    }
-                    else
-                    {
-                        return false;
-                    }
+                    return false;
                 }
             }
-        }
-    }
-
-    public class TileObject {
-        public byte Tile;
-        public int Bl, Br, Tr, Tl;
-
-        public TileObject(byte tile, int bl, int br, int tr, int tl) {
-            Tile = tile;
-            Bl = bl;
-            Br = br;
-            Tr = tr;
-            Tl = tl;
         }
     }
 }

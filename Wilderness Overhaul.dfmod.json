@@ -3,7 +3,7 @@
     "ModVersion": "1.0",
     "ModAuthor": "Daniel Schmidt",
     "ContactInfo": "https://forums.dfworkshop.net/memberlist.php?mode=viewprofile&u=2094",
-    "DFUnity_Version": "0.11.0",
+    "DFUnity_Version": "0.11.3",
     "ModDescription": "Overhaul of the nature billboard distribution in Daggerfalls Wilderness",
     "GUID": "b55d56af-2bf2-4b59-81d4-ca839397e84a",
     "Files": [
@@ -33,6 +33,9 @@
         "Assets/Game/Mods/Wilderness Overhaul/Textures/TEXTURE.103.asset",
         "Assets/Game/Mods/Wilderness Overhaul/Textures/TEXTURE.004.asset",
         "Assets/Game/Mods/Wilderness Overhaul/Textures/TEXTURE.104.asset",
-        "Assets/Game/Mods/Wilderness Overhaul/Textures/TEXTURE.003.asset"
+        "Assets/Game/Mods/Wilderness Overhaul/Textures/TEXTURE.003.asset",
+        "Assets/Game/Mods/Wilderness Overhaul/Textures/TEXTURE.305.asset",
+        "Assets/Game/Mods/Wilderness Overhaul/Scripts/WOVegetationList.cs",
+        "Assets/Game/Mods/Wilderness Overhaul/Scripts/WOVegetationChance.cs"
     ]
 }

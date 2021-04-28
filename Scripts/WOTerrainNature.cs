@@ -5,7 +5,6 @@ using DaggerfallConnect;
 using DaggerfallWorkshop;
 using DaggerfallWorkshop.Utility.AssetInjection;
 using DaggerfallWorkshop.Utility;
-using WildernessOverhaul;
 
 namespace WildernessOverhaul
 {
@@ -14,95 +13,40 @@ namespace WildernessOverhaul
         // static GameObject exterior;
         // static List<GameObject> staticGeometryList;
 
-        //Mod Settings
-        readonly bool dynamicNatureClearance;
-        readonly bool vegetationInLocations;
-        readonly bool firefliesExist;
-        readonly bool shootingStarsExist;
-        static float fireflyDistance;
-        static float shootingStarsMinimum;
-        static float shootingStarsMaximum;
-        static float generalNatureClearance;
-        static float natureClearance1;
-        static float natureClearance2;
-        static float natureClearance3;
-        static float natureClearance4;
-        static float natureClearance5;
+        // MOD SETTINGS
+        private readonly bool dynamicNatureClearance;
+        private readonly bool vegetationInLocations;
+        private readonly bool firefliesExist;
+        private readonly bool shootingStarsExist;
+        private readonly bool InterestingTerrainEnabled;
+        private static float fireflyDistance;
+        private static float shootingStarsMinimum;
+        private static float shootingStarsMaximum;
+        private static float generalNatureClearance;
+        private static float natureClearance1;
+        private static float natureClearance2;
+        private static float natureClearance3;
+        private static float natureClearance4;
+        private static float natureClearance5;
 
-        const float maxSteepness = 50f; // 50
-        const float slopeSinkRatio = 70f; // 70 - Sink flats slightly into ground as slope increases to prevent floaty trees.
-        public GameObject shootingStar = Resources.Load("ShootingStars") as GameObject;
+        // TERRAIN SETTINGS
+        // Max steepness to still place nature billboards
+        private const float maxSteepness = 50f; // 50
+        // Sink flats slightly into ground as slope increases to prevent floaty trees.
+        private const float slopeSinkRatio = 70f; // 70
+        // Tree border
+        private float treeLine = WOTerrainTexturing.treeLine;
+        //Flag to signal use of meshes
+        public bool NatureMeshUsed { get; protected set; }
 
-        // Chance for different terrain layout
-        public float mapStyleChanceRnd = 0;
-        public float[] mapStyleChance = {30f, 40f, 50f, 60f, 70f, 80f};
-
+        // Important data classes holding values and lists
         public WOVegetationList vegetationList;
         public WOVegetationChance vegetationChance;
-
-        #region Variables for different Chances
-        // Tree border
-        public float treeLine = WOTerrainTexturing.treeLine;
-
-        // ------------------------------------
-        // TEMPERATE Climate Vegetation Chances
-        // ------------------------------------
-        // Chance for Mushrom Circle
-        public float temperateMushroomRingChance = 0.025f;
-        // Distribution Limits
-        public float[] tempForestLimit = {Random.Range(0.30f, 0.40f), Random.Range(0.50f, 0.60f)};
-        // Noise Parameters
-        public float tempForestFrequency = Random.Range(0.04f, 0.06f); //0.05f
-        public float tempForestAmplitude = 0.9f;
-        public float tempForestPersistence = Random.Range(0.3f, 0.5f); //0.4f
-        public int tempForestOctaves = Random.Range(2, 3); //2
-
-        // ------------------------------------
-        // MOUNTAIN Climate Vegetation Chances
-        // ------------------------------------
-        // Chance for Stone Circle
-        public float mountainStoneCircleChance = 0.025f;
-        // Distribution Limits
-        public float[] mountForestLimit = {Random.Range(0.30f, 0.40f), Random.Range(0.40f, 0.50f)};
-        // Noise Parameters
-        public float mountForestFrequency = Random.Range(0.04f, 0.06f); //0.05f
-        public float mountForestAmplitude = 0.9f;
-        public float mountForestPersistence = Random.Range(0.3f, 0.5f); //0.4f
-        public int mountForestOctaves = Random.Range(2, 3); //2
-
-        // ------------------------------------
-        // DESERT Climate Vegetation Chances
-        // ------------------------------------
-        // DIRT
-        // Chance for Dead Tree instead of Cactus
-        public float desert2DirtChance = Random.Range(0, 1);
-        public float desert1DirtChance = Random.Range(1, 6);
-
-        // GRASS
-        // Chance for Flowers
-        public float desert2GrassChance1 = Random.Range(0, 10);
-        public float desert1GrassChance1 = Random.Range(0, 30);
-        // Chance for Plants
-        public float desert2GrassChance2 = Random.Range(10, 15);
-        public float desert1GrassChance2 = Random.Range(30, 50);
-
-        // ------------------------------------
-        // HILLS Climate Vegetation Chances
-        // ------------------------------------
-
-        // DIRT
-        // Chance for Dead Tree/Rocks instead of Needle Tree
-        public float woodlandHillsDirtChance = Random.Range(20, 30);
-
-        // GRASS
-        // Chance for Stone Circle
-        public float woodlandHillsStoneCircleChance = 0.075f;
-        #endregion
-
-        public bool NatureMeshUsed { get; protected set; }
+        public WOStochasticChances stochastics;
 
         public WOTerrainNature(
           bool DMEnabled,
+          bool ITEnabled,
           bool dNClearance,
           bool vegInLoc,
           bool fireflies,
@@ -121,13 +65,15 @@ namespace WildernessOverhaul
             if (DMEnabled)
             {
                 List<int> desertTrees = new List<int>(new int[] { 5, 13, 30 });
+                Debug.Log("Wilderness Overhaul: DREAM Sprites enabled: " + DMEnabled);
             }
             else
             {
                 List<int> desertTrees = new List<int>(new int[] { 5, 13, 13 });
+                Debug.Log("Wilderness Overhaul: DREAM Sprites enabled: " + DMEnabled);
             }
-
-            Debug.Log("Wilderness Overhaul: DREAM Sprites enabled: " + DMEnabled);
+            InterestingTerrainEnabled = ITEnabled;
+            Debug.Log("Wilderness Overhaul: Interesting Terrain enabled: " + InterestingTerrainEnabled);
             dynamicNatureClearance = dNClearance;
             Debug.Log("Wilderness Overhaul: Setting Dynamic Nature Clearance: " + dynamicNatureClearance);
             vegetationInLocations = vegInLoc;
@@ -155,7 +101,11 @@ namespace WildernessOverhaul
             Debug.Log("Wilderness Overhaul: Setting Nature Clearance 5: " + natureClearance5);
         }
 
-        public virtual void LayoutNature(DaggerfallTerrain dfTerrain, DaggerfallBillboardBatch dfBillboardBatch, float terrainScale, int terrainDist)
+        public virtual void LayoutNature(
+          DaggerfallTerrain dfTerrain,
+          DaggerfallBillboardBatch dfBillboardBatch,
+          float terrainScale,
+          int terrainDist)
         {
 
             // Preparation of StaticGeometry for collision detection
@@ -167,7 +117,7 @@ namespace WildernessOverhaul
                 AddDescendantsWithTag(streamingTarget.transform, "StaticGeometry", staticGeometryList);
                 } */
 
-            #region Dynamic Nature Clearance Switch
+            // Apply Mod Setting of Dynamic Nature Clearance Distances
             if (dynamicNatureClearance)
             {
                 if (dfTerrain.MapData.LocationType == DFRegion.LocationTypes.TownCity)
@@ -192,9 +142,8 @@ namespace WildernessOverhaul
                 if (dfTerrain.MapData.worldClimate == (int)MapsFile.Climates.Rainforest)
                     generalNatureClearance = 0.5f;
             }
-            #endregion
 
-            // Location Rect is expanded slightly to give extra clearance around locations
+            // Applying General Nature Clearance Distance
             Rect rect = dfTerrain.MapData.locationRect;
             if (rect.x > 0 && rect.y > 0)
             {
@@ -236,30 +185,20 @@ namespace WildernessOverhaul
             float maxTerrainHeight = DaggerfallUnity.Instance.TerrainSampler.MaxTerrainHeight;
             float beachLine = DaggerfallUnity.Instance.TerrainSampler.BeachElevation;
 
+            // Adapting maxTerrainHeight for Interesting Terrain Mod
+            if (InterestingTerrainEnabled) {
+                maxTerrainHeight = 4890;
+            }
+
             // Chance scaled by base climate type
             DFLocation.ClimateSettings climate = MapsFile.GetWorldClimateSettings(dfTerrain.MapData.worldClimate);
 
             // Initialize and set up Vegetation Lists and Vegetation Spawn Chances by climate, elevation and season
             vegetationList = new WOVegetationList(terrainElevation, DaggerfallUnity.Instance.WorldTime.Now.SeasonValue);
             vegetationChance = new WOVegetationChance(terrainElevation, climate);
+            stochastics = new WOStochasticChances();
 
-            // Vegetation Styles of the map pixel
-            int mapStyle = Random.Range(0, 6);
-            if (mapStyle < 1)
-                mapStyleChanceRnd = mapStyleChance[0];
-            else if (mapStyle < 2)
-                mapStyleChanceRnd = mapStyleChance[1];
-            else if (mapStyle < 3)
-                mapStyleChanceRnd = mapStyleChance[2];
-            else if (mapStyle < 4)
-                mapStyleChanceRnd = mapStyleChance[3];
-            else if (mapStyle < 5)
-                mapStyleChanceRnd = mapStyleChance[4];
-            else
-                mapStyleChanceRnd = mapStyleChance[5];
-
-            float flowerTreeSwap = Random.Range(0.00f, 1.00f);
-
+            // Adds one shooting star Particle System of every MapPixel
             AddShootingStar(dfTerrain, dfBillboardBatch, 90f, 900f, shootingStarsMinimum, shootingStarsMaximum); // Shooting Stars
 
             for (int y = 0; y < tDim; y++)
@@ -281,6 +220,8 @@ namespace WildernessOverhaul
                     // Reject if inside location rect (expanded slightly to give extra clearance around locations)
                     tilePos.x = x;
                     tilePos.y = y;
+
+                    // Checks Mod Setting if Vegetation should also be spawned inside of Jungle Locations.
                     if (vegetationInLocations)
                     {
                         if (rect.x > 0 && rect.y > 0 && rect.Contains(tilePos) && dfTerrain.MapData.worldClimate != (int)MapsFile.Climates.Rainforest)
@@ -306,11 +247,11 @@ namespace WildernessOverhaul
                         if (Random.Range(0.0f, 1.0f) > vegetationChance.chanceOnStone)
                             continue;
                     }
-                    else if (tile == 0) {
+                    else if (tile == 0) {   // Water
                         continue;
                     }
-                    else if (tile == 4 || tile == 5 || tile == 6 || tile == 21 || tile == 31 || tile == 32) {
-                    } //Shore (water)
+                    else if (tile == 4 || tile == 5 || tile == 6 || tile == 21 || tile == 31 || tile == 32) {   // Shore (Water)
+                    }
                     else {   // Anything else
                         continue;
                     }
@@ -323,70 +264,37 @@ namespace WildernessOverhaul
                     if (tile == 0 || height <= 0)
                         continue;
 
-                    int record = (int)Mathf.Round(Random.Range(1, 32));
+                    BaseDataObject baseData = new BaseDataObject(dfTerrain, dfBillboardBatch, terrain, scale, steepness, x, y);
+
                     switch (climate.WorldClimate)
                     {
                         #region Temperate Spawns
                         case (int)MapsFile.Climates.Woodlands:
 
-                            weight += GetNoise(latitude, longitude, tempForestFrequency, tempForestAmplitude, tempForestPersistence, tempForestOctaves, 100);
-
+                            weight += GetNoise(latitude, longitude, stochastics.tempForestFrequency, stochastics.tempForestAmplitude, stochastics.tempForestPersistence, stochastics.tempForestOctaves, 100);
+                            weight = Mathf.Clamp(weight,0f,1f);
                             if (tile == 1) // Dirt
                             {
-                                // Beach
-                                /* if (dfTerrain.MapData.heightmapSamples[hy, hx] * maxTerrainHeight < beachLine)
-                                {
-                                    AddBillboardToBatch(dfTerrain, dfBillboardBatch, vegetationList.temperateWoodlandBeach, scale, steepness, terrain, x, y, 0.25f); // Beach
-                                }
-                                else if (dfTerrain.MapData.heightmapSamples[hy, hx] * maxTerrainHeight >= beachLine && dfTerrain.MapData.heightmapSamples[hy, hx] < Random.Range(0.15f, 0.18f))
-                                {
-                                    if (Random.Range(0, 100) < Random.Range(50, 60))
-                                    {
-                                        AddBillboardToBatch(dfTerrain, dfBillboardBatch, vegetationList.temperateWoodlandDeadTrees, scale, steepness, terrain, x, y, 0.25f); // Dead Trees
-                                    }
-                                    else
-                                    {
-                                        AddBillboardToBatch(dfTerrain, dfBillboardBatch, vegetationList.temperateWoodlandBeach, scale, steepness, terrain, x, y, 0.25f); // Beach
-                                    }
-                                }
-                                else
+                                if (dfTerrain.MapData.worldHeight / 128f > Random.Range(0.15f, 0.18f))
                                 {
                                     if (GetWeightedRecord(weight) == "forest")
                                     {
-                                        if (Random.Range(0, 100) < Random.Range(80, 90))
+                                        if (Random.Range(0, 100) < Random.Range(70, 80))
                                         {
-                                            AddBillboardToBatch(dfTerrain, dfBillboardBatch, vegetationList.temperateWoodlandDeadTrees, scale, steepness, terrain, x, y, 0.25f); // Dead Trees
+                                            AddBillboardToBatch(baseData, vegetationList.temperateWoodlandDeadTrees,Random.Range(0.15f,0.30f), true); // Dead Trees
                                         }
                                         else
                                         {
-                                            if (Random.Range(0, 100) < mapStyleChance)
+                                            if (Random.Range(0, 100) < stochastics.mapStyle)
                                             {
-                                                AddBillboardToBatch(dfTerrain, dfBillboardBatch, vegetationList.temperateWoodlandDeadTrees, scale, steepness, terrain, x, y, 1f, 3); // Needle Tree
+                                                for (int i = 0; i < Random.Range(1,5); i++)
+                                                {
+                                                    AddBillboardToBatch(baseData, vegetationList.temperateWoodlandDeadTrees, Random.Range(0.75f,1.10f), true, 3); // Needle Tree
+                                                }
                                             }
                                             else
                                             {
-                                                AddBillboardToBatch(dfTerrain, dfBillboardBatch, vegetationList.temperateWoodlandDeadTrees, scale, steepness, terrain, x, y, 0.25f); // Dead Trees
-                                            }
-                                        }
-                                    }
-                                } */
-                                if (dfTerrain.MapData.heightmapSamples[hy, hx] > Random.Range(0.15f, 0.18f))
-                                {
-                                    if (GetWeightedRecord(weight) == "forest")
-                                    {
-                                        if (Random.Range(0, 100) < Random.Range(80, 90))
-                                        {
-                                            AddBillboardToBatch(dfTerrain, dfBillboardBatch, vegetationList.temperateWoodlandDeadTrees, scale, steepness, terrain, x, y, Random.Range(0.15f,0.30f)); // Dead Trees
-                                        }
-                                        else
-                                        {
-                                            if (Random.Range(0, 100) < mapStyleChanceRnd)
-                                            {
-                                                AddBillboardToBatch(dfTerrain, dfBillboardBatch, vegetationList.temperateWoodlandDeadTrees, scale, steepness, terrain, x, y, Random.Range(0.75f,1.10f), 3); // Needle Tree
-                                            }
-                                            else
-                                            {
-                                                AddBillboardToBatch(dfTerrain, dfBillboardBatch, vegetationList.temperateWoodlandDeadTrees, scale, steepness, terrain, x, y, Random.Range(0.15f,0.30f)); // Dead Trees
+                                                AddBillboardToBatch(baseData, vegetationList.temperateWoodlandDeadTrees, Random.Range(0.15f,0.30f), true); // Dead Trees
                                             }
                                         }
                                     }
@@ -394,241 +302,106 @@ namespace WildernessOverhaul
                             }
                             else if (tile == 2) // Grass
                             {
-                                float rndMajor = Random.Range(0.0f, 100.0f);
-                                if (rndMajor <= temperateMushroomRingChance) // Mushroom Circle
+                                if (Random.Range(0.0f, 100.0f) <= stochastics.temperateMushroomRingChance) // Mushroom Circle
                                 {
-                                    Vector3 pos = new Vector3(x * scale, 0, (y + 0.5f) * scale);
-                                    float height2 = terrain.SampleHeight(pos + terrain.transform.position);
-                                    pos.y = height2 - (steepness / slopeSinkRatio);
-                                    dfBillboardBatch.AddItem(23, pos);
-
-                                    pos = new Vector3((x + 0.272f) * scale, 0, (y - 0.404f) * scale);
-                                    height2 = terrain.SampleHeight(pos + terrain.transform.position);
-                                    pos.y = height2 - (steepness / slopeSinkRatio);
-                                    dfBillboardBatch.AddItem(23, pos);
-
-                                    pos = new Vector3((x - 0.272f) * scale, 0, (y - 0.404f) * scale);
-                                    height2 = terrain.SampleHeight(pos + terrain.transform.position);
-                                    pos.y = height2 - (steepness / slopeSinkRatio);
-                                    dfBillboardBatch.AddItem(23, pos);
-
-                                    pos = new Vector3((x - 0.475f) * scale, 0, (y + 0.154f) * scale);
-                                    height2 = terrain.SampleHeight(pos + terrain.transform.position);
-                                    pos.y = height2 - (steepness / slopeSinkRatio);
-                                    dfBillboardBatch.AddItem(23, pos);
-
-                                    pos = new Vector3((x + 0.475f) * scale, 0, (y + 0.154f) * scale);
-                                    height2 = terrain.SampleHeight(pos + terrain.transform.position);
-                                    pos.y = height2 - (steepness / slopeSinkRatio);
-                                    dfBillboardBatch.AddItem(23, pos);
+                                    AddMushroomRingToBatch(baseData, 23);
                                 }
-                                else if (GetWeightedRecord(weight, tempForestLimit[0], tempForestLimit[1]) == "flower")
+                                else if (GetWeightedRecord(weight, stochastics.tempForestLimit[0], stochastics.tempForestLimit[1]) == "flower")
                                 {
-                                    if (flowerTreeSwap > 0.2f) {
-                                        if (Random.Range(0.00f, 1.00f) > 0.95f)
-                                        {
-                                            AddBillboardToBatch(dfTerrain, dfBillboardBatch, vegetationList.temperateWoodlandMushroom, scale, steepness, terrain, x, y, 0.00f); // Mushroom
-                                        }
-
-                                        for (int i = 0; i < Random.Range(3, 10); i++)
-                                        {
-                                            AddBillboardToBatch(dfTerrain, dfBillboardBatch, vegetationList.temperateWoodlandFlowers, scale, steepness, terrain, x, y, Random.Range(0.30f,0.50f)); // Flowers
-                                        }
-
-                                        float rndMinor = Random.Range(0, 100);
-                                        if (rndMinor < (mapStyleChance[0] - 20 + (dfTerrain.MapData.heightmapSamples[hy, hx] * 100)))
-                                        {
-                                            for (int i = 0; i < Random.Range(3, 8); i++)
-                                            {
-                                                AddBillboardToBatch(dfTerrain, dfBillboardBatch, vegetationList.temperateWoodlandFlowers, scale, steepness, terrain, x, y, Random.Range(0.50f,0.80f)); // Flowers
-                                            }
-                                        }
-                                        if (rndMinor < 20 * (0.4f - dfTerrain.MapData.heightmapSamples[hy, hx]))
-                                        {
-                                            for (int i = 0; i < Random.Range(0,5); i++)
-                                            {
-                                                AddBillboardToBatch(dfTerrain, dfBillboardBatch, vegetationList.temperateWoodlandBushes, scale, steepness, terrain, x, y, Random.Range(0.75f,1.15f)); // Bushes
-                                            }
-
-                                        }
-                                    } else {
-                                        float rndMinor = Random.Range(0, 100);
-                                        if (rndMinor < mapStyleChanceRnd)
-                                        {
-                                            AddBillboardToBatch(dfTerrain, dfBillboardBatch, vegetationList.temperateWoodlandTrees, scale, steepness, terrain, x, y, Random.Range(0.75f,1.15f)); // Trees
-
-                                            for (int i = 0; i < Random.Range(1,3); i++)
-                                            {
-                                                AddBillboardToBatch(dfTerrain, dfBillboardBatch, vegetationList.temperateWoodlandBushes, scale, steepness, terrain, x, y, Random.Range(1.20f,1.60f)); // Bushes
-                                            }
-
-                                            AddFirefly(dfTerrain, terrain, dfBillboardBatch, Random.Range(0.0f, 100.0f), 1f * (1 - dfTerrain.MapData.heightmapSamples[hy, hx]), scale, x, y, 5, 15, 35, firefliesExist); // Fireflies
-
-                                            if (rndMinor < mapStyleChance[1])
-                                            {
-                                                AddBillboardToBatch(dfTerrain, dfBillboardBatch, vegetationList.temperateWoodlandTrees, scale, steepness, terrain, x, y, Random.Range(1.25f,1.65f)); // Trees
-
-                                                for (int i = 0; i < Random.Range(1,3); i++)
-                                                {
-                                                    AddBillboardToBatch(dfTerrain, dfBillboardBatch, vegetationList.temperateWoodlandBushes, scale, steepness, terrain, x, y, Random.Range(1.80f,2.30f)); // Bushes
-                                                }
-
-                                                AddBillboardToBatch(dfTerrain, dfBillboardBatch, vegetationList.temperateWoodlandBeach, scale, steepness, terrain, x, y, Random.Range(0.10f,0.30f)); // Beach
-
-                                                if (Random.Range(0.0f, 1.0f) < dfTerrain.MapData.heightmapSamples[hy, hx] * 0.5f)
-                                                {
-                                                    for (int i = 0; i < Random.Range(2,4); i++)
-                                                    {
-                                                        AddBillboardToBatch(dfTerrain, dfBillboardBatch, vegetationList.temperateWoodlandBushes, scale, steepness, terrain, x, y, Random.Range(1.80f,2.30f)); // Bushes
-                                                    }
-                                                }
-
-                                                AddFirefly(dfTerrain, terrain, dfBillboardBatch, Random.Range(0.0f, 100.0f), 2f * (1 - dfTerrain.MapData.heightmapSamples[hy, hx]), scale, x, y, 10, 50, 100, firefliesExist); // Fireflies
-                                            }
-
-                                            if (rndMinor < mapStyleChance[0])
-                                            {
-                                                for (int i = 0; i < Random.Range(3,5); i++)
-                                                {
-                                                    AddBillboardToBatch(dfTerrain, dfBillboardBatch, vegetationList.temperateWoodlandTrees, scale, steepness, terrain, x, y, Random.Range(1.30f,1.80f)); // Trees
-                                                }
-
-                                                AddBillboardToBatch(dfTerrain, dfBillboardBatch, vegetationList.temperateWoodlandDeadTrees, scale, steepness, terrain, x, y, Random.Range(0.10f,0.30f)); // Dead Trees
-
-                                                for (int i = 0; i < Random.Range(1,3); i++)
-                                                {
-                                                    AddBillboardToBatch(dfTerrain, dfBillboardBatch, vegetationList.temperateWoodlandBushes, scale, steepness, terrain, x, y, Random.Range(1.25f,1.65f)); // Bushes
-                                                }
-
-                                                if (Random.Range(0.0f, 1.0f) < dfTerrain.MapData.heightmapSamples[hy, hx] * 0.5f)
-                                                {
-                                                    for (int i = 0; i < Random.Range(1,3); i++)
-                                                    {
-                                                        AddBillboardToBatch(dfTerrain, dfBillboardBatch, vegetationList.temperateWoodlandBushes, scale, steepness, terrain, x, y, Random.Range(1.25f,1.65f)); // Bushes
-                                                    }
-                                                }
-
-                                                AddFirefly(dfTerrain, terrain, dfBillboardBatch, Random.Range(0.0f, 100.0f), 3f * (1 - dfTerrain.MapData.heightmapSamples[hy, hx]), scale, x, y, 15, 100, 250, firefliesExist); // Fireflies
-                                            }
-
-                                            if (rndMinor < 20 * (0.4f - dfTerrain.MapData.heightmapSamples[hy, hx]))
-                                            {
-                                                for (int i = 0; i < Random.Range(2,7); i++)
-                                                {
-                                                    AddBillboardToBatch(dfTerrain, dfBillboardBatch, vegetationList.temperateWoodlandBushes, scale, steepness, terrain, x, y, Random.Range(0.75f,1.15f)); // Bushes
-                                                }
-                                            }
-                                        }
-                                    }
-                                }
-                                else if (GetWeightedRecord(weight, tempForestLimit[0], tempForestLimit[1]) == "grass")
-                                {
-                                    float rndMinor = Random.Range(0, 100);
-                                    if (rndMinor < 40 * (0.4f - dfTerrain.MapData.heightmapSamples[hy, hx]))
+                                    if (Random.Range(0, 100) < 5)
                                     {
-                                        for (int i = 0; i < Random.Range(10, 20); i++)
-                                        {
-                                            AddBillboardToBatch(dfTerrain, dfBillboardBatch, vegetationList.temperateWoodlandBushes, scale, steepness, terrain, x, y, Random.Range(0.75f,1.15f)); // Bushes
-                                        }
+                                        AddBillboardToBatch(baseData, vegetationList.temperateWoodlandMushroom, 0.00f, true); // Mushroom
+                                    }
 
+                                    for (int i = 0; i < Random.Range(3,7); i++)
+                                    {
+                                        AddBillboardToBatch(baseData, vegetationList.temperateWoodlandFlowers, Random.Range(0.45f,0.75f), true); // Flowers
+                                    }
+
+                                    float rnd = Random.Range(0, 100);
+                                    if (rnd < stochastics.mapStyleChance[1])
+                                    {
+                                        for (int i = 0; i < Random.Range(2,5); i++)
+                                        {
+                                            AddBillboardToBatch(baseData, vegetationList.temperateWoodlandFlowers, Random.Range(0.60f,1.00f), true); // Flowers
+                                        }
+                                    }
+                                    if (rnd < 5)
+                                    {
+                                        for (int i = 0; i < Random.Range(0,3); i++)
+                                        {
+                                            AddBillboardToBatch(baseData, vegetationList.temperateWoodlandBushes, Random.Range(0.85f,1.15f), true); // Bushes
+                                        }
                                     }
                                 }
-                                else if (GetWeightedRecord(weight, tempForestLimit[0], tempForestLimit[1]) == "forest")
+                                else if (GetWeightedRecord(weight, stochastics.tempForestLimit[0], stochastics.tempForestLimit[1]) == "grass")
                                 {
-                                    if (flowerTreeSwap > 0.2f) {
-                                        float rndMinor = Random.Range(0, 100);
-                                        if (rndMinor < mapStyleChanceRnd)
+                                    float rnd = Random.Range(0, 100);
+                                    if (rnd < 3)
+                                    {
+                                        for (int i = 0; i < Random.Range(15,25); i++)
                                         {
-                                            AddBillboardToBatch(dfTerrain, dfBillboardBatch, vegetationList.temperateWoodlandTrees, scale, steepness, terrain, x, y, Random.Range(0.75f,1.15f)); // Trees
-
-                                            for (int i = 0; i < Random.Range(0,2); i++)
-                                            {
-                                                AddBillboardToBatch(dfTerrain, dfBillboardBatch, vegetationList.temperateWoodlandBushes, scale, steepness, terrain, x, y, Random.Range(1.00f,1.40f)); // Bushes
-                                            }
-
-                                            AddFirefly(dfTerrain, terrain, dfBillboardBatch, Random.Range(0.0f, 100.0f), 1f * (1 - dfTerrain.MapData.heightmapSamples[hy, hx]), scale, x, y, 5, 15, 35, firefliesExist); // Fireflies
-
-                                            if (rndMinor < mapStyleChance[1])
-                                            {
-                                                AddBillboardToBatch(dfTerrain, dfBillboardBatch, vegetationList.temperateWoodlandTrees, scale, steepness, terrain, x, y, Random.Range(1.25f,1.65f)); // Trees
-
-                                                for (int i = 0; i < Random.Range(0,2); i++)
-                                                {
-                                                    AddBillboardToBatch(dfTerrain, dfBillboardBatch, vegetationList.temperateWoodlandBushes, scale, steepness, terrain, x, y, Random.Range(1.50f,1.80f)); // Bushes
-                                                }
-
-                                                AddBillboardToBatch(dfTerrain, dfBillboardBatch, vegetationList.temperateWoodlandBeach, scale, steepness, terrain, x, y, Random.Range(0.10f,0.30f)); // Beach
-
-                                                if (Random.Range(0.0f, 1.0f) < dfTerrain.MapData.heightmapSamples[hy, hx] * 0.5f)
-                                                {
-                                                    for (int i = 0; i < Random.Range(1,3); i++)
-                                                    {
-                                                        AddBillboardToBatch(dfTerrain, dfBillboardBatch, vegetationList.temperateWoodlandBushes, scale, steepness, terrain, x, y, Random.Range(1.50f,1.80f)); // Bushes
-                                                    }
-                                                }
-
-                                                AddFirefly(dfTerrain, terrain, dfBillboardBatch, Random.Range(0.0f, 100.0f), 2f * (1 - dfTerrain.MapData.heightmapSamples[hy, hx]), scale, x, y, 10, 50, 100, firefliesExist); // Fireflies
-                                            }
-
-                                            if (rndMinor < mapStyleChance[0])
-                                            {
-                                                for (int i = 0; i < Random.Range(1,3); i++)
-                                                {
-                                                    AddBillboardToBatch(dfTerrain, dfBillboardBatch, vegetationList.temperateWoodlandTrees, scale, steepness, terrain, x, y, Random.Range(1.00f,1.40f)); // Trees
-                                                }
-
-                                                AddBillboardToBatch(dfTerrain, dfBillboardBatch, vegetationList.temperateWoodlandDeadTrees, scale, steepness, terrain, x, y, Random.Range(0.10f,0.30f)); // Dead Trees
-
-                                                for (int i = 0; i < Random.Range(1,3); i++)
-                                                {
-                                                    AddBillboardToBatch(dfTerrain, dfBillboardBatch, vegetationList.temperateWoodlandBushes, scale, steepness, terrain, x, y, Random.Range(1.25f,1.65f)); // Bushes
-                                                }
-
-                                                if (Random.Range(0.0f, 1.0f) < dfTerrain.MapData.heightmapSamples[hy, hx] * 0.5f)
-                                                {
-                                                    for (int i = 0; i < Random.Range(1,3); i++)
-                                                    {
-                                                        AddBillboardToBatch(dfTerrain, dfBillboardBatch, vegetationList.temperateWoodlandBushes, scale, steepness, terrain, x, y, Random.Range(1.25f,1.65f)); // Bushes
-                                                    }
-                                                }
-
-                                                AddFirefly(dfTerrain, terrain, dfBillboardBatch, Random.Range(0.0f, 100.0f), 3f * (1 - dfTerrain.MapData.heightmapSamples[hy, hx]), scale, x, y, 15, 100, 250, firefliesExist); // Fireflies
-                                            }
-
-                                            if (rndMinor < 20 * (0.4f - dfTerrain.MapData.heightmapSamples[hy, hx]))
-                                            {
-                                                for (int i = 0; i < Random.Range(2,7); i++)
-                                                {
-                                                    AddBillboardToBatch(dfTerrain, dfBillboardBatch, vegetationList.temperateWoodlandBushes, scale, steepness, terrain, x, y, Random.Range(0.75f,1.15f)); // Bushes
-                                                }
-                                            }
+                                            AddBillboardToBatch(baseData, vegetationList.temperateWoodlandBushes, Random.Range(2.25f,3.00f), true); // Bushes
                                         }
-                                    } else {
-                                        if (Random.Range(0.00f, 1.00f) > 0.95f)
+                                    }
+
+                                    if(rnd < 1) {
+                                        for (int i = 0; i < Random.Range(1,5); i++)
                                         {
-                                            AddBillboardToBatch(dfTerrain, dfBillboardBatch, vegetationList.temperateWoodlandMushroom, scale, steepness, terrain, x, y, 0.00f); // Mushroom
+                                            AddBillboardToBatch(baseData, vegetationList.temperateWoodlandTrees, Random.Range(1.25f,1.65f), true); // Trees
+                                        }
+                                    }
+                                }
+                                else if (GetWeightedRecord(weight, stochastics.tempForestLimit[0], stochastics.tempForestLimit[1]) == "forest")
+                                {
+                                    float rnd = Random.Range(0, 100);
+                                    if (rnd < stochastics.mapStyle)
+                                    {
+
+                                        for (int i = 0; i < Random.Range(3,5); i++)
+                                        {
+                                            AddBillboardToBatch(baseData, vegetationList.temperateWoodlandTrees, Random.Range(1.00f,1.35f), true); // Trees
                                         }
 
-                                        for (int i = 0; i < Random.Range(1, 3); i++)
+                                        for (int i = 0; i < Random.Range(2,4); i++)
                                         {
-                                            AddBillboardToBatch(dfTerrain, dfBillboardBatch, vegetationList.temperateWoodlandFlowers, scale, steepness, terrain, x, y, Random.Range(0.30f,0.50f)); // Flowers
+                                            AddBillboardToBatch(baseData, vegetationList.temperateWoodlandBushes, Random.Range(1.00f,1.35f), true); // Bushes
                                         }
 
-                                        float rndMinor = Random.Range(0, 100);
-                                        if (rndMinor < (mapStyleChance[0] - 20 + (dfTerrain.MapData.heightmapSamples[hy, hx] * 100)))
+                                        AddFirefly(baseData, 0.1f, 5, 15, 35, firefliesExist); // Fireflies
+
+                                        if (rnd < stochastics.mapStyleChance[3])
                                         {
-                                            for (int i = 0; i < Random.Range(1, 3); i++)
+                                            AddBillboardToBatch(baseData, vegetationList.temperateWoodlandBeach, Random.Range(0.10f,0.30f), true); // Beach
+
+                                            for (int i = 0; i < Random.Range(1,2); i++)
                                             {
-                                                AddBillboardToBatch(dfTerrain, dfBillboardBatch, vegetationList.temperateWoodlandFlowers, scale, steepness, terrain, x, y, Random.Range(0.50f,0.80f)); // Flowers
-                                            }
-                                        }
-                                        if (rndMinor < 20 * (0.4f - dfTerrain.MapData.heightmapSamples[hy, hx]))
-                                        {
-                                            for (int i = 0; i < Random.Range(0,2); i++)
-                                            {
-                                                AddBillboardToBatch(dfTerrain, dfBillboardBatch, vegetationList.temperateWoodlandBushes, scale, steepness, terrain, x, y, Random.Range(0.75f,1.15f)); // Bushes
+                                                AddBillboardToBatch(baseData, vegetationList.temperateWoodlandTrees, Random.Range(1.00f,1.45f), true); // Trees
                                             }
 
+                                            for (int i = 0; i < Random.Range(1,2); i++)
+                                            {
+                                                AddBillboardToBatch(baseData, vegetationList.temperateWoodlandBushes, Random.Range(1.00f,1.45f), true); // Bushes
+                                            }
+
+                                            AddFirefly(baseData, 0.1f, 10, 50, 100, firefliesExist); // Fireflies
+                                        }
+
+                                        if (rnd < stochastics.mapStyleChance[1])
+                                        {
+                                            for (int i = 0; i < Random.Range(0,1); i++)
+                                            {
+                                                AddBillboardToBatch(baseData, vegetationList.temperateWoodlandTrees, Random.Range(1.25f,1.75f), true); // Trees
+                                            }
+
+                                            AddBillboardToBatch(baseData, vegetationList.temperateWoodlandDeadTrees, Random.Range(0.10f,0.30f), true); // Dead Trees
+
+                                            for (int i = 0; i < Random.Range(0,1); i++)
+                                            {
+                                                AddBillboardToBatch(baseData, vegetationList.temperateWoodlandBushes, Random.Range(1.25f,1.75f), true); // Bushes
+                                            }
+
+                                            AddFirefly(baseData, 0.1f, 15, 100, 250, firefliesExist); // Fireflies
                                         }
                                     }
                                 }
@@ -637,11 +410,14 @@ namespace WildernessOverhaul
                             {
                                 if (GetWeightedRecord(weight) == "forest")
                                 {
-                                    AddBillboardToBatch(dfTerrain, dfBillboardBatch, vegetationList.temperateWoodlandRocks, scale, steepness, terrain, x, y, Random.Range(0.75f,1.15f)); // Stones
+                                    for (int i = 0; i < Random.Range(1,4); i++)
+                                    {
+                                        AddBillboardToBatch(baseData, vegetationList.temperateWoodlandRocks, Random.Range(0.75f,1.15f), true); // Stones
+                                    }
                                 }
                                 if (GetWeightedRecord(weight) == "flower")
                                 {
-                                    AddBillboardToBatch(dfTerrain, dfBillboardBatch, vegetationList.temperateWoodlandRocks, scale, steepness, terrain, x, y, Random.Range(0.75f,1.15f)); // Stones
+                                    AddBillboardToBatch(baseData, vegetationList.temperateWoodlandRocks, Random.Range(0.75f,1.15f), true); // Stones
                                 }
                             }
                             break;
@@ -650,18 +426,18 @@ namespace WildernessOverhaul
                         #region Mountain Spawns
                         case (int)MapsFile.Climates.Mountain:
 
-                            weight += GetNoise(latitude, longitude, mountForestFrequency, mountForestAmplitude, mountForestPersistence, mountForestOctaves, 100);
+                            weight += GetNoise(latitude, longitude, stochastics.mountForestFrequency, stochastics.mountForestAmplitude, stochastics.mountForestPersistence, stochastics.mountForestOctaves, 100);
 
                             if (tile == 1) // Dirt
                             {
                                 // Beach
                                 if (dfTerrain.MapData.heightmapSamples[hy, hx] * maxTerrainHeight < beachLine)
                                 {
-                                    if (Random.Range(0, 100) < mapStyleChanceRnd)
+                                    if (Random.Range(0, 100) < stochastics.mapStyle)
                                     {
                                         for (int i = 0; i < (int)Mathf.Round(Random.Range(0, 2)); i++)
                                         {
-                                            AddBillboardToBatch(dfTerrain, dfBillboardBatch, vegetationList.mountainsBeach, scale, steepness, terrain, x, y, 0.75f); // Beach
+                                            AddBillboardToBatch(baseData, vegetationList.mountainsBeach, 0.75f, true); // Beach
                                         }
                                     }
                                 }
@@ -669,41 +445,41 @@ namespace WildernessOverhaul
                                 {
                                     if (Random.Range(0, 100) < Random.Range(10, 20))
                                     {
-                                        AddBillboardToBatch(dfTerrain, dfBillboardBatch, vegetationList.mountainsDeadTrees, scale, steepness, terrain, x, y, 0.75f); // Dead Trees
+                                        AddBillboardToBatch(baseData, vegetationList.mountainsDeadTrees, 0.75f, true); // Dead Trees
 
                                         for (int i = 0; i < (int)Mathf.Round(Random.Range(0, 1)); i++)
                                         {
-                                            AddBillboardToBatch(dfTerrain, dfBillboardBatch, vegetationList.mountainsDeadTrees, scale, steepness, terrain, x, y, 1.50f); // Dead Trees
+                                            AddBillboardToBatch(baseData, vegetationList.mountainsDeadTrees, 1.50f, true); // Dead Trees
                                         }
                                     }
                                     else
                                     {
-                                        if (Random.Range(0, 100) < mapStyleChanceRnd)
+                                        if (Random.Range(0, 100) < stochastics.mapStyle)
                                         {
-                                            AddBillboardToBatch(dfTerrain, dfBillboardBatch, vegetationList.mountainsNeedleTrees, scale, steepness, terrain, x, y, 0.00f); // Needle Tree
+                                            AddBillboardToBatch(baseData, vegetationList.mountainsNeedleTrees, 0.00f, true); // Needle Tree
 
                                             for (int i = 0; i < (int)Mathf.Round(Random.Range(1, 3)); i++)
                                             {
-                                                AddBillboardToBatch(dfTerrain, dfBillboardBatch, vegetationList.mountainsNeedleTrees, scale, steepness, terrain, x, y, 1.00f); // Needle Tree
+                                                AddBillboardToBatch(baseData, vegetationList.mountainsNeedleTrees, 1.00f, true); // Needle Tree
                                             }
 
                                             for (int i = 0; i < (int)Mathf.Round(Random.Range(1, 3)); i++)
                                             {
-                                                AddBillboardToBatch(dfTerrain, dfBillboardBatch, vegetationList.mountainsNeedleTrees, scale, steepness, terrain, x, y, 1.50f); // Needle Tree
+                                                AddBillboardToBatch(baseData, vegetationList.mountainsNeedleTrees, 1.50f, true); // Needle Tree
                                             }
                                         }
                                         else
                                         {
-                                            AddBillboardToBatch(dfTerrain, dfBillboardBatch, vegetationList.mountainsDeadTrees, scale, steepness, terrain, x, y, 0.50f); // Dead Trees
+                                            AddBillboardToBatch(baseData, vegetationList.mountainsDeadTrees, 0.50f, true); // Dead Trees
 
                                             for (int i = 0; i < (int)Mathf.Round(Random.Range(1, 3)); i++)
                                             {
-                                                AddBillboardToBatch(dfTerrain, dfBillboardBatch, vegetationList.mountainsNeedleTrees, scale, steepness, terrain, x, y, 1.25f); // Needle Trees
+                                                AddBillboardToBatch(baseData, vegetationList.mountainsNeedleTrees, 1.25f, true); // Needle Trees
                                             }
 
                                             for (int i = 0; i < (int)Mathf.Round(Random.Range(0, 1)); i++)
                                             {
-                                                AddBillboardToBatch(dfTerrain, dfBillboardBatch, vegetationList.mountainsRocks, scale, steepness, terrain, x, y, 0.75f); // Rocks
+                                                AddBillboardToBatch(baseData, vegetationList.mountainsRocks, 0.75f, true); // Rocks
                                             }
                                         }
                                     }
@@ -712,85 +488,42 @@ namespace WildernessOverhaul
                                 {
                                     for (int i = 0; i < (int)Mathf.Round(Random.Range(0, 3)); i++)
                                     {
-                                        AddBillboardToBatch(dfTerrain, dfBillboardBatch, vegetationList.mountainsRocks, scale, steepness, terrain, x, y, 1.00f); // Rocks
+                                        AddBillboardToBatch(baseData, vegetationList.mountainsRocks, 1.00f, true); // Rocks
                                     }
 
                                     for (int i = 0; i < (int)Mathf.Round(Random.Range(0, 3)); i++)
                                     {
-                                        AddBillboardToBatch(dfTerrain, dfBillboardBatch, vegetationList.mountainsBeach, scale, steepness, terrain, x, y, 1.00f); // Beach
+                                        AddBillboardToBatch(baseData, vegetationList.mountainsBeach, 1.00f, true); // Beach
                                     }
                                 }
                             }
                             else if (tile == 2) // Grass
                             {
                                 float rndMajor = Random.Range(0.0f, 100.0f);
-                                if (Random.Range(0.0f, 100.0f) < mountainStoneCircleChance)
+                                if (Random.Range(0.0f, 100.0f) < stochastics.mountainStoneCircleChance)
                                 {
-                                    Vector3 pos = new Vector3(x * scale, 0, y * scale);
-                                    float height2 = terrain.SampleHeight(pos + terrain.transform.position);
-                                    pos.y = height2 - (steepness / slopeSinkRatio);
-                                    dfBillboardBatch.AddItem(vegetationList.mountainsRocks[5], pos);
-
-                                    pos = new Vector3((x + 0.4f) * scale, 0, y * scale);
-                                    height2 = terrain.SampleHeight(pos + terrain.transform.position);
-                                    pos.y = height2 - (steepness / slopeSinkRatio);
-                                    dfBillboardBatch.AddItem(vegetationList.mountainsRocks[0], pos);
-
-                                    pos = new Vector3((x - 0.4f) * scale, 0, y * scale);
-                                    height2 = terrain.SampleHeight(pos + terrain.transform.position);
-                                    pos.y = height2 - (steepness / slopeSinkRatio);
-                                    dfBillboardBatch.AddItem(vegetationList.mountainsRocks[0], pos);
-
-                                    pos = new Vector3(x * scale, 0, (y + 0.4f) * scale);
-                                    height2 = terrain.SampleHeight(pos + terrain.transform.position);
-                                    pos.y = height2 - (steepness / slopeSinkRatio);
-                                    dfBillboardBatch.AddItem(vegetationList.mountainsRocks[0], pos);
-
-                                    pos = new Vector3(x * scale, 0, (y - 0.4f) * scale);
-                                    height2 = terrain.SampleHeight(pos + terrain.transform.position);
-                                    pos.y = height2 - (steepness / slopeSinkRatio);
-                                    dfBillboardBatch.AddItem(vegetationList.mountainsRocks[0], pos);
-
-                                    pos = new Vector3((x + 0.3f) * scale, 0, (y + 0.3f) * scale);
-                                    height2 = terrain.SampleHeight(pos + terrain.transform.position);
-                                    pos.y = height2 - (steepness / slopeSinkRatio);
-                                    dfBillboardBatch.AddItem(vegetationList.mountainsRocks[0], pos);
-
-                                    pos = new Vector3((x - 0.3f) * scale, 0, (y + 0.3f) * scale);
-                                    height2 = terrain.SampleHeight(pos + terrain.transform.position);
-                                    pos.y = height2 - (steepness / slopeSinkRatio);
-                                    dfBillboardBatch.AddItem(vegetationList.mountainsRocks[0], pos);
-
-                                    pos = new Vector3((x + 0.3f) * scale, 0, (y - 0.3f) * scale);
-                                    height2 = terrain.SampleHeight(pos + terrain.transform.position);
-                                    pos.y = height2 - (steepness / slopeSinkRatio);
-                                    dfBillboardBatch.AddItem(vegetationList.mountainsRocks[0], pos);
-
-                                    pos = new Vector3((x - 0.3f) * scale, 0, (y - 0.3f) * scale);
-                                    height2 = terrain.SampleHeight(pos + terrain.transform.position);
-                                    pos.y = height2 - (steepness / slopeSinkRatio);
-                                    dfBillboardBatch.AddItem(vegetationList.mountainsRocks[0], pos);
+                                    AddStoneCircleToBatch(baseData, vegetationList.mountainsRocks, 5, 0);
                                 }
                                 if (dfTerrain.MapData.heightmapSamples[hy, hx] > treeLine)
                                 {
                                     float rndMinor = Random.Range(0, 100);
-                                    if (rndMinor < mapStyleChanceRnd)
+                                    if (rndMinor < stochastics.mapStyle)
                                     {
                                         if ((int)Mathf.Round(Random.Range(0.00f, 1.00f)) > 0.97f)
                                         {
-                                            AddBillboardToBatch(dfTerrain, dfBillboardBatch, vegetationList.mountainsRocks, scale, steepness, terrain, x, y, 0.00f); // Rock
+                                            AddBillboardToBatch(baseData, vegetationList.mountainsRocks, 0.00f, true); // Rock
                                         }
 
                                         for (int i = 0; i < (int)Mathf.Round(Random.Range(2, 4)); i++)
                                         {
-                                            AddBillboardToBatch(dfTerrain, dfBillboardBatch, vegetationList.mountainsFlowers, scale, steepness, terrain, x, y, 0.5f); // Flowers
+                                            AddBillboardToBatch(baseData, vegetationList.mountainsFlowers, 0.5f, true); // Flowers
                                         }
 
-                                        if (rndMinor < mapStyleChance[1])
+                                        if (rndMinor < 40)
                                         {
                                             for (int i = 0; i < (int)Mathf.Round(Random.Range(2, 4)); i++)
                                             {
-                                                AddBillboardToBatch(dfTerrain, dfBillboardBatch, vegetationList.mountainsFlowers, scale, steepness, terrain, x, y, 1.00f); // Flowers
+                                                AddBillboardToBatch(baseData, vegetationList.mountainsFlowers, 1.00f, true); // Flowers
                                             }
                                         }
                                     }
@@ -798,176 +531,176 @@ namespace WildernessOverhaul
                                     {
                                         for (int i = 0; i < (int)Mathf.Round(Random.Range(0, 4)); i++)
                                         {
-                                            AddBillboardToBatch(dfTerrain, dfBillboardBatch, vegetationList.mountainsFlowers, scale, steepness, terrain, x, y, 0.5f); // Rocks
+                                            AddBillboardToBatch(baseData, vegetationList.mountainsFlowers, 0.5f, true); // Rocks
                                         }
 
                                         for (int i = 0; i < (int)Mathf.Round(Random.Range(2, 4)); i++)
                                         {
-                                            AddBillboardToBatch(dfTerrain, dfBillboardBatch, vegetationList.mountainsGrass, scale, steepness, terrain, x, y, 0.75f); // Grass
+                                            AddBillboardToBatch(baseData, vegetationList.mountainsGrass, 0.75f, true); // Grass
                                         }
 
-                                        if (rndMinor < mapStyleChance[1])
+                                        if (rndMinor < 40)
                                         {
                                             for (int i = 0; i < (int)Mathf.Round(Random.Range(2, 4)); i++)
                                             {
-                                                AddBillboardToBatch(dfTerrain, dfBillboardBatch, vegetationList.mountainsGrass, scale, steepness, terrain, x, y, 1.25f); // Grass
+                                                AddBillboardToBatch(baseData, vegetationList.mountainsGrass, 1.25f, true); // Grass
                                             }
                                         }
                                     }
                                 }
                                 else if (dfTerrain.MapData.heightmapSamples[hy, hx] < treeLine && dfTerrain.MapData.heightmapSamples[hy, hx] >= Random.Range(0.70f, 0.72f))
                                 {
-                                    if (GetWeightedRecord(weight, mountForestLimit[0], mountForestLimit[1]) == "flower")
+                                    if (GetWeightedRecord(weight, stochastics.mountForestLimit[0], stochastics.mountForestLimit[1]) == "flower")
                                     {
                                         float rndMinor = Random.Range(0, 100);
-                                        if (rndMinor < mapStyleChanceRnd)
+                                        if (rndMinor < stochastics.mapStyle)
                                         {
                                             for (int i = 0; i < (int)Mathf.Round(Random.Range(1, 3)); i++)
                                             {
-                                                AddBillboardToBatch(dfTerrain, dfBillboardBatch, vegetationList.mountainsTrees, scale, steepness, terrain, x, y, 0.50f); // Trees
+                                                AddBillboardToBatch(baseData, vegetationList.mountainsTrees, 0.50f, true); // Trees
                                             }
 
                                             for (int i = 0; i < (int)Mathf.Round(Random.Range(2, 4)); i++)
                                             {
-                                                AddBillboardToBatch(dfTerrain, dfBillboardBatch, vegetationList.mountainsTrees, scale, steepness, terrain, x, y, 1.00f); // Trees
+                                                AddBillboardToBatch(baseData, vegetationList.mountainsTrees, 1.00f, true); // Trees
                                             }
 
                                             for (int i = 0; i < (int)Mathf.Round(Random.Range(2, 4)); i++)
                                             {
-                                                AddBillboardToBatch(dfTerrain, dfBillboardBatch, vegetationList.mountainsGrass, scale, steepness, terrain, x, y, 0.50f); // Grass
+                                                AddBillboardToBatch(baseData, vegetationList.mountainsGrass, 0.50f, true); // Grass
                                             }
 
-                                            if (rndMinor < mapStyleChance[1])
+                                            if (rndMinor < 40)
                                             {
                                                 for (int i = 0; i < (int)Mathf.Round(Random.Range(1, 4)); i++)
                                                 {
-                                                    AddBillboardToBatch(dfTerrain, dfBillboardBatch, vegetationList.mountainsTrees, scale, steepness, terrain, x, y, 1.50f); // Trees
+                                                    AddBillboardToBatch(baseData, vegetationList.mountainsTrees, 1.50f, true); // Trees
                                                 }
 
                                                 for (int i = 0; i < (int)Mathf.Round(Random.Range(2, 4)); i++)
                                                 {
-                                                    AddBillboardToBatch(dfTerrain, dfBillboardBatch, vegetationList.mountainsFlowers, scale, steepness, terrain, x, y, 0.75f); // Trees
+                                                    AddBillboardToBatch(baseData, vegetationList.mountainsFlowers, 0.75f, true); // Trees
                                                 }
 
                                                 for (int i = 0; i < (int)Mathf.Round(Random.Range(1, 3)); i++)
                                                 {
-                                                    AddBillboardToBatch(dfTerrain, dfBillboardBatch, vegetationList.mountainsGrass, scale, steepness, terrain, x, y, 1.00f); // Grass
+                                                    AddBillboardToBatch(baseData, vegetationList.mountainsGrass, 1.00f, true); // Grass
                                                 }
                                             }
 
-                                            if (rndMinor < mapStyleChance[0])
+                                            if (rndMinor < 30)
                                             {
                                                 for (int i = 0; i < (int)Mathf.Round(Random.Range(1, 2)); i++)
                                                 {
-                                                    AddBillboardToBatch(dfTerrain, dfBillboardBatch, vegetationList.mountainsNeedleTrees, scale, steepness, terrain, x, y, 1.75f); // Trees
+                                                    AddBillboardToBatch(baseData, vegetationList.mountainsNeedleTrees, 1.75f, true); // Trees
                                                 }
                                                 for (int i = 0; i < (int)Mathf.Round(Random.Range(1, 3)); i++)
                                                 {
-                                                    AddBillboardToBatch(dfTerrain, dfBillboardBatch, vegetationList.mountainsFlowers, scale, steepness, terrain, x, y, 1.75f); // Trees
+                                                    AddBillboardToBatch(baseData, vegetationList.mountainsFlowers, 1.75f, true); // Trees
                                                 }
 
                                                 if ((int)Mathf.Round(Random.Range(0.00f, 1.00f)) > 0.98f)
                                                 {
                                                     for (int i = 0; i < (int)Mathf.Round(Random.Range(0, 2)); i++)
                                                     {
-                                                        AddBillboardToBatch(dfTerrain, dfBillboardBatch, vegetationList.mountainsRocks, scale, steepness, terrain, x, y, 1.00f); // Rocks
+                                                        AddBillboardToBatch(baseData, vegetationList.mountainsRocks, 1.00f, true); // Rocks
                                                     }
                                                 }
                                             }
                                         }
                                     }
-                                    else if (GetWeightedRecord(weight, mountForestLimit[0], mountForestLimit[1]) == "forest")
+                                    else if (GetWeightedRecord(weight, stochastics.mountForestLimit[0], stochastics.mountForestLimit[1]) == "forest")
                                     {
                                         if ((int)Mathf.Round(Random.Range(0.00f, 1.00f)) > 0.98f)
                                         {
-                                            AddBillboardToBatch(dfTerrain, dfBillboardBatch, vegetationList.mountainsRocks, scale, steepness, terrain, x, y, 0.00f); // Rock
+                                            AddBillboardToBatch(baseData, vegetationList.mountainsRocks, 0.00f, true); // Rock
                                         }
 
                                         for (int i = 0; i < (int)Mathf.Round(Random.Range(0, 2)); i++)
                                         {
-                                            AddBillboardToBatch(dfTerrain, dfBillboardBatch, vegetationList.mountainsTrees, scale, steepness, terrain, x, y, 0.50f); // Trees
+                                            AddBillboardToBatch(baseData, vegetationList.mountainsTrees, 0.50f, true); // Trees
                                         }
 
                                         for (int i = 0; i < (int)Mathf.Round(Random.Range(0, 2)); i++)
                                         {
-                                            AddBillboardToBatch(dfTerrain, dfBillboardBatch, vegetationList.mountainsTrees, scale, steepness, terrain, x, y, 1.00f); // Trees
+                                            AddBillboardToBatch(baseData, vegetationList.mountainsTrees, 1.00f, true); // Trees
                                         }
 
                                         for (int i = 0; i < (int)Mathf.Round(Random.Range(1, 3)); i++)
                                         {
-                                            AddBillboardToBatch(dfTerrain, dfBillboardBatch, vegetationList.mountainsFlowers, scale, steepness, terrain, x, y, 0.20f); // Flowers
+                                            AddBillboardToBatch(baseData, vegetationList.mountainsFlowers, 0.20f, true); // Flowers
                                         }
 
                                         float rndMinor = Random.Range(0, 100);
-                                        if (rndMinor < mapStyleChance[1])
+                                        if (rndMinor < 40)
                                         {
                                             for (int i = 0; i < (int)Mathf.Round(Random.Range(1, 3)); i++)
                                             {
-                                                AddBillboardToBatch(dfTerrain, dfBillboardBatch, vegetationList.mountainsFlowers, scale, steepness, terrain, x, y, 0.50f); // Flowers
+                                                AddBillboardToBatch(baseData, vegetationList.mountainsFlowers, 0.50f, true); // Flowers
                                             }
                                         }
                                     }
                                 }
                                 else if (dfTerrain.MapData.heightmapSamples[hy, hx] < Random.Range(0.70f, 0.72f) && dfTerrain.MapData.heightmapSamples[hy, hx] > Random.Range(0.45f, 0.40f))
                                 {
-                                    if (GetWeightedRecord(weight, mountForestLimit[0], mountForestLimit[1]) == "forest")
+                                    if (GetWeightedRecord(weight, stochastics.mountForestLimit[0], stochastics.mountForestLimit[1]) == "forest")
                                     {
                                         float rndMinor = Random.Range(0, 100);
-                                        if (rndMinor < mapStyleChanceRnd)
+                                        if (rndMinor < stochastics.mapStyle)
                                         {
                                             for (int i = 0; i < (int)Mathf.Round(Random.Range(1, 3)); i++)
                                             {
-                                                AddBillboardToBatch(dfTerrain, dfBillboardBatch, vegetationList.mountainsTrees, scale, steepness, terrain, x, y, 0.50f); // Trees
+                                                AddBillboardToBatch(baseData, vegetationList.mountainsTrees, 0.50f, true); // Trees
                                             }
 
                                             for (int i = 0; i < (int)Mathf.Round(Random.Range(1, 3)); i++)
                                             {
-                                                AddBillboardToBatch(dfTerrain, dfBillboardBatch, vegetationList.mountainsGrass, scale, steepness, terrain, x, y, 0.50f); // Grass
+                                                AddBillboardToBatch(baseData, vegetationList.mountainsGrass, 0.50f, true); // Grass
                                             }
 
-                                            if (rndMinor < mapStyleChance[1])
+                                            if (rndMinor < 40)
                                             {
                                                 for (int i = 0; i < (int)Mathf.Round(Random.Range(1, 3)); i++)
                                                 {
-                                                    AddBillboardToBatch(dfTerrain, dfBillboardBatch, vegetationList.mountainsFlowers, scale, steepness, terrain, x, y, 1.00f); // Flowers
+                                                    AddBillboardToBatch(baseData, vegetationList.mountainsFlowers, 1.00f, true); // Flowers
                                                 }
                                             }
 
-                                            if (rndMinor < mapStyleChance[0])
+                                            if (rndMinor < 30)
                                             {
                                                 for (int i = 0; i < (int)Mathf.Round(Random.Range(1, 3)); i++)
                                                 {
-                                                    AddBillboardToBatch(dfTerrain, dfBillboardBatch, vegetationList.mountainsFlowers, scale, steepness, terrain, x, y, 1.75f); // Flowers
+                                                    AddBillboardToBatch(baseData, vegetationList.mountainsFlowers, 1.75f, true); // Flowers
                                                 }
 
                                                 if ((int)Mathf.Round(Random.Range(0.00f, 1.00f)) > 0.95f)
                                                 {
                                                     for (int i = 0; i < (int)Mathf.Round(Random.Range(0, 2)); i++)
                                                     {
-                                                        AddBillboardToBatch(dfTerrain, dfBillboardBatch, vegetationList.mountainsRocks, scale, steepness, terrain, x, y, 1.00f); // Rocks
+                                                        AddBillboardToBatch(baseData, vegetationList.mountainsRocks, 1.00f, true); // Rocks
                                                     }
                                                 }
                                             }
                                         }
                                     }
-                                    else if (GetWeightedRecord(weight, mountForestLimit[0], mountForestLimit[1]) == "flower")
+                                    else if (GetWeightedRecord(weight, stochastics.mountForestLimit[0], stochastics.mountForestLimit[1]) == "flower")
                                     {
                                         if ((int)Mathf.Round(Random.Range(0.00f, 1.00f)) > 0.95f)
                                         {
-                                            AddBillboardToBatch(dfTerrain, dfBillboardBatch, vegetationList.mountainsRocks, scale, steepness, terrain, x, y, 0.00f); // Rock
+                                            AddBillboardToBatch(baseData, vegetationList.mountainsRocks, 0.00f, true); // Rock
                                         }
 
                                         for (int i = 0; i < (int)Mathf.Round(Random.Range(1, 3)); i++)
                                         {
-                                            AddBillboardToBatch(dfTerrain, dfBillboardBatch, vegetationList.mountainsFlowers, scale, steepness, terrain, x, y, 0.50f); // Flowers
+                                            AddBillboardToBatch(baseData, vegetationList.mountainsFlowers, 0.50f, true); // Flowers
                                         }
 
                                         float rndMinor = Random.Range(0, 100);
-                                        if (rndMinor < mapStyleChance[1])
+                                        if (rndMinor < 40)
                                         {
                                             for (int i = 0; i < (int)Mathf.Round(Random.Range(1, 3)); i++)
                                             {
-                                                AddBillboardToBatch(dfTerrain, dfBillboardBatch, vegetationList.mountainsFlowers, scale, steepness, terrain, x, y, 0.75f); // Flowers
+                                                AddBillboardToBatch(baseData, vegetationList.mountainsFlowers, 0.75f, true); // Flowers
                                             }
                                         }
                                     }
@@ -975,43 +708,43 @@ namespace WildernessOverhaul
                                 else if (dfTerrain.MapData.heightmapSamples[hy, hx] < Random.Range(0.40f, 0.45f))
                                 {
                                     float rndMinor = Random.Range(0, 100);
-                                    if (GetWeightedRecord(weight, mountForestLimit[0], mountForestLimit[1]) == "forest")
+                                    if (GetWeightedRecord(weight, stochastics.mountForestLimit[0], stochastics.mountForestLimit[1]) == "forest")
                                     {
                                         for (int i = 0; i < (int)Mathf.Round(Random.Range(1, 3)); i++)
                                         {
-                                            AddBillboardToBatch(dfTerrain, dfBillboardBatch, vegetationList.mountainsTrees, scale, steepness, terrain, x, y, 0.50f); // Trees
+                                            AddBillboardToBatch(baseData, vegetationList.mountainsTrees, 0.50f, true); // Trees
                                         }
 
                                         for (int i = 0; i < (int)Mathf.Round(Random.Range(1, 3)); i++)
                                         {
-                                            AddBillboardToBatch(dfTerrain, dfBillboardBatch, vegetationList.mountainsGrass, scale, steepness, terrain, x, y, 0.50f); // Grass
+                                            AddBillboardToBatch(baseData, vegetationList.mountainsGrass, 0.50f, true); // Grass
                                         }
 
-                                        if (rndMinor < mapStyleChance[0])
+                                        if (rndMinor < 30)
                                         {
                                             if ((int)Mathf.Round(Random.Range(0.00f, 1.00f)) > 0.95f)
                                             {
                                                 for (int i = 0; i < (int)Mathf.Round(Random.Range(0, 2)); i++)
                                                 {
-                                                    AddBillboardToBatch(dfTerrain, dfBillboardBatch, vegetationList.mountainsRocks, scale, steepness, terrain, x, y, 1.00f); // Rocks
+                                                    AddBillboardToBatch(baseData, vegetationList.mountainsRocks, 1.00f, true); // Rocks
                                                 }
                                             }
                                         }
                                     }
-                                    else if (GetWeightedRecord(weight, mountForestLimit[0], mountForestLimit[1]) == "flower")
+                                    else if (GetWeightedRecord(weight, stochastics.mountForestLimit[0], stochastics.mountForestLimit[1]) == "flower")
                                     {
                                         for (int i = 0; i < (int)Mathf.Round(Random.Range(1, 3)); i++)
                                         {
-                                            AddBillboardToBatch(dfTerrain, dfBillboardBatch, vegetationList.mountainsFlowers, scale, steepness, terrain, x, y, 0.50f); // Trees
+                                            AddBillboardToBatch(baseData, vegetationList.mountainsFlowers, 0.50f, true); // Trees
                                         }
 
-                                        if (rndMinor < mapStyleChance[0])
+                                        if (rndMinor < 30)
                                         {
                                             if ((int)Mathf.Round(Random.Range(0.00f, 1.00f)) > 0.95f)
                                             {
                                                 for (int i = 0; i < (int)Mathf.Round(Random.Range(0, 1)); i++)
                                                 {
-                                                    AddBillboardToBatch(dfTerrain, dfBillboardBatch, vegetationList.mountainsRocks, scale, steepness, terrain, x, y, 1.00f); // Rocks
+                                                    AddBillboardToBatch(baseData, vegetationList.mountainsRocks, 1.00f, true); // Rocks
                                                 }
                                             }
                                         }
@@ -1020,25 +753,25 @@ namespace WildernessOverhaul
                             }
                             else if (tile == 3) // Stone
                             {
-                                if (GetWeightedRecord(weight, mountForestLimit[0], mountForestLimit[1]) == "forest")
+                                if (GetWeightedRecord(weight, stochastics.mountForestLimit[0], stochastics.mountForestLimit[1]) == "forest")
                                 {
-                                    AddBillboardToBatch(dfTerrain, dfBillboardBatch, vegetationList.mountainsRocks, scale, steepness, terrain, x, y, 0.00f); // Stones
+                                    AddBillboardToBatch(baseData, vegetationList.mountainsRocks, 0.00f, true); // Stones
 
                                     for (int i = 0; i < (int)Mathf.Round(Random.Range(0, 2)); i++)
                                     {
-                                        AddBillboardToBatch(dfTerrain, dfBillboardBatch, vegetationList.mountainsRocks, scale, steepness, terrain, x, y, 0.25f); // Stones
+                                        AddBillboardToBatch(baseData, vegetationList.mountainsRocks, 0.25f, true); // Stones
                                     }
 
                                     for (int i = 0; i < (int)Mathf.Round(Random.Range(2, 3)); i++)
                                     {
-                                        AddBillboardToBatch(dfTerrain, dfBillboardBatch, vegetationList.mountainsFlowers, scale, steepness, terrain, x, y, 0.50f); // Flowers
+                                        AddBillboardToBatch(baseData, vegetationList.mountainsFlowers, 0.50f, true); // Flowers
                                     }
                                 }
-                                if (GetWeightedRecord(weight, mountForestLimit[1], mountForestLimit[2]) == "flower")
+                                if (GetWeightedRecord(weight, stochastics.mountForestLimit[0], stochastics.mountForestLimit[1]) == "flower")
                                 {
                                     for (int i = 0; i < (int)Mathf.Round(Random.Range(2, 4)); i++)
                                     {
-                                        AddBillboardToBatch(dfTerrain, dfBillboardBatch, vegetationList.mountainsFlowers, scale, steepness, terrain, x, y, 0.75f); // Flowers
+                                        AddBillboardToBatch(baseData, vegetationList.mountainsFlowers, 0.75f, true); // Flowers
                                     }
                                 }
                             }
@@ -1438,96 +1171,96 @@ namespace WildernessOverhaul
                                 {
                                     for (int i = 0; i < (int)Mathf.Round(Random.Range(5, 10)); i++)
                                     {
-                                        AddBillboardToBatch(dfTerrain, dfBillboardBatch, vegetationList.desertTrees, scale, steepness, terrain, x, y, Random.Range(2f, 2.5f)); // Trees
+                                        AddBillboardToBatch(baseData, vegetationList.desertTrees, Random.Range(2f, 2.5f), true); // Trees
                                     }
 
                                     for (int i = 0; i < (int)Mathf.Round(Random.Range(10, 25)); i++)
                                     {
-                                        AddBillboardToBatch(dfTerrain, dfBillboardBatch, vegetationList.desertTrees, scale, steepness, terrain, x, y, Random.Range(3.5f, 6f)); // Trees
+                                        AddBillboardToBatch(baseData, vegetationList.desertTrees, Random.Range(3.5f, 6f), true); // Trees
                                     }
 
                                     for (int i = 0; i < (int)Mathf.Round(Random.Range(20, 40)); i++)
                                     {
-                                        AddBillboardToBatch(dfTerrain, dfBillboardBatch, vegetationList.desertWaterPlants, scale, steepness, terrain, x, y, Random.Range(4f, 7f)); // Plants
+                                        AddBillboardToBatch(baseData, vegetationList.desertWaterPlants, Random.Range(4f, 7f), true); // Plants
                                     }
 
                                     for (int i = 0; i < (int)Mathf.Round(Random.Range(40, 80)); i++)
                                     {
-                                        AddBillboardToBatch(dfTerrain, dfBillboardBatch, vegetationList.desertFlowers, scale, steepness, terrain, x, y, Random.Range(5f, 9f)); // Flowers
+                                        AddBillboardToBatch(baseData, vegetationList.desertFlowers, Random.Range(5f, 9f), true); // Flowers
                                     }
 
                                     for (int i = 0; i < (int)Mathf.Round(Random.Range(20, 40)); i++)
                                     {
-                                        AddBillboardToBatch(dfTerrain, dfBillboardBatch, vegetationList.desertFlowers, scale, steepness, terrain, x, y, Random.Range(1.2f, 3f)); // Flowers
+                                        AddBillboardToBatch(baseData, vegetationList.desertFlowers, Random.Range(1.2f, 3f), true); // Flowers
                                     }
 
                                     for (int i = 0; i < (int)Mathf.Round(Random.Range(10, 20)); i++)
                                     {
-                                        AddBillboardToBatchWater(dfTerrain, dfBillboardBatch, vegetationList.desertWaterFlowers, scale, steepness, terrain, x, y, Random.Range(0.2f, 1.5f)); // Flowers
+                                        AddBillboardToBatch(baseData, vegetationList.desertWaterFlowers, Random.Range(0.2f, 1.5f), false); // Flowers
                                     }
                                 }
                                 else if (rndMajor >= 1 && rndMajor < 2)
                                 {
                                     for (int i = 0; i < (int)Mathf.Round(Random.Range(3, 8)); i++)
                                     {
-                                        AddBillboardToBatch(dfTerrain, dfBillboardBatch, vegetationList.desertTrees, scale, steepness, terrain, x, y, Random.Range(1f, 3.5f)); // Trees
+                                        AddBillboardToBatch(baseData, vegetationList.desertTrees, Random.Range(1f, 3.5f), true); // Trees
                                     }
 
                                     for (int i = 0; i < (int)Mathf.Round(Random.Range(6, 18)); i++)
                                     {
-                                        AddBillboardToBatch(dfTerrain, dfBillboardBatch, vegetationList.desertTrees, scale, steepness, terrain, x, y, Random.Range(2f, 6f)); // Trees
+                                        AddBillboardToBatch(baseData, vegetationList.desertTrees, Random.Range(2f, 6f), true); // Trees
                                     }
 
                                     for (int i = 0; i < (int)Mathf.Round(Random.Range(15, 30)); i++)
                                     {
-                                        AddBillboardToBatch(dfTerrain, dfBillboardBatch, vegetationList.desertWaterPlants, scale, steepness, terrain, x, y, Random.Range(2.5f, 7f)); // Plants
+                                        AddBillboardToBatch(baseData, vegetationList.desertWaterPlants, Random.Range(2.5f, 7f), true); // Plants
                                     }
 
                                     for (int i = 0; i < (int)Mathf.Round(Random.Range(30, 60)); i++)
                                     {
-                                        AddBillboardToBatch(dfTerrain, dfBillboardBatch, vegetationList.desertFlowers, scale, steepness, terrain, x, y, Random.Range(2.5f, 9f)); // Flowers
+                                        AddBillboardToBatch(baseData, vegetationList.desertFlowers, Random.Range(2.5f, 9f), true); // Flowers
                                     }
 
                                     for (int i = 0; i < (int)Mathf.Round(Random.Range(10, 20)); i++)
                                     {
-                                        AddBillboardToBatch(dfTerrain, dfBillboardBatch, vegetationList.desertFlowers, scale, steepness, terrain, x, y, Random.Range(1.2f, 3f)); // Flowers
+                                        AddBillboardToBatch(baseData, vegetationList.desertFlowers, Random.Range(1.2f, 3f), true); // Flowers
                                     }
 
                                     for (int i = 0; i < (int)Mathf.Round(Random.Range(5, 10)); i++)
                                     {
-                                        AddBillboardToBatchWater(dfTerrain, dfBillboardBatch, vegetationList.desertWaterFlowers, scale, steepness, terrain, x, y, Random.Range(0.2f, 0.5f)); // Flowers
+                                        AddBillboardToBatch(baseData, vegetationList.desertWaterFlowers, Random.Range(0.2f, 0.5f), false); // Flowers
                                     }
                                 }
                                 else if (rndMajor >= 2)
                                 {
                                     for (int i = 0; i < (int)Mathf.Round(Random.Range(2, 5)); i++)
                                     {
-                                        AddBillboardToBatch(dfTerrain, dfBillboardBatch, vegetationList.desertTrees, scale, steepness, terrain, x, y, Random.Range(1f, 3.5f)); // Trees
+                                        AddBillboardToBatch(baseData, vegetationList.desertTrees, Random.Range(1f, 3.5f), true); // Trees
                                     }
 
                                     for (int i = 0; i < (int)Mathf.Round(Random.Range(4, 12)); i++)
                                     {
-                                        AddBillboardToBatch(dfTerrain, dfBillboardBatch, vegetationList.desertTrees, scale, steepness, terrain, x, y, Random.Range(1.5f, 6f)); // Trees
+                                        AddBillboardToBatch(baseData, vegetationList.desertTrees, Random.Range(1.5f, 6f), true); // Trees
                                     }
 
                                     for (int i = 0; i < (int)Mathf.Round(Random.Range(10, 20)); i++)
                                     {
-                                        AddBillboardToBatch(dfTerrain, dfBillboardBatch, vegetationList.desertWaterPlants, scale, steepness, terrain, x, y, Random.Range(1.5f, 7f)); // Plants
+                                        AddBillboardToBatch(baseData, vegetationList.desertWaterPlants, Random.Range(1.5f, 7f), true); // Plants
                                     }
 
                                     for (int i = 0; i < (int)Mathf.Round(Random.Range(15, 25)); i++)
                                     {
-                                        AddBillboardToBatch(dfTerrain, dfBillboardBatch, vegetationList.desertFlowers, scale, steepness, terrain, x, y, Random.Range(1.5f, 9f)); // Flowers
+                                        AddBillboardToBatch(baseData, vegetationList.desertFlowers, Random.Range(1.5f, 9f), true); // Flowers
                                     }
 
                                     for (int i = 0; i < (int)Mathf.Round(Random.Range(6, 12)); i++)
                                     {
-                                        AddBillboardToBatch(dfTerrain, dfBillboardBatch, vegetationList.desertFlowers, scale, steepness, terrain, x, y, Random.Range(1.2f, 3f)); // Flowers
+                                        AddBillboardToBatch(baseData, vegetationList.desertFlowers, Random.Range(1.2f, 3f), true); // Flowers
                                     }
 
                                     for (int i = 0; i < (int)Mathf.Round(Random.Range(2, 5)); i++)
                                     {
-                                        AddBillboardToBatchWater(dfTerrain, dfBillboardBatch, vegetationList.desertWaterFlowers, scale, steepness, terrain, x, y, Random.Range(0.2f, 0.5f)); // Flowers
+                                        AddBillboardToBatch(baseData, vegetationList.desertWaterFlowers, Random.Range(0.2f, 0.5f), false); // Flowers
                                     }
                                 }
                             }
@@ -1918,96 +1651,96 @@ namespace WildernessOverhaul
                                 {
                                     for (int i = 0; i < (int)Mathf.Round(Random.Range(5, 20)); i++)
                                     {
-                                        AddBillboardToBatch(dfTerrain, dfBillboardBatch, vegetationList.desertTrees, scale, steepness, terrain, x, y, Random.Range(2f, 2.5f)); // Trees
+                                        AddBillboardToBatch(baseData, vegetationList.desertTrees, Random.Range(2f, 2.5f), true); // Trees
                                     }
 
                                     for (int i = 0; i < (int)Mathf.Round(Random.Range(10, 35)); i++)
                                     {
-                                        AddBillboardToBatch(dfTerrain, dfBillboardBatch, vegetationList.desertTrees, scale, steepness, terrain, x, y, Random.Range(3.5f, 6f)); // Trees
+                                        AddBillboardToBatch(baseData, vegetationList.desertTrees, Random.Range(3.5f, 6f), true); // Trees
                                     }
 
                                     for (int i = 0; i < (int)Mathf.Round(Random.Range(30, 50)); i++)
                                     {
-                                        AddBillboardToBatch(dfTerrain, dfBillboardBatch, vegetationList.desertWaterPlants, scale, steepness, terrain, x, y, Random.Range(4f, 7f)); // Plants
+                                        AddBillboardToBatch(baseData, vegetationList.desertWaterPlants, Random.Range(4f, 7f), true); // Plants
                                     }
 
                                     for (int i = 0; i < (int)Mathf.Round(Random.Range(60, 120)); i++)
                                     {
-                                        AddBillboardToBatch(dfTerrain, dfBillboardBatch, vegetationList.desertFlowers, scale, steepness, terrain, x, y, Random.Range(5f, 9f)); // Flowers
+                                        AddBillboardToBatch(baseData, vegetationList.desertFlowers, Random.Range(5f, 9f), true); // Flowers
                                     }
 
                                     for (int i = 0; i < (int)Mathf.Round(Random.Range(20, 40)); i++)
                                     {
-                                        AddBillboardToBatch(dfTerrain, dfBillboardBatch, vegetationList.desertFlowers, scale, steepness, terrain, x, y, Random.Range(1.2f, 3f)); // Flowers
+                                        AddBillboardToBatch(baseData, vegetationList.desertFlowers, Random.Range(1.2f, 3f), true); // Flowers
                                     }
 
                                     for (int i = 0; i < (int)Mathf.Round(Random.Range(25, 40)); i++)
                                     {
-                                        AddBillboardToBatchWater(dfTerrain, dfBillboardBatch, vegetationList.desertWaterFlowers, scale, steepness, terrain, x, y, Random.Range(0.2f, 1.5f)); // Flowers
+                                        AddBillboardToBatch(baseData, vegetationList.desertWaterFlowers, Random.Range(0.2f, 1.5f), false); // Flowers
                                     }
                                 }
                                 else if (rndMajor >= 1 && rndMajor < 2)
                                 {
                                     for (int i = 0; i < (int)Mathf.Round(Random.Range(3, 8)); i++)
                                     {
-                                        AddBillboardToBatch(dfTerrain, dfBillboardBatch, vegetationList.desertTrees, scale, steepness, terrain, x, y, Random.Range(1f, 3.5f)); // Trees
+                                        AddBillboardToBatch(baseData, vegetationList.desertTrees, Random.Range(1f, 3.5f), true); // Trees
                                     }
 
                                     for (int i = 0; i < (int)Mathf.Round(Random.Range(6, 18)); i++)
                                     {
-                                        AddBillboardToBatch(dfTerrain, dfBillboardBatch, vegetationList.desertTrees, scale, steepness, terrain, x, y, Random.Range(2f, 6f)); // Trees
+                                        AddBillboardToBatch(baseData, vegetationList.desertTrees, Random.Range(2f, 6f), true); // Trees
                                     }
 
                                     for (int i = 0; i < (int)Mathf.Round(Random.Range(17, 35)); i++)
                                     {
-                                        AddBillboardToBatch(dfTerrain, dfBillboardBatch, vegetationList.desertWaterPlants, scale, steepness, terrain, x, y, Random.Range(2.5f, 7f)); // Plants
+                                        AddBillboardToBatch(baseData, vegetationList.desertWaterPlants, Random.Range(2.5f, 7f), true); // Plants
                                     }
 
                                     for (int i = 0; i < (int)Mathf.Round(Random.Range(40, 75)); i++)
                                     {
-                                        AddBillboardToBatch(dfTerrain, dfBillboardBatch, vegetationList.desertFlowers, scale, steepness, terrain, x, y, Random.Range(2.5f, 9f)); // Flowers
+                                        AddBillboardToBatch(baseData, vegetationList.desertFlowers, Random.Range(2.5f, 9f), true); // Flowers
                                     }
 
                                     for (int i = 0; i < (int)Mathf.Round(Random.Range(10, 20)); i++)
                                     {
-                                        AddBillboardToBatch(dfTerrain, dfBillboardBatch, vegetationList.desertFlowers, scale, steepness, terrain, x, y, Random.Range(1.2f, 3f)); // Flowers
+                                        AddBillboardToBatch(baseData, vegetationList.desertFlowers, Random.Range(1.2f, 3f), true); // Flowers
                                     }
 
                                     for (int i = 0; i < (int)Mathf.Round(Random.Range(10, 25)); i++)
                                     {
-                                        AddBillboardToBatchWater(dfTerrain, dfBillboardBatch, vegetationList.desertWaterFlowers, scale, steepness, terrain, x, y, Random.Range(0.2f, 1.5f)); // Flowers
+                                        AddBillboardToBatch(baseData, vegetationList.desertWaterFlowers, Random.Range(0.2f, 1.5f), false); // Flowers
                                     }
                                 }
                                 else if (rndMajor >= 2)
                                 {
                                     for (int i = 0; i < (int)Mathf.Round(Random.Range(2, 5)); i++)
                                     {
-                                        AddBillboardToBatch(dfTerrain, dfBillboardBatch, vegetationList.desertTrees, scale, steepness, terrain, x, y, Random.Range(1f, 3.5f)); // Trees
+                                        AddBillboardToBatch(baseData, vegetationList.desertTrees, Random.Range(1f, 3.5f), true); // Trees
                                     }
 
                                     for (int i = 0; i < (int)Mathf.Round(Random.Range(4, 12)); i++)
                                     {
-                                        AddBillboardToBatch(dfTerrain, dfBillboardBatch, vegetationList.desertTrees, scale, steepness, terrain, x, y, Random.Range(1.5f, 6f)); // Trees
+                                        AddBillboardToBatch(baseData, vegetationList.desertTrees, Random.Range(1.5f, 6f), true); // Trees
                                     }
 
                                     for (int i = 0; i < (int)Mathf.Round(Random.Range(10, 25)); i++)
                                     {
-                                        AddBillboardToBatch(dfTerrain, dfBillboardBatch, vegetationList.desertWaterPlants, scale, steepness, terrain, x, y, Random.Range(1.5f, 7f)); // Plants
+                                        AddBillboardToBatch(baseData, vegetationList.desertWaterPlants, Random.Range(1.5f, 7f), true); // Plants
                                     }
 
                                     for (int i = 0; i < (int)Mathf.Round(Random.Range(15, 35)); i++)
                                     {
-                                        AddBillboardToBatch(dfTerrain, dfBillboardBatch, vegetationList.desertFlowers, scale, steepness, terrain, x, y, Random.Range(1.5f, 9f)); // Flowers
+                                        AddBillboardToBatch(baseData, vegetationList.desertFlowers, Random.Range(1.5f, 9f), true); // Flowers
                                     }
 
                                     for (int i = 0; i < (int)Mathf.Round(Random.Range(6, 12)); i++)
                                     {
-                                        AddBillboardToBatch(dfTerrain, dfBillboardBatch, vegetationList.desertFlowers, scale, steepness, terrain, x, y, Random.Range(1.2f, 3f)); // Flowers
+                                        AddBillboardToBatch(baseData, vegetationList.desertFlowers, Random.Range(1.2f, 3f), true); // Flowers
                                     }
 
                                     for (int i = 0; i < (int)Mathf.Round(Random.Range(5, 15)); i++)
                                     {
-                                        AddBillboardToBatchWater(dfTerrain, dfBillboardBatch, vegetationList.desertWaterFlowers, scale, steepness, terrain, x, y, Random.Range(0.2f, 1.5f)); // Flowers
+                                        AddBillboardToBatch(baseData, vegetationList.desertWaterFlowers, Random.Range(0.2f, 1.5f), false); // Flowers
                                     }
                                 }
                             }
@@ -3035,96 +2768,162 @@ namespace WildernessOverhaul
         }
 
         public static void AddBillboardToBatch(
-          DaggerfallTerrain dfTerrain,
-          DaggerfallBillboardBatch dfBillboardBatch,
+          BaseDataObject baseData,
           List<int> billboardCollection,
-          float scale,
-          float steepness,
-          Terrain terrain,
-          int x,
-          int y,
-          float posVariance)
+          float posVariance,
+          bool checkOnLand)
         {
             int rnd = (int)Mathf.Round(Random.Range(0, billboardCollection.Count));
-            Vector3 pos = new Vector3((x + Random.Range(-posVariance, posVariance)) * scale, 0, (y + Random.Range(-posVariance, posVariance)) * scale);
-            float height = terrain.SampleHeight(pos + terrain.transform.position);
-            pos.y = height - (steepness / slopeSinkRatio);
-
-            if (!IsOnAnyWaterTile(dfTerrain, pos, scale) && !IsCollidingWithBuilding(dfTerrain, pos, scale) && !IsOnOrCloseToStreetTile(dfTerrain, pos, scale) && steepness < Random.Range(40f,50f))
+            Vector3 pos = new Vector3((baseData.x + Random.Range(-posVariance, posVariance)) * baseData.scale, 0, (baseData.y + Random.Range(-posVariance, posVariance)) * baseData.scale);
+            float height = baseData.terrain.SampleHeight(pos + baseData.terrain.transform.position);
+            pos.y = height - (baseData.steepness / slopeSinkRatio);
+            if (checkOnLand &&
+              !IsOnAnyWaterTile(baseData.dfTerrain, pos, baseData.scale) &&
+              !IsCollidingWithBuilding(baseData.dfTerrain, pos, baseData.scale) &&
+              !IsOnOrCloseToStreetTile(baseData.dfTerrain, pos, baseData.scale) &&
+              baseData.steepness < Random.Range(40f,50f))
             {
-                dfBillboardBatch.AddItem(billboardCollection[rnd], pos);
+                baseData.dfBillboardBatch.AddItem(billboardCollection[rnd], pos);
+            }
+            if (!checkOnLand &&
+              IsOnOrCloseToShallowWaterTile(baseData.dfTerrain, pos, baseData.scale) &&
+              !IsCollidingWithBuilding(baseData.dfTerrain, pos, baseData.scale) &&
+              !IsOnOrCloseToStreetTile(baseData.dfTerrain, pos, baseData.scale) &&
+              baseData.steepness < Random.Range(30f,45f))
+            {
+                baseData.dfBillboardBatch.AddItem(billboardCollection[rnd], pos);
             }
         }
 
         public static void AddBillboardToBatch(
-          DaggerfallTerrain dfTerrain,
-          DaggerfallBillboardBatch dfBillboardBatch,
+          BaseDataObject baseData,
           List<int> billboardCollection,
-          float scale,
-          float steepness,
-          Terrain terrain,
-          int x,
-          int y,
           float posVariance,
+          bool checkOnLand,
           int record)
         {
-            Vector3 pos = new Vector3((x + Random.Range(-posVariance, posVariance)) * scale, 0, (y + Random.Range(-posVariance, posVariance)) * scale);
-            float height = terrain.SampleHeight(pos + terrain.transform.position);
-            pos.y = height - (steepness / slopeSinkRatio);
+            Vector3 pos = new Vector3((baseData.x + Random.Range(-posVariance, posVariance)) * baseData.scale, 0, (baseData.y + Random.Range(-posVariance, posVariance)) * baseData.scale);
+            float height = baseData.terrain.SampleHeight(pos + baseData.terrain.transform.position);
+            pos.y = height - (baseData.steepness / slopeSinkRatio);
 
-            if (!IsOnAnyWaterTile(dfTerrain, pos, scale) && !IsCollidingWithBuilding(dfTerrain, pos, scale) && !IsOnOrCloseToStreetTile(dfTerrain, pos, scale) && steepness < Random.Range(30f,45f))
+            if (checkOnLand &&
+              !IsOnAnyWaterTile(baseData.dfTerrain, pos, baseData.scale) &&
+              !IsCollidingWithBuilding(baseData.dfTerrain, pos, baseData.scale) &&
+              !IsOnOrCloseToStreetTile(baseData.dfTerrain, pos, baseData.scale) &&
+              baseData.steepness < Random.Range(30f,45f))
             {
-                dfBillboardBatch.AddItem(billboardCollection[record], pos);
+                baseData.dfBillboardBatch.AddItem(billboardCollection[record], pos);
+            }
+            if (!checkOnLand &&
+              IsOnOrCloseToShallowWaterTile(baseData.dfTerrain, pos, baseData.scale) &&
+              !IsCollidingWithBuilding(baseData.dfTerrain, pos, baseData.scale) &&
+              !IsOnOrCloseToStreetTile(baseData.dfTerrain, pos, baseData.scale) &&
+              baseData.steepness < Random.Range(30f,45f))
+            {
+                baseData.dfBillboardBatch.AddItem(billboardCollection[record], pos);
             }
         }
 
-        public static void AddBillboardToBatchWater(
-          DaggerfallTerrain dfTerrain,
-          DaggerfallBillboardBatch dfBillboardBatch,
-          List<int> billboardCollection,
-          float scale,
-          float steepness,
-          Terrain terrain,
-          int x,
-          int y,
-          float posVariance)
+        public static void AddMushroomRingToBatch(
+          BaseDataObject baseData,
+          int record)
         {
-            int rnd = (int)Mathf.Round(Random.Range(0, billboardCollection.Count));
-            Vector3 pos = new Vector3((x + Random.Range(-posVariance, posVariance)) * scale, 0, (y + Random.Range(-posVariance, posVariance)) * scale);
-            float height = terrain.SampleHeight(pos + terrain.transform.position);
-            pos.y = height - (steepness / slopeSinkRatio);
+            Vector3 pos = new Vector3(baseData.x * baseData.scale, 0, (baseData.y + 0.5f) * baseData.scale);
+            float height2 = baseData.terrain.SampleHeight(pos + baseData.terrain.transform.position);
+            pos.y = height2 - (baseData.steepness / slopeSinkRatio);
+            baseData.dfBillboardBatch.AddItem(record, pos);
 
-            if (IsOnOrCloseToShallowWaterTile(dfTerrain, pos, scale) && !IsCollidingWithBuilding(dfTerrain, pos, scale) && !IsOnOrCloseToStreetTile(dfTerrain, pos, scale) && steepness < Random.Range(30f,45f))
-            {
-                dfBillboardBatch.AddItem(billboardCollection[rnd], pos);
-            }
+            pos = new Vector3((baseData.x + 0.272f) * baseData.scale, 0, (baseData.y - 0.404f) * baseData.scale);
+            height2 = baseData.terrain.SampleHeight(pos + baseData.terrain.transform.position);
+            pos.y = height2 - (baseData.steepness / slopeSinkRatio);
+            baseData.dfBillboardBatch.AddItem(record, pos);
+
+            pos = new Vector3((baseData.x - 0.272f) * baseData.scale, 0, (baseData.y - 0.404f) * baseData.scale);
+            height2 = baseData.terrain.SampleHeight(pos + baseData.terrain.transform.position);
+            pos.y = height2 - (baseData.steepness / slopeSinkRatio);
+            baseData.dfBillboardBatch.AddItem(record, pos);
+
+            pos = new Vector3((baseData.x - 0.475f) * baseData.scale, 0, (baseData.y + 0.154f) * baseData.scale);
+            height2 = baseData.terrain.SampleHeight(pos + baseData.terrain.transform.position);
+            pos.y = height2 - (baseData.steepness / slopeSinkRatio);
+            baseData.dfBillboardBatch.AddItem(record, pos);
+
+            pos = new Vector3((baseData.x + 0.475f) * baseData.scale, 0, (baseData.y + 0.154f) * baseData.scale);
+            height2 = baseData.terrain.SampleHeight(pos + baseData.terrain.transform.position);
+            pos.y = height2 - (baseData.steepness / slopeSinkRatio);
+            baseData.dfBillboardBatch.AddItem(record, pos);
+        }
+
+        public static void AddStoneCircleToBatch(
+          BaseDataObject baseData,
+          List<int> billboardCollection,
+          int record1,
+          int record2) {
+            Vector3 pos = new Vector3(baseData.x * baseData.scale, 0, baseData.y * baseData.scale);
+            float height2 = baseData.terrain.SampleHeight(pos + baseData.terrain.transform.position);
+            pos.y = height2 - (baseData.steepness / slopeSinkRatio);
+            baseData.dfBillboardBatch.AddItem(billboardCollection[record1], pos);
+
+            pos = new Vector3((baseData.x + 0.4f) * baseData.scale, 0, baseData.y * baseData.scale);
+            height2 = baseData.terrain.SampleHeight(pos + baseData.terrain.transform.position);
+            pos.y = height2 - (baseData.steepness / slopeSinkRatio);
+            baseData.dfBillboardBatch.AddItem(billboardCollection[record2], pos);
+
+            pos = new Vector3((baseData.x - 0.4f) * baseData.scale, 0, baseData.y * baseData.scale);
+            height2 = baseData.terrain.SampleHeight(pos + baseData.terrain.transform.position);
+            pos.y = height2 - (baseData.steepness / slopeSinkRatio);
+            baseData.dfBillboardBatch.AddItem(billboardCollection[record2], pos);
+
+            pos = new Vector3(baseData.x * baseData.scale, 0, (baseData.y + 0.4f) * baseData.scale);
+            height2 = baseData.terrain.SampleHeight(pos + baseData.terrain.transform.position);
+            pos.y = height2 - (baseData.steepness / slopeSinkRatio);
+            baseData.dfBillboardBatch.AddItem(billboardCollection[record2], pos);
+
+            pos = new Vector3(baseData.x * baseData.scale, 0, (baseData.y - 0.4f) * baseData.scale);
+            height2 = baseData.terrain.SampleHeight(pos + baseData.terrain.transform.position);
+            pos.y = height2 - (baseData.steepness / slopeSinkRatio);
+            baseData.dfBillboardBatch.AddItem(billboardCollection[record2], pos);
+
+            pos = new Vector3((baseData.x + 0.3f) * baseData.scale, 0, (baseData.y + 0.3f) * baseData.scale);
+            height2 = baseData.terrain.SampleHeight(pos + baseData.terrain.transform.position);
+            pos.y = height2 - (baseData.steepness / slopeSinkRatio);
+            baseData.dfBillboardBatch.AddItem(billboardCollection[record2], pos);
+
+            pos = new Vector3((baseData.x - 0.3f) * baseData.scale, 0, (baseData.y + 0.3f) * baseData.scale);
+            height2 = baseData.terrain.SampleHeight(pos + baseData.terrain.transform.position);
+            pos.y = height2 - (baseData.steepness / slopeSinkRatio);
+            baseData.dfBillboardBatch.AddItem(billboardCollection[record2], pos);
+
+            pos = new Vector3((baseData.x + 0.3f) * baseData.scale, 0, (baseData.y - 0.3f) * baseData.scale);
+            height2 = baseData.terrain.SampleHeight(pos + baseData.terrain.transform.position);
+            pos.y = height2 - (baseData.steepness / slopeSinkRatio);
+            baseData.dfBillboardBatch.AddItem(billboardCollection[record2], pos);
+
+            pos = new Vector3((baseData.x - 0.3f) * baseData.scale, 0, (baseData.y - 0.3f) * baseData.scale);
+            height2 = baseData.terrain.SampleHeight(pos + baseData.terrain.transform.position);
+            pos.y = height2 - (baseData.steepness / slopeSinkRatio);
+            baseData.dfBillboardBatch.AddItem(billboardCollection[record2], pos);
         }
 
         public static void AddFirefly(
-          DaggerfallTerrain dfTerrain,
-          Terrain terrain,
-          DaggerfallBillboardBatch dfBillboardBatch,
+          BaseDataObject baseData,
           float rndFirefly,
-          float fireflyChance,
-          float scale,
-          int x,
-          int y,
           float distanceVariation,
           int minNumber,
           int maxNumber,
           bool firefliesExist)
         {
-            if (rndFirefly <= 0.1f && DaggerfallUnity.Instance.WorldTime.Now.SeasonValue != DaggerfallDateTime.Seasons.Winter && firefliesExist)
+            if (rndFirefly >= Random.Range(0.0f, 100.0f) && DaggerfallUnity.Instance.WorldTime.Now.SeasonValue != DaggerfallDateTime.Seasons.Winter && firefliesExist)
             {
                 GameObject fireflyContainer = new GameObject();
                 fireflyContainer.name = "fireflyContainer";
-                fireflyContainer.transform.parent = dfBillboardBatch.transform;
-                fireflyContainer.transform.position = new Vector3(dfTerrain.transform.position.x + (x * scale), terrain.SampleHeight(new Vector3(x * scale, 0, y * scale) + dfTerrain.transform.position) + dfTerrain.transform.position.y, dfTerrain.transform.position.z + (y * scale));
+                fireflyContainer.transform.parent = baseData.dfBillboardBatch.transform;
+                fireflyContainer.transform.position = new Vector3(baseData.dfTerrain.transform.position.x + (baseData.x * baseData.scale), baseData.terrain.SampleHeight(new Vector3(baseData.x * baseData.scale, 0, baseData.y * baseData.scale) + baseData.dfTerrain.transform.position) + baseData.dfTerrain.transform.position.y, baseData.dfTerrain.transform.position.z + (baseData.y * baseData.scale));
                 fireflyContainer.AddComponent<WODistanceChecker>();
                 fireflyContainer.GetComponent<WODistanceChecker>().distance = fireflyDistance;
                 for (int i = 0; i < Random.Range(minNumber, maxNumber); i++)
                 {
-                    fireflyContainer.GetComponent<WODistanceChecker>().CreateFirefly(dfTerrain, x, y, scale, terrain, distanceVariation); // Firefly
+                    fireflyContainer.GetComponent<WODistanceChecker>().CreateFirefly(baseData.dfTerrain, baseData.x, baseData.y, baseData.scale, baseData.terrain, distanceVariation); // Firefly
                 }
                 fireflyContainer.GetComponent<WODistanceChecker>().AddChildrenToArray();
                 fireflyContainer.GetComponent<WODistanceChecker>().DeactivateAllChildren();
@@ -3148,7 +2947,10 @@ namespace WildernessOverhaul
             emissionModule.rateOverTime = new ParticleSystem.MinMaxCurve(sSMin / 1000, sSMax / 1000);
         }
 
-        static public bool IsOnAnyWaterTile(DaggerfallTerrain dfTerrain, Vector3 pos, float scale)
+        static public bool IsOnAnyWaterTile(
+          DaggerfallTerrain dfTerrain,
+          Vector3 pos,
+          float scale)
         {
             bool result = true;
             int roundedX = (int)Mathf.Round(pos.x / scale);
@@ -3162,30 +2964,9 @@ namespace WildernessOverhaul
                   sampleGround != 4 &&
                   sampleGround != 5 &&
                   sampleGround != 6 &&
-                  sampleGround != 7 &&
-                  sampleGround != 8 &&
-                  sampleGround != 19 &&
-                  sampleGround != 20 &&
                   sampleGround != 21 &&
-                  sampleGround != 22 &&
-                  sampleGround != 23 &&
-                  sampleGround != 29 &&
-                  sampleGround != 30 &&
                   sampleGround != 31 &&
-                  sampleGround != 32 &&
-                  sampleGround != 33 &&
-                  sampleGround != 34 &&
-                  sampleGround != 35 &&
-                  sampleGround != 36 &&
-                  sampleGround != 37 &&
-                  sampleGround != 38 &&
-                  sampleGround != 40 &&
-                  sampleGround != 41 &&
-                  sampleGround != 43 &&
-                  sampleGround != 44 &&
-                  sampleGround != 48 &&
-                  sampleGround != 49 &&
-                  sampleGround != 50)
+                  sampleGround != 32)
                 {
                     result = false;
                 }
@@ -3193,7 +2974,10 @@ namespace WildernessOverhaul
             return result;
         }
 
-        static public bool IsOnOrCloseToShallowWaterTile(DaggerfallTerrain dfTerrain, Vector3 pos, float scale)
+        static public bool IsOnOrCloseToShallowWaterTile(
+          DaggerfallTerrain dfTerrain,
+          Vector3 pos,
+          float scale)
         {
             bool result = true;
             bool stopCondition = false;
@@ -3260,7 +3044,10 @@ namespace WildernessOverhaul
             return result;
         }
 
-        static public bool IsOnOrCloseToStreetTile(DaggerfallTerrain dfTerrain, Vector3 pos, float scale)
+        static public bool IsOnOrCloseToStreetTile(
+          DaggerfallTerrain dfTerrain,
+          Vector3 pos,
+          float scale)
         {
             bool result = true;
             bool stopCondition = false;
@@ -3302,41 +3089,47 @@ namespace WildernessOverhaul
             return result;
         }
 
-        static public bool IsCollidingWithBuilding(DaggerfallTerrain dfTerrain, Vector3 pos, float scale)
+        static public bool IsCollidingWithBuilding(
+          DaggerfallTerrain dfTerrain,
+          Vector3 pos,
+          float scale)
         {
             /* if(dfTerrain.MapData.hasLocation)
-      {
-        foreach(GameObject go in staticGeometryList)
-        {
-          Vector3 newPos = new Vector3(pos.x,pos.y + 100, pos.z);
-          RaycastHit hit;
-
-          if (Physics.Raycast(dfTerrain.transform.TransformPoint(newPos), new Vector3(0,-1,0), out hit, Mathf.Infinity))
-          {
-            Debug.DrawLine(dfTerrain.transform.TransformPoint(newPos), hit.point, Color.red,30);
-
-            if(hit.collider.gameObject.tag == "StaticGeometry")
             {
-        Debug.DrawLine(dfTerrain.transform.TransformPoint(newPos), new Vector3(dfTerrain.transform.TransformPoint(newPos).x,-200,dfTerrain.transform.TransformPoint(newPos).z), Color.yellow,30);
-        return true;
-            }
-          }
-        }
-      } */
+                foreach(GameObject go in staticGeometryList)
+                {
+                Vector3 newPos = new Vector3(pos.x,pos.y + 100, pos.z);
+                RaycastHit hit;
+
+                if (Physics.Raycast(dfTerrain.transform.TransformPoint(newPos), new Vector3(0,-1,0), out hit, Mathf.Infinity))
+                {
+                    Debug.DrawLine(dfTerrain.transform.TransformPoint(newPos), hit.point, Color.red,30);
+
+                    if(hit.collider.gameObject.tag == "StaticGeometry")
+                    {
+                Debug.DrawLine(dfTerrain.transform.TransformPoint(newPos), new Vector3(dfTerrain.transform.TransformPoint(newPos).x,-200,dfTerrain.transform.TransformPoint(newPos).z), Color.yellow,30);
+                return true;
+                    }
+                }
+                }
+            } */
             return false;
         }
 
-        /* static private void AddDescendantsWithTag(Transform parent, string tag, List<GameObject> list)
-    {
-      foreach (Transform child in parent)
-      {
-        if (child.gameObject.CompareTag(tag))
+        /* static private void AddDescendantsWithTag(
+          Transform parent,
+          string tag,
+          List<GameObject> list)
         {
-          list.Add(child.gameObject);
+        foreach (Transform child in parent)
+        {
+            if (child.gameObject.CompareTag(tag))
+            {
+            list.Add(child.gameObject);
+            }
+            AddDescendantsWithTag(child, tag, list);
         }
-        AddDescendantsWithTag(child, tag, list);
-      }
-    } */
+        } */
 
         // Noise function
         private float GetNoise(
@@ -3352,7 +3145,7 @@ namespace WildernessOverhaul
             for (int i = 0; i < octaves; ++i)
             {
                 finalValue += Mathf.PerlinNoise(seed + (x * frequency), seed + (y * frequency)) * amplitude;
-                frequency *= 2.0f;
+                frequency *= 7;
                 amplitude *= persistance;
             }
 
@@ -3360,7 +3153,10 @@ namespace WildernessOverhaul
         }
 
         // Sets texture by range
-        private string GetWeightedRecord(float weight, float limit1 = 0.3f, float limit2 = 0.6f)
+        private string GetWeightedRecord(
+          float weight,
+          float limit1 = 0.3f,
+          float limit2 = 0.6f)
         {
             if (weight < limit1)
                 return "flower";
@@ -3368,33 +3164,6 @@ namespace WildernessOverhaul
                 return "grass";
             else
                 return "forest";
-        }
-    }
-
-    public static class ExtensionMethods
-    {
-        public static bool In2DArrayBounds(this byte[,] array, int x, int y)
-        {
-            if (
-              x < array.GetLowerBound(0) ||
-              x > array.GetUpperBound(0) ||
-              y < array.GetLowerBound(1) ||
-              y > array.GetUpperBound(1))
-            {
-                return false;
-            }
-            return true;
-        }
-
-        public static bool InArrayBounds(this float[] array, int x)
-        {
-            if (
-              x < array.GetLowerBound(0) ||
-              x > array.GetUpperBound(0))
-            {
-                return false;
-            }
-            return true;
         }
     }
 }
