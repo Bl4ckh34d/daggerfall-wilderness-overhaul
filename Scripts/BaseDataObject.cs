@@ -12,6 +12,7 @@ namespace WildernessOverhaul {
         public float steepness;
         public int x;
         public int y;
+        public float maxTerrainHeight;
 
         public BaseDataObject(
           DaggerfallTerrain DFTerrain,
@@ -20,7 +21,8 @@ namespace WildernessOverhaul {
           float Scale,
           float Steepness,
           int X,
-          int Y)
+          int Y,
+          float MaxTerrainHeight)
         {
             dfTerrain = DFTerrain;
             dfBillboardBatch = DFBillboardBatch;
@@ -29,6 +31,7 @@ namespace WildernessOverhaul {
             steepness = Steepness;
             x = X;
             y = Y;
+            maxTerrainHeight = MaxTerrainHeight;
         }
     }
 }

@@ -45,7 +45,166 @@ namespace WildernessOverhaul
         protected static readonly int assignTilesDim = MapsFile.WorldMapTileDim;
 
         protected byte[] lookupTable;
-        static TileObject[] tileTable;
+        static protected TileObject[] tileTable = {
+            // Water - Dirt
+            new TileObject(MakeLookup(0, false, false),  0,0,0,0),
+
+            new TileObject(MakeLookup(5, true, false),   1,0,0,0),
+            new TileObject(MakeLookup(5, false, true),   0,1,0,0),
+            new TileObject(MakeLookup(5, true, true),    0,0,1,0),
+            new TileObject(MakeLookup(5, false, false),  0,0,0,1),
+
+            new TileObject(MakeLookup(6, true, false),   1,1,0,0),
+            new TileObject(MakeLookup(6, false, true),   0,1,1,0),
+            new TileObject(MakeLookup(6, true, true),    0,0,1,1),
+            new TileObject(MakeLookup(6, false, false),  1,0,0,1),
+
+            new TileObject(MakeLookup(7, false, true),   1,1,1,0),
+            new TileObject(MakeLookup(7, true, true),    0,1,1,1),
+            new TileObject(MakeLookup(7, false, false),  1,0,1,1),
+            new TileObject(MakeLookup(7, true, false),   1,1,0,1),
+
+            new TileObject(MakeLookup(48, false, false), 0,1,0,1),
+            new TileObject(MakeLookup(48, true, false),  1,0,1,0),
+
+            new TileObject(MakeLookup(1, false, false),  1,1,1,1),
+
+            // Dirt - Grass
+            new TileObject(MakeLookup(10, true, false),   2,1,1,1),
+            new TileObject(MakeLookup(10, false, true),   1,2,1,1),
+            new TileObject(MakeLookup(10, true, true),    1,1,2,1),
+            new TileObject(MakeLookup(10, false, false),  1,1,1,2),
+
+            new TileObject(MakeLookup(11, true, false),   2,2,1,1),
+            new TileObject(MakeLookup(11, false, true),   1,2,2,1),
+            new TileObject(MakeLookup(11, true, true),    1,1,2,2),
+            new TileObject(MakeLookup(11, false, false),  2,1,1,2),
+
+            new TileObject(MakeLookup(12, false, true),   2,2,2,1),
+            new TileObject(MakeLookup(12, true, true),    1,2,2,2),
+            new TileObject(MakeLookup(12, false, false),  2,1,2,2),
+            new TileObject(MakeLookup(12, true, false),   2,2,1,2),
+
+            new TileObject(MakeLookup(51, true, false),  2,1,2,1),
+            new TileObject(MakeLookup(51, false, false), 1,2,1,2),
+
+            new TileObject(MakeLookup(2, false, false),  2,2,2,2),
+
+            // Grass - Stone
+            new TileObject(MakeLookup(15, true, false),  3,2,2,2),
+            new TileObject(MakeLookup(15, false, true),  2,3,2,2),
+            new TileObject(MakeLookup(15, true, true),   2,2,3,2),
+            new TileObject(MakeLookup(15, false, false), 2,2,2,3),
+
+            new TileObject(MakeLookup(16, true, false),  3,3,2,2),
+            new TileObject(MakeLookup(16, false, true),  2,3,3,2),
+            new TileObject(MakeLookup(16, true, true),   2,2,3,3),
+            new TileObject(MakeLookup(16, false, false), 3,2,2,3),
+
+            new TileObject(MakeLookup(17, false, true),  3,3,3,2),
+            new TileObject(MakeLookup(17, true, true),   2,3,3,3),
+            new TileObject(MakeLookup(17, false, false), 3,2,3,3),
+            new TileObject(MakeLookup(17, true, false),  3,3,2,3),
+
+            new TileObject(MakeLookup(53, true, false),  3,2,3,2),
+            new TileObject(MakeLookup(53, false, false), 2,3,2,3),
+
+            new TileObject(MakeLookup(3, false, false),  3,3,3,3),
+
+            // Dirt - Stone
+            new TileObject(MakeLookup(25, true, false),  3,1,1,1),
+            new TileObject(MakeLookup(25, false, true),  1,3,1,1),
+            new TileObject(MakeLookup(25, true, true),   1,1,3,1),
+            new TileObject(MakeLookup(25, false, false), 1,1,1,3),
+
+            new TileObject(MakeLookup(26, true, false),  3,3,1,1),
+            new TileObject(MakeLookup(26, false, true),  1,3,3,1),
+            new TileObject(MakeLookup(26, true, true),   1,1,3,3),
+            new TileObject(MakeLookup(26, false, false), 3,1,1,3),
+
+            new TileObject(MakeLookup(27, false, true),  3,3,3,1),
+            new TileObject(MakeLookup(27, true, true),   1,3,3,3),
+            new TileObject(MakeLookup(27, false, false), 3,1,3,3),
+            new TileObject(MakeLookup(27, true, false),  3,3,1,3),
+
+            new TileObject(MakeLookup(52, true, false),  3,1,3,1),
+            new TileObject(MakeLookup(52, false, false), 1,3,1,3),
+
+            //Dirt - Grass - Stone
+            new TileObject(MakeLookup(39, true, false),  1,1,2,3),
+            new TileObject(MakeLookup(39, false, true),  3,1,1,2),
+            new TileObject(MakeLookup(39, true, true),   2,3,1,1),
+            new TileObject(MakeLookup(39, false, false), 1,2,3,1),
+
+            new TileObject(MakeLookup(56, true, false),  1,1,3,2),
+            new TileObject(MakeLookup(56, false, true),  2,1,1,3),
+            new TileObject(MakeLookup(56, true, true),   3,2,1,1),
+            new TileObject(MakeLookup(56, false, false), 1,3,2,1),
+
+            new TileObject(MakeLookup(42, true, false),  2,2,1,3),
+            new TileObject(MakeLookup(42, false, true),  3,2,2,1),
+            new TileObject(MakeLookup(42, true, true),   1,3,2,2),
+            new TileObject(MakeLookup(42, false, false), 2,1,3,2),
+
+            new TileObject(MakeLookup(57, true, false),  2,2,3,1),
+            new TileObject(MakeLookup(57, false, true),  1,2,2,3),
+            new TileObject(MakeLookup(57, true, true),   3,1,2,2),
+            new TileObject(MakeLookup(57, false, false), 2,3,1,2),
+
+            new TileObject(MakeLookup(45, true, false),  3,3,1,2),
+            new TileObject(MakeLookup(45, false, true),  2,3,3,1),
+            new TileObject(MakeLookup(45, true, true),   1,2,3,3),
+            new TileObject(MakeLookup(45, false, false), 3,1,2,3),
+
+            new TileObject(MakeLookup(58, true, false),  3,3,2,1),
+            new TileObject(MakeLookup(58, false, true),  1,3,3,2),
+            new TileObject(MakeLookup(58, true, true),   2,1,3,3),
+            new TileObject(MakeLookup(58, false, false), 3,2,1,3),
+
+            //Dirt - Stone & Grass
+            new TileObject(MakeLookup(59, true, false),  3,1,2,1),
+            new TileObject(MakeLookup(59, false, true),  1,3,1,2),
+            new TileObject(MakeLookup(59, true, true),   2,1,3,1),
+            new TileObject(MakeLookup(59, false, false), 1,2,1,3),
+
+            //Dirt - Water & Grass
+            new TileObject(MakeLookup(60, true, false),  2,1,0,1),
+            new TileObject(MakeLookup(60, false, true),  1,2,1,0),
+            new TileObject(MakeLookup(60, true, true),   0,1,2,1),
+            new TileObject(MakeLookup(60, false, false), 1,0,1,2),
+
+            //Dirt - Water & Stone
+            new TileObject(MakeLookup(61, true, false),  3,1,0,1),
+            new TileObject(MakeLookup(61, false, true),  1,3,1,0),
+            new TileObject(MakeLookup(61, true, true),   0,1,3,1),
+            new TileObject(MakeLookup(61, false, false), 1,0,1,3),
+
+            //Grass - Dirt & Stone
+            new TileObject(MakeLookup(62, true, false),  3,2,1,2),
+            new TileObject(MakeLookup(62, false, true),  2,3,2,1),
+            new TileObject(MakeLookup(62, true, true),   1,2,3,2),
+            new TileObject(MakeLookup(62, false, false), 2,1,2,3),
+
+            //Stone - Dirt & Grass
+            new TileObject(MakeLookup(63, true, false),  2,3,1,3),
+            new TileObject(MakeLookup(63, false, true),  3,2,3,1),
+            new TileObject(MakeLookup(63, true, true),   1,3,2,3),
+            new TileObject(MakeLookup(63, false, false), 3,1,3,2),
+
+            //Road - Dirt & Grass
+            new TileObject(MakeLookup(46, false, false), 19,19,19,19),
+
+            new TileObject(MakeLookup(47, true, false),  1,20,19,20),
+            new TileObject(MakeLookup(47, false, true),  20,1,20,19),
+            new TileObject(MakeLookup(47, true, true),   19,20,1,20),
+            new TileObject(MakeLookup(47, false, false), 20,19,20,1),
+
+            new TileObject(MakeLookup(55, true, false),  2,26,19,26),
+            new TileObject(MakeLookup(55, false, true),  26,2,26,19),
+            new TileObject(MakeLookup(55, true, true),   19,26,2,26),
+            new TileObject(MakeLookup(55, false, false), 26,19,26,2)
+        };
+
         static MapPixelData currentMapData;
 
         public WOTerrainTexturing(
@@ -112,8 +271,6 @@ namespace WildernessOverhaul
             public bool march;
             public Rect locationRect;
 
-
-
             public void Execute(int index)
             {
                 int x = JobA.Row(index, tDim);
@@ -126,28 +283,12 @@ namespace WildernessOverhaul
                 // Assign tile texture
                 if (march)
                 {
-                    if(!currentMapData.hasLocation) {
+                    int bl = tileData[JobA.Idx(x, y, tdDim)];
+                    int br = tileData[JobA.Idx(x + 1, y, tdDim)];
+                    int tr = tileData[JobA.Idx(x + 1, y + 1, tdDim)];
+                    int tl = tileData[JobA.Idx(x, y + 1, tdDim)];
 
-                        int bl = tileData[JobA.Idx(x, y, tdDim)];
-                        int br = tileData[JobA.Idx(x + 1, y, tdDim)];
-                        int tr = tileData[JobA.Idx(x + 1, y + 1, tdDim)];
-                        int tl = tileData[JobA.Idx(x, y + 1, tdDim)];
-
-                        tilemapData[index] = tileTable[FindTileIndex(bl, br, tr, tl)].Tile;
-
-                    } else {
-
-                        int tdIdx = JobA.Idx(x, y, tdDim);
-                        int b0 = tileData[tdIdx];               // tileData[x, y]
-                        int b1 = tileData[tdIdx + 1];           // tileData[x + 1, y]
-                        int b2 = tileData[tdIdx + tdDim];       // tileData[x, y + 1]
-                        int b3 = tileData[tdIdx + tdDim + 1];   // tileData[x + 1, y + 1]
-                        int shape = (b0 & 1) | (b1 & 1) << 1 | (b2 & 1) << 2 | (b3 & 1) << 3;
-                        int ring = (b0 + b1 + b2 + b3) >> 2;
-                        int tileID = shape | ring << 4;
-
-                        tilemapData[index] = lookupTable[tileID];
-                    }
+                    tilemapData[index] = tileTable[FindTileIndex(tileTable, bl, br, tr, tl)].Tile;
                 }
                 else
                 {
@@ -336,267 +477,69 @@ namespace WildernessOverhaul
                 tileData[index] = GetWeightedRecord(weight, upperWaterSpread[climateNum], lowerGrassSpread[climateNum], upperGrassSpread[climateNum]);
 
                 // Check for lowest local point in desert to place oasis
-                if (worldClimate == (int)MapsFile.Climates.Desert2 && LowestPointFound(30, heightmapData, maxTerrainHeight, hx, hy, hDim, uB, index, tdDim, tileData))
+                if (worldClimate == (int)MapsFile.Climates.Desert2 && LowestPointFound(30, heightmapData, maxTerrainHeight, hx, hy, hDim, uB, index, tdDim, tileData)) {
                     tileData[index] = water;
-                if (worldClimate == (int)MapsFile.Climates.Desert && LowestPointFound(80, heightmapData, maxTerrainHeight, hx, hy, hDim, uB, index, tdDim, tileData))
+                    return;
+                }
+
+                if (worldClimate == (int)MapsFile.Climates.Desert && LowestPointFound(80, heightmapData, maxTerrainHeight, hx, hy, hDim, uB, index, tdDim, tileData)) {
                     tileData[index] = water;
+                    return;
+                }
+
+                /* // Create Rivers
+                if (LowestPointFound(80, heightmapData, maxTerrainHeight, hx, hy, hDim, uB, index, tdDim, tileData)) {
+                    tileData[index] = water;
+                    return;
+                } */
 
                 // Rock Mountain Face
-                if (SteepnessWithinLimits(true, Mathf.Clamp(90f - ((height / maxTerrainHeight)/0.85f * 100f),40f,90f), heightmapData, maxTerrainHeight, hx, hy, hDim, uB, index, tdDim, tileData))
+                if (SteepnessWithinLimits(true, Mathf.Clamp(90f - ((height / maxTerrainHeight)/0.85f * 100f),40f,90f), heightmapData, maxTerrainHeight, hx, hy, hDim, uB, index, tdDim, tileData)) {
                     tileData[index] = stone;
+                    return;
+                }
 
                 int rnd = JobRand.Next(25,35);
-                if (tileData[index] == stone && SteepnessWithinLimits(false, Mathf.Clamp(90f - ((height / maxTerrainHeight)/0.85f * 100f),40f,90f), heightmapData, maxTerrainHeight, hx, hy, hDim, uB, index, tdDim, tileData))
+                if (tileData[index] == stone && SteepnessWithinLimits(false, Mathf.Clamp(90f - ((height / maxTerrainHeight)/0.85f * 100f),40f,90f), heightmapData, maxTerrainHeight, hx, hy, hDim, uB, index, tdDim, tileData)) {
                     tileData[index] = grass;
+                    return;
+                }
 
                 // Max angle for dirt patches
                 rnd = JobRand.Next(20,25);
-                if (tileData[index] == dirt && SteepnessWithinLimits(false, rnd, heightmapData, maxTerrainHeight, hx, hy, hDim, uB, index, tdDim, tileData))
+                if (tileData[index] == dirt && SteepnessWithinLimits(false, rnd, heightmapData, maxTerrainHeight, hx, hy, hDim, uB, index, tdDim, tileData)) {
                     tileData[index] = dirt;
-                else if (tileData[index] == dirt && !SteepnessWithinLimits(false, rnd, heightmapData, maxTerrainHeight, hx, hy, hDim, uB, index, tdDim, tileData))
+                    return;
+                }
+
+                if (tileData[index] == dirt && !SteepnessWithinLimits(false, rnd, heightmapData, maxTerrainHeight, hx, hy, hDim, uB, index, tdDim, tileData)) {
                     tileData[index] = grass;
+                    return;
+                }
             }
         }
 
-        // Creates lookup table
-        void CreateLookupTable()
-        {
-            lookupTable = new byte[64];
-            AddLookupRange(0, 1, 5, 48, false, 0);
-            AddLookupRange(2, 1, 10, 51, true, 16);
-            AddLookupRange(2, 3, 15, 53, false, 32);
-            AddLookupRange(3, 3, 15, 53, true, 48);
-
-            tileTable = new TileObject[114];
-            // Water - Dirt
-            tileTable[0]   = new TileObject(MakeLookup(0, false, false),  0,0,0,0);
-
-            tileTable[1]   = new TileObject(MakeLookup(4, true, false),   1,0,0,0);
-            tileTable[2]   = new TileObject(MakeLookup(4, false, true),   0,1,0,0);
-            tileTable[3]   = new TileObject(MakeLookup(4, true, true),    0,0,1,0);
-            tileTable[4]   = new TileObject(MakeLookup(4, false, false),  0,0,0,1);
-
-            tileTable[5]   = new TileObject(MakeLookup(5, true, false),   1,1,0,0);
-            tileTable[6]   = new TileObject(MakeLookup(5, false, true),   0,1,1,0);
-            tileTable[7]   = new TileObject(MakeLookup(5, true, true),    0,0,1,1);
-            tileTable[8]   = new TileObject(MakeLookup(5, false, false),  1,0,0,1);
-
-            tileTable[9]   = new TileObject(MakeLookup(6, false, true),   1,1,1,0);
-            tileTable[10]  = new TileObject(MakeLookup(6, true, true),    0,1,1,1);
-            tileTable[11]  = new TileObject(MakeLookup(6, false, false),  1,0,1,1);
-            tileTable[12]  = new TileObject(MakeLookup(6, true, false),   1,1,0,1);
-
-            tileTable[13]  = new TileObject(MakeLookup(21, false, false), 0,1,0,1);
-            tileTable[14]  = new TileObject(MakeLookup(21, true, false),  1,0,1,0);
-
-            tileTable[15]  = new TileObject(MakeLookup(1, false, false),  1,1,1,1);
-
-            // Dirt - Grass
-            tileTable[16]  = new TileObject(MakeLookup(7, true, false),   2,1,1,1);
-            tileTable[17]  = new TileObject(MakeLookup(7, false, true),   1,2,1,1);
-            tileTable[18]  = new TileObject(MakeLookup(7, true, true),    1,1,2,1);
-            tileTable[19]  = new TileObject(MakeLookup(7, false, false),  1,1,1,2);
-
-            tileTable[20]  = new TileObject(MakeLookup(8, true, false),   2,2,1,1);
-            tileTable[21]  = new TileObject(MakeLookup(8, false, true),   1,2,2,1);
-            tileTable[22]  = new TileObject(MakeLookup(8, true, true),    1,1,2,2);
-            tileTable[23]  = new TileObject(MakeLookup(8, false, false),  2,1,1,2);
-
-            tileTable[24]  = new TileObject(MakeLookup(9, false, true),   2,2,2,1);
-            tileTable[25]  = new TileObject(MakeLookup(9, true, true),    1,2,2,2);
-            tileTable[26]  = new TileObject(MakeLookup(9, false, false),  2,1,2,2);
-            tileTable[27]  = new TileObject(MakeLookup(9, true, false),   2,2,1,2);
-
-            tileTable[28]  = new TileObject(MakeLookup(22, true, false),  2,1,2,1);
-            tileTable[29]  = new TileObject(MakeLookup(22, false, false), 1,2,1,2);
-
-            tileTable[30]  = new TileObject(MakeLookup(2, false, false),  2,2,2,2);
-
-            // Grass - Stone
-            tileTable[31]  = new TileObject(MakeLookup(10, true, false),  3,2,2,2);
-            tileTable[32]  = new TileObject(MakeLookup(10, false, true),  2,3,2,2);
-            tileTable[33]  = new TileObject(MakeLookup(10, true, true),   2,2,3,2);
-            tileTable[34]  = new TileObject(MakeLookup(10, false, false), 2,2,2,3);
-
-            tileTable[35]  = new TileObject(MakeLookup(11, true, false),  3,3,2,2);
-            tileTable[36]  = new TileObject(MakeLookup(11, false, true),  2,3,3,2);
-            tileTable[37]  = new TileObject(MakeLookup(11, true, true),   2,2,3,3);
-            tileTable[38]  = new TileObject(MakeLookup(11, false, false), 3,2,2,3);
-
-            tileTable[39]  = new TileObject(MakeLookup(12, false, true),  3,3,3,2);
-            tileTable[40]  = new TileObject(MakeLookup(12, true, true),   2,3,3,3);
-            tileTable[41]  = new TileObject(MakeLookup(12, false, false), 3,2,3,3);
-            tileTable[42]  = new TileObject(MakeLookup(12, true, false),  3,3,2,3);
-
-            tileTable[43]  = new TileObject(MakeLookup(24, true, false),  3,2,3,2);
-            tileTable[44]  = new TileObject(MakeLookup(24, false, false), 2,3,2,3);
-
-            tileTable[45]  = new TileObject(MakeLookup(3, false, false),  3,3,3,3);
-
-            // Dirt - Stone
-            tileTable[46]  = new TileObject(MakeLookup(13, true, false),  3,1,1,1);
-            tileTable[47]  = new TileObject(MakeLookup(13, false, true),  1,3,1,1);
-            tileTable[48]  = new TileObject(MakeLookup(13, true, true),   1,1,3,1);
-            tileTable[49]  = new TileObject(MakeLookup(13, false, false), 1,1,1,3);
-
-            tileTable[50]  = new TileObject(MakeLookup(14, true, false),  3,3,1,1);
-            tileTable[51]  = new TileObject(MakeLookup(14, false, true),  1,3,3,1);
-            tileTable[52]  = new TileObject(MakeLookup(14, true, true),   1,1,3,3);
-            tileTable[53]  = new TileObject(MakeLookup(14, false, false), 3,1,1,3);
-
-            tileTable[54]  = new TileObject(MakeLookup(15, false, true),  3,3,3,1);
-            tileTable[55]  = new TileObject(MakeLookup(15, true, true),   1,3,3,3);
-            tileTable[56]  = new TileObject(MakeLookup(15, false, false), 3,1,3,3);
-            tileTable[57]  = new TileObject(MakeLookup(15, true, false),  3,3,1,3);
-
-            tileTable[58]  = new TileObject(MakeLookup(23, true, false),  3,1,3,1);
-            tileTable[59]  = new TileObject(MakeLookup(23, false, false), 1,3,1,3);
-
-            //Dirt - Grass - Stone
-            tileTable[60]  = new TileObject(MakeLookup(16, true, false),  1,1,2,3);
-            tileTable[61]  = new TileObject(MakeLookup(16, false, true),  3,1,1,2);
-            tileTable[62]  = new TileObject(MakeLookup(16, true, true),   2,3,1,1);
-            tileTable[63]  = new TileObject(MakeLookup(16, false, false), 1,2,3,1);
-
-            tileTable[64]  = new TileObject(MakeLookup(27, true, false),  1,1,3,2);
-            tileTable[65]  = new TileObject(MakeLookup(27, false, true),  2,1,1,3);
-            tileTable[66]  = new TileObject(MakeLookup(27, true, true),   3,2,1,1);
-            tileTable[67]  = new TileObject(MakeLookup(27, false, false), 1,3,2,1);
-
-            tileTable[68]  = new TileObject(MakeLookup(17, true, false),  2,2,1,3);
-            tileTable[69]  = new TileObject(MakeLookup(17, false, true),  3,2,2,1);
-            tileTable[70]  = new TileObject(MakeLookup(17, true, true),   1,3,2,2);
-            tileTable[71]  = new TileObject(MakeLookup(17, false, false), 2,1,3,2);
-
-            tileTable[72]  = new TileObject(MakeLookup(28, true, false),  2,2,3,1);
-            tileTable[73]  = new TileObject(MakeLookup(28, false, true),  1,2,2,3);
-            tileTable[74]  = new TileObject(MakeLookup(28, true, true),   3,1,2,2);
-            tileTable[75]  = new TileObject(MakeLookup(28, false, false), 2,3,1,2);
-
-            tileTable[76]  = new TileObject(MakeLookup(18, true, false),  3,3,1,2);
-            tileTable[77]  = new TileObject(MakeLookup(18, false, true),  2,3,3,1);
-            tileTable[78]  = new TileObject(MakeLookup(18, true, true),   1,2,3,3);
-            tileTable[79]  = new TileObject(MakeLookup(18, false, false), 3,1,2,3);
-
-            tileTable[80]  = new TileObject(MakeLookup(29, true, false),  3,3,2,1);
-            tileTable[81]  = new TileObject(MakeLookup(29, false, true),  1,3,3,2);
-            tileTable[82]  = new TileObject(MakeLookup(29, true, true),   2,1,3,3);
-            tileTable[83]  = new TileObject(MakeLookup(29, false, false), 3,2,1,3);
-
-            //Dirt - Stone & Grass
-            tileTable[84]  = new TileObject(MakeLookup(30, true, false),  3,1,2,1);
-            tileTable[85]  = new TileObject(MakeLookup(30, false, true),  1,3,1,2);
-            tileTable[86]  = new TileObject(MakeLookup(30, true, true),   2,1,3,1);
-            tileTable[87]  = new TileObject(MakeLookup(30, false, false), 1,2,1,3);
-
-            //Dirt - Water & Grass
-            tileTable[88]  = new TileObject(MakeLookup(31, true, false),  2,1,0,1);
-            tileTable[89]  = new TileObject(MakeLookup(31, false, true),  1,2,1,0);
-            tileTable[90]  = new TileObject(MakeLookup(31, true, true),   0,1,2,1);
-            tileTable[91]  = new TileObject(MakeLookup(31, false, false), 1,0,1,2);
-
-            //Dirt - Water & Stone
-            tileTable[92]  = new TileObject(MakeLookup(32, true, false),  3,1,0,1);
-            tileTable[93]  = new TileObject(MakeLookup(32, false, true),  1,3,1,0);
-            tileTable[94]  = new TileObject(MakeLookup(32, true, true),   0,1,3,1);
-            tileTable[95]  = new TileObject(MakeLookup(32, false, false), 1,0,1,3);
-
-            //Grass - Dirt & Stone
-            tileTable[96]  = new TileObject(MakeLookup(33, true, false),  3,2,1,2);
-            tileTable[97]  = new TileObject(MakeLookup(33, false, true),  2,3,2,1);
-            tileTable[98]  = new TileObject(MakeLookup(33, true, true),   1,2,3,2);
-            tileTable[99]  = new TileObject(MakeLookup(33, false, false), 2,1,2,3);
-
-            //Stone - Dirt & Grass
-            tileTable[100] = new TileObject(MakeLookup(34, true, false),  2,3,1,3);
-            tileTable[101] = new TileObject(MakeLookup(34, false, true),  3,2,3,1);
-            tileTable[102] = new TileObject(MakeLookup(34, true, true),   1,3,2,3);
-            tileTable[103] = new TileObject(MakeLookup(34, false, false), 3,1,3,2);
-
-            //Road - Dirt & Grass
-            tileTable[105] = new TileObject(MakeLookup(19, false, false), 19,19,19,19);
-
-            tileTable[106] = new TileObject(MakeLookup(20, true, false),  1,20,19,20);
-            tileTable[107] = new TileObject(MakeLookup(20, false, true),  20,1,20,19);
-            tileTable[108] = new TileObject(MakeLookup(20, true, true),   19,20,1,20);
-            tileTable[109] = new TileObject(MakeLookup(20, false, false), 20,19,20,1);
-
-            tileTable[110] = new TileObject(MakeLookup(26, true, false),  2,26,19,26);
-            tileTable[111] = new TileObject(MakeLookup(26, false, true),  26,2,26,19);
-            tileTable[112] = new TileObject(MakeLookup(26, true, true),   19,26,2,26);
-            tileTable[113] = new TileObject(MakeLookup(26, false, false), 26,19,26,2);
-        }
-
-        // Adds range of 16 values to lookup table
-        void AddLookupRange(int baseStart, int baseEnd, int shapeStart, int saddleIndex, bool reverse, int offset)
-        {
-            if (reverse)
-            {
-                // high > low
-                lookupTable[offset] = MakeLookup2(baseStart, false, false);
-                lookupTable[offset + 1] = MakeLookup2(shapeStart + 2, true, true);
-                lookupTable[offset + 2] = MakeLookup2(shapeStart + 2, false, false);
-                lookupTable[offset + 3] = MakeLookup2(shapeStart + 1, true, true);
-                lookupTable[offset + 4] = MakeLookup2(shapeStart + 2, false, true);
-                lookupTable[offset + 5] = MakeLookup2(shapeStart + 1, false, true);
-                lookupTable[offset + 6] = MakeLookup2(saddleIndex, true, false); //d
-                lookupTable[offset + 7] = MakeLookup2(shapeStart, true, true);
-                lookupTable[offset + 8] = MakeLookup2(shapeStart + 2, true, false);
-                lookupTable[offset + 9] = MakeLookup2(saddleIndex, false, false); //d
-                lookupTable[offset + 10] = MakeLookup2(shapeStart + 1, false, false);
-                lookupTable[offset + 11] = MakeLookup2(shapeStart, false, false);
-                lookupTable[offset + 12] = MakeLookup2(shapeStart + 1, true, false);
-                lookupTable[offset + 13] = MakeLookup2(shapeStart, false, true);
-                lookupTable[offset + 14] = MakeLookup2(shapeStart, true, false);
-                lookupTable[offset + 15] = MakeLookup2(baseEnd, false, false);
-            }
-            else
-            {
-                // low > high
-                lookupTable[offset] = MakeLookup2(baseStart, false, false);
-                lookupTable[offset + 1] = MakeLookup2(shapeStart, true, false);
-                lookupTable[offset + 2] = MakeLookup2(shapeStart, false, true);
-                lookupTable[offset + 3] = MakeLookup2(shapeStart + 1, true, false);
-                lookupTable[offset + 4] = MakeLookup2(shapeStart, false, false);
-                lookupTable[offset + 5] = MakeLookup2(shapeStart + 1, false, false);
-                lookupTable[offset + 6] = MakeLookup2(saddleIndex, false, false); //d
-                lookupTable[offset + 7] = MakeLookup2(shapeStart + 2, true, false);
-                lookupTable[offset + 8] = MakeLookup2(shapeStart, true, true);
-                lookupTable[offset + 9] = MakeLookup2(saddleIndex, true, false); //d
-                lookupTable[offset + 10] = MakeLookup2(shapeStart + 1, false, true);
-                lookupTable[offset + 11] = MakeLookup2(shapeStart + 2, false, true);
-                lookupTable[offset + 12] = MakeLookup2(shapeStart + 1, true, true);
-                lookupTable[offset + 13] = MakeLookup2(shapeStart + 2, false, false);
-                lookupTable[offset + 14] = MakeLookup2(shapeStart + 2, true, true);
-                lookupTable[offset + 15] = MakeLookup2(baseEnd, false, false);
-            }
+        void CreateLookupTable() {
+            lookupTable = new byte[1];
+            lookupTable[0] = MakeLookup(0, false, false);
         }
 
         // Encodes a byte with Daggerfall tile neighbours
-        static int FindTileIndex(int bl, int br, int tr, int tl)
+        static int FindTileIndex(TileObject[] array, int bl, int br, int tr, int tl)
         {
-            if (Array.FindIndex(tileTable, tile => tile.Bl == bl && tile.Br == br && tile.Tr == tr && tile.Tl == tl) != -1)
-                return Array.FindIndex(tileTable, tile => tile.Bl == bl && tile.Br == br && tile.Tr == tr && tile.Tl == tl);
-            else
+            if (Array.Exists(array, tile => (tile.Bl == bl && tile.Br == br && tile.Tr == tr && tile.Tl == tl))) {
+                return Array.FindIndex(array, tile => (tile.Bl == bl && tile.Br == br && tile.Tr == tr && tile.Tl == tl));
+            }
+            else {
                 return 0;
+            }
         }
 
         // Encodes a byte with Daggerfall tile lookup
-        byte MakeLookup(int index, bool rotate, bool flip)
+        static byte MakeLookup(int index, bool rotate, bool flip)
         {
-            if (index > 255)
+            if (index > 63)
                 throw new IndexOutOfRangeException("Index out of range. Valid range 0-255");
-            if (rotate) index += 64;
-            if (flip) index += 128;
-
-            return (byte)index;
-        }
-
-        // Encodes a byte with Daggerfall tile lookup
-        byte MakeLookup2(int index, bool rotate, bool flip)
-        {
-            if (index > 55)
-                throw new IndexOutOfRangeException("Index out of range. Valid range 0-55");
             if (rotate) index += 64;
             if (flip) index += 128;
 
@@ -625,8 +568,7 @@ namespace WildernessOverhaul
                     JobA.Idx(hy + 5, hx - 5, hDim) < 0 ||
                     JobA.Idx(hy + 5, hx - 5, hDim) > upperBound ||
                     JobA.Idx(hy + 5, hx + 5, hDim) < 0 ||
-                    JobA.Idx(hy + 5, hx + 5, hDim) > upperBound
-                    )
+                    JobA.Idx(hy + 5, hx + 5, hDim) > upperBound)
                 {
                     return false;
                 }
