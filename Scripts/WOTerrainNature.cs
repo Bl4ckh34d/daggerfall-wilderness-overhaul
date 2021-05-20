@@ -2964,9 +2964,32 @@ namespace WildernessOverhaul
 			sampleGround != 4 &&
 			sampleGround != 5 &&
 			sampleGround != 6 &&
+            sampleGround != 7 &&
+            sampleGround != 8 &&
+            sampleGround != 19 &&
+            sampleGround != 20 &&
 			sampleGround != 21 &&
+			sampleGround != 22 &&
+			sampleGround != 23 &&
+			sampleGround != 29 &&
+			sampleGround != 30 &&
 			sampleGround != 31 &&
-			sampleGround != 32)	{
+			sampleGround != 32 &&
+			sampleGround != 33 &&
+			sampleGround != 34 &&
+			sampleGround != 35 &&
+			sampleGround != 36 &&
+			sampleGround != 37 &&
+			sampleGround != 38 &&
+			sampleGround != 40 &&
+			sampleGround != 41 &&
+			sampleGround != 43 &&
+			sampleGround != 44 &&
+			sampleGround != 48 &&
+			sampleGround != 49 &&
+			sampleGround != 50 &&
+			sampleGround != 60 &&
+			sampleGround != 61)	{
 			 result = false;
 			}
 		 }
@@ -3001,12 +3024,35 @@ namespace WildernessOverhaul
 			 if (ExtensionMethods.In2DArrayBounds(baseData.dfTerrain.MapData.tilemapSamples, roundedX - x, roundedY - y))	{
 				sampleGround = baseData.dfTerrain.MapData.tilemapSamples[roundedX - x, roundedY - y] & 0x3F;
 				if (
-				sampleGround != 4 &&
-				sampleGround != 5 &&
-				sampleGround != 6 &&
-				sampleGround != 21 &&
-				sampleGround != 31 &&
-				sampleGround != 32)
+                  sampleGround != 4 &&
+                  sampleGround != 5 &&
+                  sampleGround != 6 &&
+                  sampleGround != 7 &&
+                  sampleGround != 8 &&
+                  sampleGround != 19 &&
+                  sampleGround != 20 &&
+                  sampleGround != 21 &&
+                  sampleGround != 22 &&
+                  sampleGround != 23 &&
+                  sampleGround != 29 &&
+                  sampleGround != 30 &&
+                  sampleGround != 31 &&
+                  sampleGround != 32 &&
+                  sampleGround != 33 &&
+                  sampleGround != 34 &&
+                  sampleGround != 35 &&
+                  sampleGround != 36 &&
+                  sampleGround != 37 &&
+                  sampleGround != 38 &&
+                  sampleGround != 40 &&
+                  sampleGround != 41 &&
+                  sampleGround != 43 &&
+                  sampleGround != 44 &&
+                  sampleGround != 48 &&
+                  sampleGround != 49 &&
+                  sampleGround != 50 &&
+                  sampleGround != 60 &&
+                  sampleGround != 61)
 				{
 				 stopCondition = result = false;
 				}	else
@@ -3034,9 +3080,9 @@ namespace WildernessOverhaul
 			 if (ExtensionMethods.In2DArrayBounds(baseData.dfTerrain.MapData.tilemapSamples, roundedX - x, roundedY - y)) {
 				sampleGround = baseData.dfTerrain.MapData.tilemapSamples[roundedX - x, roundedY - y] & 0x3F;
 				if (
-				 sampleGround != 19 &&
-				 sampleGround != 20 &&
-				 sampleGround != 26) {
+				 sampleGround != 46 &&
+				 sampleGround != 47 &&
+				 sampleGround != 55) {
 				 stopCondition = result = false;
 				} else
 				 stopCondition = true;
