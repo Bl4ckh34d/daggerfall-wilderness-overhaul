@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using DaggerfallWorkshop;
 using DaggerfallWorkshop.Game;
 using DaggerfallWorkshop.Game.Utility.ModSupport;
@@ -18,6 +18,8 @@ namespace WildernessOverhaul
         static Mod InterestingTerrainMod;
         static bool InterestingTerrainModEnabled;
         static Material terrainMaterial;
+
+        static bool BasicRoadsModEnabled = false;
 
 		bool dynamicVegetationClearance;
 		bool vegetationInLocations;
@@ -47,15 +49,21 @@ namespace WildernessOverhaul
                     Debug.Log("Wilderness Overhaul: DREAM Mod is active");
 			}
             if (ModManager.Instance.GetModFromGUID("d08bb628-ff2e-4e2f-ae57-1d4981e61843") != null)
-			{
-				InterestingTerrainMod = ModManager.Instance.GetModFromGUID("d08bb628-ff2e-4e2f-ae57-1d4981e61843");
-				if (InterestingTerrainMod != null && InterestingTerrainMod.Enabled)
-					InterestingTerrainModEnabled = true;
-                    Debug.Log("Wilderness Overhaul: Interesting Terrain Mod is active");
-			}
-		}
+            {
+                InterestingTerrainMod = ModManager.Instance.GetModFromGUID("d08bb628-ff2e-4e2f-ae57-1d4981e61843");
+                if (InterestingTerrainMod != null && InterestingTerrainMod.Enabled)
+                    InterestingTerrainModEnabled = true;
+                Debug.Log("Wilderness Overhaul: Interesting Terrain Mod is active");
+            }
+            Mod basicRoadsMod = ModManager.Instance.GetModFromGUID("566ab21a-22d8-4eea-8ccd-6cb8f7a7ed25");
+            if (basicRoadsMod != null && basicRoadsMod.Enabled)
+            {
+                BasicRoadsModEnabled = true;
+                Debug.Log("Wilderness Overhaul: Basic Roads Mod is active");
+            }
+        }
 
-		void Start()
+        void Start()
 		{
 			Debug.Log("Wilderness Overhaul: Initiating Mod");
 
@@ -90,7 +98,8 @@ namespace WildernessOverhaul
 				natureClearance3,
 				natureClearance4,
 				natureClearance5);
-			woTexturing = new WOTerrainTexturing(InterestingTerrainModEnabled);
+
+			woTexturing = new WOTerrainTexturing(InterestingTerrainModEnabled, BasicRoadsModEnabled);
 
 			DaggerfallUnity.Instance.TerrainNature = woNature;
 			DaggerfallUnity.Instance.TerrainTexturing = woTexturing;

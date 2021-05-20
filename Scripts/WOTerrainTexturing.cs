@@ -1,4 +1,4 @@
-﻿// Project:         Daggerfall Tools For Unity
+// Project:         Daggerfall Tools For Unity
 // Copyright:       Copyright (C) 2009-2020 Daggerfall Workshop
 // Web Site:        http://www.dfworkshop.net
 // License:         MIT License (http://www.opensource.org/licenses/mit-license.php)
@@ -15,6 +15,7 @@ using DaggerfallConnect.Arena2;
 using Unity.Jobs;
 using Unity.Collections;
 using DaggerfallWorkshop;
+using DaggerfallWorkshop.Game.Utility.ModSupport;
 
 namespace WildernessOverhaul
 {
@@ -28,6 +29,7 @@ namespace WildernessOverhaul
         const byte stone = 3;
 
         static bool interestingTerrainEnabled;
+        readonly bool basicRoadsEnabled;
 
         // Order: Deser1, Desert2, Mountains, Rainforest, Swamp,
         // Subtropics, Mountain Woods, Woodland, Haunted Woods, Ocean
@@ -207,10 +209,10 @@ namespace WildernessOverhaul
 
         static MapPixelData currentMapData;
 
-        public WOTerrainTexturing(
-            bool ITEnabled)
+        public WOTerrainTexturing(bool ITEnabled, bool basicRoadsEnabled)
         {
             interestingTerrainEnabled = ITEnabled;
+            this.basicRoadsEnabled = basicRoadsEnabled;
             CreateLookupTable();
         }
 
@@ -235,6 +237,20 @@ namespace WildernessOverhaul
             };
             JobHandle tileDataHandle = tileDataJob.Schedule(tileDataDim * tileDataDim, 64, dependencies);
 
+            // Schedule the paint roads jobs if basic roads mod is enabled
+            JobHandle preAssignTilesHandle = tileDataHandle;
+            if (basicRoadsEnabled)
+            {
+                ModManager.Instance.SendModMessage("BasicRoads", "scheduleRoadsJob", new object[] { mapData, tileData, tileDataHandle },
+                    (string message, object data) =>
+                    {
+                        if (message == "error")
+                            Debug.LogError(data as string);
+                        else
+                            preAssignTilesHandle = (JobHandle)data;
+                    });
+            }
+
             // Assign tile data to terrain
             NativeArray<byte> lookupData = new NativeArray<byte>(lookupTable, Allocator.TempJob);
             AssignTilesJob assignTilesJob = new AssignTilesJob
@@ -247,14 +263,13 @@ namespace WildernessOverhaul
                 march = march,
                 locationRect = mapData.locationRect,
             };
-            JobHandle assignTilesHandle = assignTilesJob.Schedule(assignTilesDim * assignTilesDim, 64, tileDataHandle);
+            JobHandle assignTilesHandle = assignTilesJob.Schedule(assignTilesDim * assignTilesDim, 64, preAssignTilesHandle);
 
             // Add both working native arrays to disposal list.
             mapData.nativeArrayList.Add(tileData);
             mapData.nativeArrayList.Add(lookupData);
 
             return assignTilesHandle;
-
         }
 
         protected struct AssignTilesJob : IJobParallelFor
@@ -584,14 +599,7 @@ namespace WildernessOverhaul
                             }
                         }
                     }
-                    if (JobRand.Next(0, 100) <= newChance)
-                    {
-                        return true;
-                    }
-                    else
-                    {
-                        return false;
-                    }
+                    return (JobRand.Next(0, 100) <= newChance);
                 }
             }
         }
@@ -626,30 +634,15 @@ namespace WildernessOverhaul
                     {
                         maxSmpl = smpl;
                     }
-
                 }
             }
 
             float diff = (maxSmpl - minSmpl) * 10f;
 
             if (bigger) {
-                if (diff >= steepness)
-                {
-                    return true;
-                }
-                else
-                {
-                    return false;
-                }
+                return (diff >= steepness);
             } else {
-                if (diff <= steepness)
-                {
-                    return true;
-                }
-                else
-                {
-                    return false;
-                }
+                return (diff <= steepness);
             }
         }
     }
