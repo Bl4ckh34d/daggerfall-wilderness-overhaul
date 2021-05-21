@@ -2775,6 +2775,7 @@ namespace WildernessOverhaul
 		pos.y = height - (baseData.steepness / slopeSinkRatio);
 		if (checkOnLand &&
 		 !TileTypeCheck(pos, baseData, true, false, false, true, true) &&
+         TileTypeCheck(pos, baseData, false, true, false, false, false) &&
 		 baseData.steepness < Mathf.Clamp(90f - ((height / baseData.maxTerrainHeight)/0.85f * 100f),40f,90f))
 		{
 			baseData.dfBillboardBatch.AddItem(billboardCollection[rnd], pos);
@@ -2800,17 +2801,18 @@ namespace WildernessOverhaul
 		pos.y = height - (baseData.steepness / slopeSinkRatio);
 
 		if (checkOnLand &&
-		 !TileTypeCheck(pos, baseData, true, false, false, true, true) &&
-		 baseData.steepness < Mathf.Clamp(90f - ((height / baseData.maxTerrainHeight)/0.85f * 100f),40f,90f))
+		    !TileTypeCheck(pos, baseData, true, false, false, true, true) &&
+            TileTypeCheck(pos, baseData, false, true, false, false, false) &&
+		    baseData.steepness < Mathf.Clamp(90f - ((height / baseData.maxTerrainHeight)/0.85f * 100f),40f,90f))
 		{
-		 baseData.dfBillboardBatch.AddItem(billboardCollection[record], pos);
+		    baseData.dfBillboardBatch.AddItem(billboardCollection[record], pos);
 		}
 		if (!checkOnLand &&
-		 TileTypeCheck(pos, baseData, true, false, false, false, false) &&
-		 !TileTypeCheck(pos, baseData, false, false, false, true, true) &&
-		 baseData.steepness < Mathf.Clamp(90f - ((height / baseData.maxTerrainHeight)/0.85f * 100f),40f,90f))
+		    TileTypeCheck(pos, baseData, true, false, false, false, false) &&
+		    !TileTypeCheck(pos, baseData, false, false, false, true, true) &&
+		    baseData.steepness < Mathf.Clamp(90f - ((height / baseData.maxTerrainHeight)/0.85f * 100f),40f,90f))
 		{
-		 baseData.dfBillboardBatch.AddItem(billboardCollection[record], pos);
+		    baseData.dfBillboardBatch.AddItem(billboardCollection[record], pos);
 		}
 	 }
 
@@ -2941,7 +2943,7 @@ namespace WildernessOverhaul
 		Vector3 pos,
 		BaseDataObject baseData,
 		bool isOnAnyWaterTile,
-		bool isOnGrassTile,
+		bool isOnPureGrassTile,
 		bool isOnOrCloseToShallowWaterTile,
 		bool isOnOrCloseToStreetTile,
 		bool isCollidingWithBuilding)
@@ -2994,7 +2996,7 @@ namespace WildernessOverhaul
 			}
 		 }
 		}
-		if (isOnGrassTile) {
+		if (isOnPureGrassTile) {
 		 roundedX = (int)Mathf.Round(pos.x / baseData.scale);
 		 roundedY = (int)Mathf.Round(pos.z / baseData.scale);
 		 if (ExtensionMethods.In2DArrayBounds(baseData.dfTerrain.MapData.tilemapSamples, roundedX, roundedY)) {

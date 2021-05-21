@@ -9,6 +9,8 @@ namespace WildernessOverhaul
 	public class WildernessOverhaulMod : MonoBehaviour
 	{
 		static Mod mod;
+        static ModSettings settings;
+
 		static WOTerrainTexturing woTexturing;
 		static WOTerrainNature woNature;
 
@@ -16,10 +18,13 @@ namespace WildernessOverhaul
 		static bool DREAMModEnabled;
 
         static Mod InterestingTerrainMod;
-        static bool InterestingTerrainModEnabled;
+        static bool InterestingTerrainModEnabled = false;
+
+        static Mod BasicRoadsMod;
+        static bool BasicRoadsModEnabled = false;
+
         static Material terrainMaterial;
 
-        static bool BasicRoadsModEnabled = false;
 
 		bool dynamicVegetationClearance;
 		bool vegetationInLocations;
@@ -41,22 +46,23 @@ namespace WildernessOverhaul
 			mod = initParams.Mod;
 			var modGameObject = new GameObject(mod.Title);
 			modGameObject.AddComponent<WildernessOverhaulMod>();
-			if (ModManager.Instance.GetModFromGUID("5e1af2fc-2c12-4d05-829c-12b37f396e19") != null)
+
+            DREAMMod = ModManager.Instance.GetModFromGUID("5e1af2fc-2c12-4d05-829c-12b37f396e19");
+            if (DREAMMod != null && DREAMMod.Enabled)
 			{
-				DREAMMod = ModManager.Instance.GetModFromGUID("5e1af2fc-2c12-4d05-829c-12b37f396e19");
-				if (DREAMMod != null && DREAMMod.Enabled)
-					DREAMModEnabled = true;
-                    Debug.Log("Wilderness Overhaul: DREAM Mod is active");
+                DREAMModEnabled = true;
+                Debug.Log("Wilderness Overhaul: DREAM Mod is active");
 			}
-            if (ModManager.Instance.GetModFromGUID("d08bb628-ff2e-4e2f-ae57-1d4981e61843") != null)
+
+            InterestingTerrainMod = ModManager.Instance.GetModFromGUID("d08bb628-ff2e-4e2f-ae57-1d4981e61843");
+            if (InterestingTerrainMod != null && InterestingTerrainMod.Enabled)
             {
-                InterestingTerrainMod = ModManager.Instance.GetModFromGUID("d08bb628-ff2e-4e2f-ae57-1d4981e61843");
-                if (InterestingTerrainMod != null && InterestingTerrainMod.Enabled)
-                    InterestingTerrainModEnabled = true;
+                InterestingTerrainModEnabled = true;
                 Debug.Log("Wilderness Overhaul: Interesting Terrain Mod is active");
             }
-            Mod basicRoadsMod = ModManager.Instance.GetModFromGUID("566ab21a-22d8-4eea-8ccd-6cb8f7a7ed25");
-            if (basicRoadsMod != null && basicRoadsMod.Enabled)
+
+            BasicRoadsMod = ModManager.Instance.GetModFromGUID("566ab21a-22d8-4eea-8ccd-6cb8f7a7ed25");
+            if (BasicRoadsMod != null && BasicRoadsMod.Enabled)
             {
                 BasicRoadsModEnabled = true;
                 Debug.Log("Wilderness Overhaul: Basic Roads Mod is active");
@@ -66,8 +72,7 @@ namespace WildernessOverhaul
         void Start()
 		{
 			Debug.Log("Wilderness Overhaul: Initiating Mod");
-
-			ModSettings settings = mod.GetSettings();
+			settings = mod.GetSettings();
 			dynamicVegetationClearance = settings.GetValue<bool>("TerrainNature", "DynamicVegetationClearance");
 			vegetationInLocations = settings.GetValue<bool>("TerrainNature", "VegetationInsideJungleLocations");
 			fireflies = settings.GetValue<bool>("Nature", "Fireflies");
@@ -98,7 +103,6 @@ namespace WildernessOverhaul
 				natureClearance3,
 				natureClearance4,
 				natureClearance5);
-
 			woTexturing = new WOTerrainTexturing(InterestingTerrainModEnabled, BasicRoadsModEnabled);
 
 			DaggerfallUnity.Instance.TerrainNature = woNature;
