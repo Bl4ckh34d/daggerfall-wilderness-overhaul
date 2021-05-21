@@ -199,7 +199,8 @@ namespace WildernessOverhaul
 		 stochastics = new WOStochasticChances();
 
 		 // Adds one shooting star Particle System of every MapPixel
-		 AddShootingStar(dfTerrain, dfBillboardBatch, 90f, 900f, shootingStarsMinimum, shootingStarsMaximum); // Shooting Stars
+         if (shootingStarsExist)
+		    AddShootingStar(dfTerrain, dfBillboardBatch, 90f, 900f, shootingStarsMinimum, shootingStarsMaximum); // Shooting Stars
 
 		 for (int y = 0; y < tDim; y++)
 		 {
