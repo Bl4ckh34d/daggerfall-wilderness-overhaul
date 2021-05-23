@@ -91,7 +91,6 @@ GameObject:
   m_Component:
   - component: {fileID: 6566623444968556238}
   - component: {fileID: 4207506677950743091}
-  - component: {fileID: 5768978834743527254}
   - component: {fileID: 5428016485121811576}
   m_Layer: 0
   m_Name: Firefly
@@ -165,25 +164,6 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!114 &5768978834743527254
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7530074579266883050}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 30720f567396393b99e909468c2dff16, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  speed: 0.5
-  posChangeTime: 2
-  maxRoamingRangeVertical: 1.5
-  maxRoamingRangeHorizontal: 2
-  randomizePosChangeTime: 1
-  startPos: {x: 0, y: 0, z: 0}
-  isPerforming: 0
 --- !u!54 &5428016485121811576
 Rigidbody:
   m_ObjectHideFlags: 0

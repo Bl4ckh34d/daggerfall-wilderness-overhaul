@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using DaggerfallWorkshop;
+using DaggerfallWorkshop.Game.Utility.ModSupport;
 
 public class WODistanceChecker : MonoBehaviour
 {
@@ -22,14 +23,16 @@ public class WODistanceChecker : MonoBehaviour
     playerTransform = GameObject.FindGameObjectWithTag("MainCamera").transform;
   }
 
-  public void CreateFirefly(DaggerfallTerrain dfTerrain, int x, int y, float scale, Terrain terrain, float distance) {
+  public void CreateFirefly(Mod mod, DaggerfallTerrain dfTerrain, int x, int y, float scale, Terrain terrain, float distance) {
     float xVariation = Random.Range(-distance, distance);
     float zVariation = Random.Range(-distance, distance);
 
     Vector3 pos = new Vector3(((x + xVariation) * scale), 0, ((y + zVariation) * scale)) + dfTerrain.transform.position;
     pos.y = terrain.SampleHeight(new Vector3((x + xVariation) * scale, 0, (y + zVariation) * scale) + dfTerrain.transform.position) + dfTerrain.transform.position.y + Random.Range(1.5f, 3f);
 
-    var firefly = GameObject.Instantiate(Resources.Load("Firefly") as GameObject, pos, Quaternion.identity, transform);
+    GameObject firefly = mod.GetAsset<GameObject>("Firefly", true);
+    firefly.transform.parent = transform;
+    firefly.AddComponent<WORandomMover>();
     firefly.GetComponent<WORandomMover>().startPos = transform.InverseTransformPoint(pos);
   }
 

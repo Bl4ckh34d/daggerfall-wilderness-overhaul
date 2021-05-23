@@ -11,7 +11,6 @@ GameObject:
   - component: {fileID: 7320761475650763463}
   - component: {fileID: 251322359404517}
   - component: {fileID: 3045403102229440369}
-  - component: {fileID: 4770854194407691623}
   m_Layer: 0
   m_Name: ShootingStars
   m_TagString: Untagged
@@ -4711,7 +4710,7 @@ ParticleSystemRenderer:
   m_RendererPriority: 0
   m_Materials:
   - {fileID: 10308, guid: 0000000000000000f000000000000000, type: 0}
-  - {fileID: 10308, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 10306, guid: 0000000000000000f000000000000000, type: 0}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -4755,16 +4754,3 @@ ParticleSystemRenderer:
   m_Mesh2: {fileID: 0}
   m_Mesh3: {fileID: 0}
   m_MaskInteraction: 0
---- !u!114 &4770854194407691623
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7692277742168607914}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: db61971785118c8b088d069491b976d4, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  ps: {fileID: 251322359404517}

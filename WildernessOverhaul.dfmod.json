@@ -1,0 +1,60 @@
+{
+    "ModTitle": "Wilderness Overhaul",
+    "ModVersion": "0.1",
+    "ModAuthor": "Daniel Schmidt",
+    "ContactInfo": "https://forums.dfworkshop.net/memberlist.php?mode=viewprofile&u=2094",
+    "DFUnity_Version": "0.11.3",
+    "ModDescription": "Overhaul of the nature billboard distribution in Daggerfalls Wilderness",
+    "GUID": "153a082a-c594-4d5d-8093-5376a17c22b9",
+    "Files": [
+        "Assets/Game/Mods/WildernessOverhaul/Textures/TEXTURE.104.asset",
+        "Assets/Game/Mods/WildernessOverhaul/Textures/TEXTURE.003.asset",
+        "Assets/Game/Mods/WildernessOverhaul/Textures/TEXTURE.002.asset",
+        "Assets/Game/Mods/WildernessOverhaul/Textures/TEXTURE.303.asset",
+        "Assets/Game/Mods/WildernessOverhaul/Textures/TEXTURE.102.asset",
+        "Assets/Game/Mods/WildernessOverhaul/Textures/TEXTURE.004.asset",
+        "Assets/Game/Mods/WildernessOverhaul/Textures/TEXTURE.103.asset",
+        "Assets/Game/Mods/WildernessOverhaul/Textures/TEXTURE.302.asset",
+        "Assets/Game/Mods/WildernessOverhaul/Textures/TEXTURE.404.asset",
+        "Assets/Game/Mods/WildernessOverhaul/Textures/TEXTURE.403.asset",
+        "Assets/Game/Mods/WildernessOverhaul/Textures/TEXTURE.304.asset",
+        "Assets/Game/Mods/WildernessOverhaul/Textures/TEXTURE.402.asset",
+        "Assets/Game/Mods/WildernessOverhaul/Scripts/TileObject.cs",
+        "Assets/Game/Mods/WildernessOverhaul/Scripts/BaseDataObject.cs",
+        "Assets/Game/Mods/WildernessOverhaul/Scripts/WOStochasticChances.cs",
+        "Assets/Game/Mods/WildernessOverhaul/Scripts/WOVegetationList.cs",
+        "Assets/Game/Mods/WildernessOverhaul/Scripts/WORandomMover.cs",
+        "Assets/Game/Mods/WildernessOverhaul/Scripts/WOShootingStarController.cs",
+        "Assets/Game/Mods/WildernessOverhaul/Scripts/ExtensionMethods.cs",
+        "Assets/Game/Mods/WildernessOverhaul/Scripts/WOTerrainNature.cs",
+        "Assets/Game/Mods/WildernessOverhaul/Scripts/WOVegetationChance.cs",
+        "Assets/Game/Mods/WildernessOverhaul/Scripts/WildernessOverhaulMod.cs",
+        "Assets/Game/Mods/WildernessOverhaul/Scripts/WODistanceChecker.cs",
+        "Assets/Game/Mods/WildernessOverhaul/Scripts/WOTerrainTexturing.cs",
+        "Assets/Game/Mods/WildernessOverhaul/Materials/Firefly.mat",
+        "Assets/Game/Mods/WildernessOverhaul/Materials/ShootingStarTrail.mat",
+        "Assets/Game/Mods/WildernessOverhaul/Images/firefly.png",
+        "Assets/Game/Mods/WildernessOverhaul/modsettings.json",
+        "Assets/Game/Mods/WildernessOverhaul/WildernessOverhaul.dfmod.json",
+        "Assets/Game/Mods/WildernessOverhaul/Firefly.prefab",
+        "Assets/Game/Mods/WildernessOverhaul/ShootingStars.prefab"
+    ],
+    "Dependencies": [
+        {
+            "Name": "basicroads",
+            "IsOptional": true,
+            "IsPeer": false,
+            "Version": "1.0.0"
+        },
+        {
+            "Name": "interesting-eroded-terrains",
+            "IsOptional": true,
+            "IsPeer": false
+        },
+        {
+            "Name": "realgrass",
+            "IsOptional": true,
+            "IsPeer": true
+        }
+    ]
+}

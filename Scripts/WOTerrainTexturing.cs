@@ -28,7 +28,7 @@ namespace WildernessOverhaul
         const byte grass = 2;
         const byte stone = 3;
 
-        static bool interestingTerrainEnabled;
+        static bool interestingErodedTerrainEnabled;
         readonly bool basicRoadsEnabled;
 
         // Order: Deser1, Desert2, Mountains, Rainforest, Swamp,
@@ -211,7 +211,7 @@ namespace WildernessOverhaul
 
         public WOTerrainTexturing(bool ITEnabled, bool basicRoadsEnabled)
         {
-            interestingTerrainEnabled = ITEnabled;
+            interestingErodedTerrainEnabled = ITEnabled;
             this.basicRoadsEnabled = basicRoadsEnabled;
             CreateLookupTable();
         }
@@ -368,7 +368,7 @@ namespace WildernessOverhaul
                         break;
                     case (int)MapsFile.Climates.Woodlands:
                         climateNum = 7;
-                        if (interestingTerrainEnabled)
+                        if (interestingErodedTerrainEnabled)
                             persistanceRnd = 0.6f + ((height / maxTerrainHeight) * 2f); //persistance[climateNum] + ((height / maxTerrainHeight) * 2f) - 0.20f;
                         else
                             persistanceRnd = persistance[climateNum] + ((height / maxTerrainHeight) * 1.4f) - 0.30f;
@@ -424,7 +424,7 @@ namespace WildernessOverhaul
                 int y = JobA.Col(index, tdDim);
                 int uB = heightmapData.Length;
 
-                if (interestingTerrainEnabled)
+                if (interestingErodedTerrainEnabled)
                     maxTerrainHeight = 4890;
 
                 // Height sample for ocean and beach tiles
@@ -449,7 +449,7 @@ namespace WildernessOverhaul
 
                 // Set texture tile using weighted noise
                 float weight = 0;
-                if (interestingTerrainEnabled)
+                if (interestingErodedTerrainEnabled)
                     weight += NoiseWeight(latitude, longitude, height/1.05f);
                 else
                     weight += NoiseWeight(latitude, longitude, height);
