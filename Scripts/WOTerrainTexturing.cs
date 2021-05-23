@@ -542,12 +542,11 @@ namespace WildernessOverhaul
         // Encodes a byte with Daggerfall tile neighbours
         static int FindTileIndex(TileObject[] array, int bl, int br, int tr, int tl)
         {
-            if (Array.Exists(array, tile => (tile.Bl == bl && tile.Br == br && tile.Tr == tr && tile.Tl == tl))) {
-                return Array.FindIndex(array, tile => (tile.Bl == bl && tile.Br == br && tile.Tr == tr && tile.Tl == tl));
-            }
-            else {
-                return 0;
-            }
+            for (int i = 0; i < array.Length; ++i)
+                if (array[i].Bl == bl && array[i].Br == br && array[i].Tr == tr && array[i].Tl == tl)
+                    return i;
+
+            return 0;
         }
 
         // Encodes a byte with Daggerfall tile lookup
