@@ -27,13 +27,16 @@ public class WODistanceChecker : MonoBehaviour
     float xVariation = Random.Range(-distance, distance);
     float zVariation = Random.Range(-distance, distance);
 
-    Vector3 pos = new Vector3(((x + xVariation) * scale), 0, ((y + zVariation) * scale)) + dfTerrain.transform.position;
-    pos.y = terrain.SampleHeight(new Vector3((x + xVariation) * scale, 0, (y + zVariation) * scale) + dfTerrain.transform.position) + dfTerrain.transform.position.y + Random.Range(1.5f, 3f);
+    //Vector3 pos = new Vector3(((x + xVariation) * scale), 0, ((y + zVariation) * scale)) + dfTerrain.transform.position;
+    Vector3 pos = transform.position + new Vector3(xVariation * scale, 0, zVariation * scale);
+    //pos.y = terrain.SampleHeight(new Vector3((x + xVariation) * scale, 0, (y + zVariation) * scale) + dfTerrain.transform.position) + dfTerrain.transform.position.y + Random.Range(1.5f, 3f);
+    pos.y = terrain.SampleHeight(pos) + Random.Range(0.5f * scale, 1.5f * scale);
 
     GameObject firefly = mod.GetAsset<GameObject>("Firefly", true);
     firefly.transform.parent = transform;
-    firefly.AddComponent<WORandomMover>();
     firefly.GetComponent<WORandomMover>().startPos = transform.InverseTransformPoint(pos);
+    //firefly.transform.position = transform.InverseTransformPoint(pos);
+    firefly.transform.position = pos;
   }
 
   public void AddChildrenToArray() {

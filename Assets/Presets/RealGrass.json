@@ -1,0 +1,41 @@
+{
+    "Title": "Wilderness Overhaul",
+    "Author": "Daniel87",
+    "Description": "Compatibility with WO",
+    "SettingsVersion": "1.7",
+    "Values": {
+        "Grass": {
+            "Height": "1.5,3",
+            "Width": "0.8,1",
+            "NoiseSpread": "0.5",
+            "ThickDensity": "20,40",
+            "ThinDensity": "10,25",
+            "SpringHealthy": "E7E8E7FF",
+            "SpringDry": "D9D9D8FF",
+            "SummerHealty": "D4D6D4FF",
+            "SummerDry": "D7D7D5FF",
+            "FallHealty": "D2D2D2FF",
+            "FallDry": "D9D8D8FF",
+            "Realistic": "False",
+            "Shader": "0"
+        },
+        "WaterPlants": {
+            "Mode": "2",
+            "NoiseSpread": "0.5",
+            "Density": "3,6",
+            "DesertDensity": "12,19"
+        },
+        "Others": {
+            "Flowers": "3",
+            "Stones": "2",
+            "FlyingInsects": "False"
+        },
+        "Advanced": {
+            "DetailDistance": "300",
+            "DetailDistanceOverride": " ",
+            "DetailDensity": "1",
+            "TextureOverride": "False"
+        }
+    },
+    "$version": "v1"
+}

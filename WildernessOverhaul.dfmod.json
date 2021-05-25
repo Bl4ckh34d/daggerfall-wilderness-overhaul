@@ -37,7 +37,8 @@
         "Assets/Game/Mods/WildernessOverhaul/modsettings.json",
         "Assets/Game/Mods/WildernessOverhaul/WildernessOverhaul.dfmod.json",
         "Assets/Game/Mods/WildernessOverhaul/Firefly.prefab",
-        "Assets/Game/Mods/WildernessOverhaul/ShootingStars.prefab"
+        "Assets/Game/Mods/WildernessOverhaul/ShootingStars.prefab",
+        "Assets/Game/Mods/WildernessOverhaul/Assets/Presets/RealGrass.json"
     ],
     "Dependencies": [
         {

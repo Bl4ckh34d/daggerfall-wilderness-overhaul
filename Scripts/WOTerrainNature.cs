@@ -15,11 +15,11 @@ namespace WildernessOverhaul
         // static List<GameObject> staticGeometryList;
 
         // MOD SETTINGS
-        private readonly bool dynamicNatureClearance;
-        private readonly bool vegetationInLocations;
-        private readonly bool firefliesExist;
-        private readonly bool shootingStarsExist;
-        private readonly bool InterestingErodedTerrainEnabled;
+        private static bool dynamicNatureClearance;
+        private static bool vegetationInLocations;
+        private static bool firefliesExist;
+        private static bool shootingStarsExist;
+        private static bool InterestingErodedTerrainEnabled;
         private static float fireflyDistance;
         private static float shootingStarsMinimum;
         private static float shootingStarsMaximum;
@@ -204,8 +204,7 @@ namespace WildernessOverhaul
             stochastics = new WOStochasticChances();
 
             // Adds one shooting star Particle System of every MapPixel
-            if (shootingStarsExist)
-                AddShootingStar(dfTerrain, dfBillboardBatch, 90f, 900f, shootingStarsMinimum, shootingStarsMaximum); // Shooting Stars
+            AddShootingStar(dfTerrain, dfBillboardBatch, 90f, 900f, shootingStarsMinimum, shootingStarsMaximum); // Shooting Stars
 
             for (int y = 0; y < tDim; y++)
             {
@@ -362,20 +361,12 @@ namespace WildernessOverhaul
                                 else if (GetWeightedRecord(weight, stochastics.tempForestLimit[0], stochastics.tempForestLimit[1]) == "forest")
                                 {
                                     float rnd = Random.Range(0, 100);
-                                    //if (rnd < stochastics.mapStyle)
-                                    //{
-
                                     for (int i = 0; i < Random.Range(3, 4); i++)
                                     {
                                         AddBillboardToBatch(baseData, vegetationList.temperateWoodlandTrees, Random.Range(1.00f, 2.00f), true); // Trees
                                     }
 
-                                    /* for (int i = 0; i < Random.Range(2,3); i++)
-                                    {
-                                        AddBillboardToBatch(baseData, vegetationList.temperateWoodlandBushes, Random.Range(1.00f,2.00f), true); // Bushes
-                                    } */
-
-                                    AddFirefly(baseData, 0.1f, 5, 15, 35, firefliesExist); // Fireflies
+                                    AddFirefly(baseData, 0.1f, 5, 15, 35); // Fireflies
 
                                     if (rnd < stochastics.mapStyleChance[3])
                                     {
@@ -391,26 +382,18 @@ namespace WildernessOverhaul
                                             AddBillboardToBatch(baseData, vegetationList.temperateWoodlandBushes, Random.Range(2.00f, 3.00f), true); // Bushes
                                         }
 
-                                        AddFirefly(baseData, 0.1f, 10, 50, 100, firefliesExist); // Fireflies
+                                        AddFirefly(baseData, 0.05f, 10, 50, 100); // Fireflies
                                     }
 
                                     if (rnd < stochastics.mapStyleChance[1])
                                     {
-                                        /* for (int i = 0; i < Random.Range(0,1); i++)
-                                        {
-                                            AddBillboardToBatch(baseData, vegetationList.temperateWoodlandTrees, Random.Range(2.00f,3.00f), true); // Trees
-                                        } */
-
-                                        //AddBillboardToBatch(baseData, vegetationList.temperateWoodlandDeadTrees, Random.Range(2.00f,3.00f), true); // Dead Trees
-
                                         for (int i = 0; i < Random.Range(0, 1); i++)
                                         {
                                             AddBillboardToBatch(baseData, vegetationList.temperateWoodlandBushes, Random.Range(2.00f, 3.00f), true); // Bushes
                                         }
 
-                                        AddFirefly(baseData, 0.2f, 15, 100, 250, firefliesExist); // Fireflies
+                                        AddFirefly(baseData, 0.025f, 15, 100, 250); // Fireflies
                                     }
-                                    //}
                                 }
                             }
                             else if (tile == 3) // Stone
@@ -2914,11 +2897,9 @@ namespace WildernessOverhaul
            float rndFirefly,
            float distanceVariation,
            int minNumber,
-           int maxNumber,
-           bool firefliesExist)
+           int maxNumber)
         {
-            if (rndFirefly >= Random.Range(0.0f, 100.0f) && DaggerfallUnity.Instance.WorldTime.Now.SeasonValue != DaggerfallDateTime.Seasons.Winter && firefliesExist)
-            {
+            if (rndFirefly >= Random.Range(0.0f, 100.0f) && DaggerfallUnity.Instance.WorldTime.Now.SeasonValue != DaggerfallDateTime.Seasons.Winter && firefliesExist) {
                 GameObject fireflyContainer = new GameObject();
                 fireflyContainer.name = "fireflyContainer";
                 fireflyContainer.transform.parent = baseData.dfBillboardBatch.transform;
@@ -2943,15 +2924,17 @@ namespace WildernessOverhaul
            float sSMax
            )
         {
-            Vector3 shootingStarPos = new Vector3(dfTerrain.transform.position.x, dfTerrain.transform.position.z, 0);
-            GameObject shootingStarInstance = mod.GetAsset<GameObject>("ShootingStars", true);
-            shootingStarInstance.transform.position = new Vector3(shootingStarPos.x, heightInTheSky, shootingStarPos.z);
-            shootingStarInstance.transform.parent = dfBillboardBatch.transform;
-            shootingStarInstance.transform.rotation = Quaternion.Euler(rotationAngleX, 0, 0);
-            shootingStarInstance.AddComponent<WOShootingStarController>();
-            shootingStarInstance.GetComponent<WOShootingStarController>().ps = shootingStarInstance.GetComponent<ParticleSystem>();
-            var emissionModule = shootingStarInstance.GetComponent<WOShootingStarController>().ps.emission;
-            emissionModule.rateOverTime = new ParticleSystem.MinMaxCurve(sSMin / 1000, sSMax / 1000);
+            if (shootingStarsExist) {
+                Vector3 shootingStarPos = new Vector3(dfTerrain.transform.position.x, dfTerrain.transform.position.z, 0);
+                GameObject shootingStarInstance = mod.GetAsset<GameObject>("ShootingStars", true);
+                shootingStarInstance.transform.position = new Vector3(shootingStarPos.x, heightInTheSky, shootingStarPos.z);
+                shootingStarInstance.transform.parent = dfBillboardBatch.transform;
+                shootingStarInstance.transform.rotation = Quaternion.Euler(rotationAngleX, 0, 0);
+                shootingStarInstance.AddComponent<WOShootingStarController>();
+                shootingStarInstance.GetComponent<WOShootingStarController>().ps = shootingStarInstance.GetComponent<ParticleSystem>();
+                var emissionModule = shootingStarInstance.GetComponent<WOShootingStarController>().ps.emission;
+                emissionModule.rateOverTime = new ParticleSystem.MinMaxCurve(sSMin / 1000, sSMax / 1000);
+            }
         }
 
         static public bool TileTypeCheck(
