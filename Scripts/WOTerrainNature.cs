@@ -157,7 +157,6 @@ namespace WildernessOverhaul
                 rect.yMax += generalNatureClearance;
             }
 
-            float terrainElevation = Mathf.Clamp((dfTerrain.MapData.worldHeight / 128f), 0.0f, 1.0f);
 
             // Get terrain
             Terrain terrain = dfTerrain.gameObject.GetComponent<Terrain>();
@@ -198,9 +197,7 @@ namespace WildernessOverhaul
             // Chance scaled by base climate type
             DFLocation.ClimateSettings climate = MapsFile.GetWorldClimateSettings(dfTerrain.MapData.worldClimate);
 
-            // Initialize and set up Vegetation Lists and Vegetation Spawn Chances by climate, elevation and season
-            vegetationList = new WOVegetationList(terrainElevation, DaggerfallUnity.Instance.WorldTime.Now.SeasonValue);
-            vegetationChance = new WOVegetationChance(terrainElevation, climate);
+            // Initialize stochastics
             stochastics = new WOStochasticChances();
 
             // Adds one shooting star Particle System of every MapPixel
@@ -263,13 +260,15 @@ namespace WildernessOverhaul
                     //Defining height for the billboard placement
                     int hx = (int)Mathf.Clamp(hDim * ((float)x / (float)tDim), 0, hDim - 1);
                     int hy = (int)Mathf.Clamp(hDim * ((float)y / (float)tDim), 0, hDim - 1);
-                    float height = dfTerrain.MapData.heightmapSamples[hy, hx] * maxTerrainHeight;
+                    float height = dfTerrain.MapData.heightmapSamples[hy, hx];
+
+                    vegetationList = new WOVegetationList(height, DaggerfallUnity.Instance.WorldTime.Now.SeasonValue, stochastics.mapStyle);
+                    vegetationChance = new WOVegetationChance(height, climate);
 
                     if (tile == 0 || height <= 0)
                         continue;
 
                     BaseDataObject baseData = new BaseDataObject(dfTerrain, dfBillboardBatch, terrain, scale, steepness, x, y, maxTerrainHeight);
-                    float currentPointHeight = terrain.SampleHeight(new Vector3(x * scale, 0, y * scale) + terrain.transform.position);
 
                     switch (climate.WorldClimate)
                     {
@@ -287,7 +286,7 @@ namespace WildernessOverhaul
 
                             if (tile == 1) // Dirt
                             {
-                                if (currentPointHeight > Random.Range(0.025f, 0.05f))
+                                if (height > Random.Range(0.025f, 0.027f))
                                 {
                                     if (GetWeightedRecord(weight) == "forest")
                                     {
@@ -306,7 +305,10 @@ namespace WildernessOverhaul
                                             {
                                                 for (int i = 0; i < Random.Range(1, 5); i++)
                                                 {
-                                                    AddBillboardToBatch(baseData, vegetationList.temperateWoodlandDeadTrees, Random.Range(0.75f, 1.50f), true, 3); // Needle Tree
+                                                    if (Random.Range(0, 100) < 50 && height > Random.Range(0.1f, 0.15f))
+                                                        AddBillboardToBatch(baseData, vegetationList.temperateWoodlandDeadTrees, Random.Range(0.75f, 1.50f), true, 3); // Needle Tree
+                                                    else
+                                                        AddBillboardToBatch(baseData, vegetationList.temperateWoodlandTrees, Random.Range(0.75f, 1.50f), true); // Tree
                                                 }
                                             }
                                             else
@@ -422,19 +424,24 @@ namespace WildernessOverhaul
                             {
                                 if (GetWeightedRecord(weight) == "forest")
                                 {
-                                    for (int i = 0; i < Random.Range(0, 2); i++)
+                                    for (int i = 0; i < Random.Range(0, 3); i++)
                                     {
                                         AddBillboardToBatch(baseData, vegetationList.temperateWoodlandRocks, Random.Range(0.25f, 1.00f), true); // Stones
                                     }
 
-                                    for (int i = 0; i < Random.Range(0, 4); i++)
+                                    if (height > 0.15f && Random.Range(0.0f, 100.0f) < 5)
                                     {
-                                        AddBillboardToBatch(baseData, vegetationList.temperateWoodlandDeadTrees, Random.Range(0.75f, 1.50f), true, 3); // Needle Tree
-                                    }
-
-                                    if (Random.Range(0, 100) < stochastics.mapStyle)
-                                    {
-                                        AddBillboardToBatch(baseData, vegetationList.temperateWoodlandDeadTrees, Random.Range(0.75f, 1.15f), true); // Dead Tree
+                                        if (Random.Range(stochastics.mapStyleChance[3], stochastics.mapStyleChance[stochastics.mapStyleChance.Length - 1]) < stochastics.mapStyle)
+                                        {
+                                            AddBillboardToBatch(baseData, vegetationList.temperateWoodlandDeadTrees, Random.Range(0.75f, 1.15f), true); // Dead Tree
+                                        }
+                                        else
+                                        {
+                                            for (int i = 0; i < Random.Range(0, 3); i++)
+                                            {
+                                                AddBillboardToBatch(baseData, vegetationList.temperateWoodlandDeadTrees, Random.Range(0.75f, 1.50f), true, 3); // Needle Tree
+                                            }
+                                        }
                                     }
                                 }
                                 if (GetWeightedRecord(weight) == "flower")
@@ -2206,7 +2213,7 @@ namespace WildernessOverhaul
                        AddBillboardToBatch(dfTerrain, dfBillboardBatch, woodlandHillsDeadTrees, scale, steepness, terrain, x, y, Random.Range(2.5f,3.5f)); // Dead Trees
                    }
 
-                   if(terrainElevation > 0.3f)
+                   if(elevation > 0.3f)
                    {
                        for(int i = 0; i < (int)Mathf.Round(Random.Range(2,4)); i++)
                        {
@@ -2238,7 +2245,7 @@ namespace WildernessOverhaul
                     AddBillboardToBatch(dfTerrain, dfBillboardBatch, woodlandHillsTrees, scale, steepness, terrain, x, y, Random.Range(2.5f,3f)); // Trees
                        }
 
-                       if(terrainElevation > 0.28f)
+                       if(elevation > 0.28f)
                        {
                     for(int i = 0; i < (int)Mathf.Round(Random.Range(1,2)); i++)
                     {
@@ -2444,7 +2451,7 @@ namespace WildernessOverhaul
                     {
                    if(Random.Range(0,100) < Random.Range(85,100))
                    {
-                       if(terrainElevation > 0.28f)
+                       if(elevation > 0.28f)
                        {
                     AddBillboardToBatch(dfTerrain, dfBillboardBatch, woodlandHillsNeedleTrees, scale, steepness, terrain, x, y, 1.5f); // Needle Trees
                        }
@@ -2472,7 +2479,7 @@ namespace WildernessOverhaul
                     {
                    if(Random.Range(0,100) < Random.Range(85,100))
                    {
-                       if(terrainElevation > 0.28f)
+                       if(elevation > 0.28f)
                        {
                     AddBillboardToBatch(dfTerrain, dfBillboardBatch, woodlandHillsNeedleTrees, scale, steepness, terrain, x, y, 1.5f); // Needle Trees
                        }
@@ -2488,7 +2495,7 @@ namespace WildernessOverhaul
                     }
                     else
                     {
-                   if(terrainElevation > 0.28f)
+                   if(elevation > 0.28f)
                    {
                        for(int i = 0; i < (int)Mathf.Round(Random.Range(1,3)); i++)
                        {

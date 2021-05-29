@@ -4,7 +4,7 @@
 // Web Site:        http://www.dfworkshop.net
 // Contact:         Gavin Clayton (interkarma@dfworkshop.net)
 // Project Page:    https://github.com/Interkarma/daggerfall-unity
-// Contributor:		Nystul, Daniel87
+// Contributor:		Nystul
 
 Shader "WildernessOverhaul/TilemapTextureArray" {
 	Properties {
@@ -24,8 +24,8 @@ Shader "WildernessOverhaul/TilemapTextureArray" {
 		_TileNormalMapTexArr("Tileset NormalMap Texture Array (RGBA)", 2DArray) = "" {}
 		_TileMetallicGlossMapTexArr ("Tileset MetallicGlossMap Texture Array (RGBA)", 2DArray) = "" {}
 		_TilemapTex("Tilemap (R)", 2D) = "red" {}
-		_TilemapDim("Tilemap Dimension (in tiles)", Int) = 128 //128
-		_MaxIndex("Max Tileset Index", Int) = 255 //255
+		_TilemapDim("Tilemap Dimension (in tiles)", Int) = 128
+		_MaxIndex("Max Tileset Index", Int) = 255
 	}
 	SubShader {
 		Tags { "RenderType"="Opaque" }

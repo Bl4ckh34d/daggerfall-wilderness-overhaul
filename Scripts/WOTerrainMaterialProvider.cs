@@ -29,7 +29,6 @@ namespace DaggerfallWorkshop
         }
 
 
-        //private readonly Shader shader = Shader.Find(MaterialReader._DaggerfallTilemapTextureArrayShaderName);
         private readonly Shader shader = Shader.Find("WildernessOverhaul/TilemapTextureArray");
 
         internal static bool IsSupported
@@ -113,7 +112,6 @@ namespace DaggerfallWorkshop
             Texture2DArray textureArrayTerrainTilesMetallicGloss = null; // = GetTerrainMetallicGlossMapTextureArray(archive);
             textureArrayTerrainTiles.filterMode =  FilterMode.Point;
 
-            Shader shader = Shader.Find("WildernessOverhaul/TilemapTextureArray");
             material = new Material(shader);
             material.name = string.Format("TEXTURE.{0:000} [TilemapTextureArray]", archive);
 

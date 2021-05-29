@@ -41,7 +41,7 @@ namespace WildernessOverhaul
         static float[] lowerGrassSpread = {0.4f, 0.35f, 0.35f, 0.35f, 0.4f, 0.4f, 0.35f, 0.35f, 0.35f, 0.35f};
         static float[] upperGrassSpread = {0.5f, 0.5f, 0.95f, 0.95f, 0.5f, 0.5f, 0.95f, 0.95f, 0.95f, 0.95f};
 
-        public static float treeLine = UnityEngine.Random.Range(0.815f, 0.835f);
+        public static float treeLine = UnityEngine.Random.Range(0.675f, 0.69f);
 
         protected static readonly int tileDataDim = MapsFile.WorldMapTileDim + 1;
         protected static readonly int assignTilesDim = MapsFile.WorldMapTileDim;
@@ -211,7 +211,7 @@ namespace WildernessOverhaul
                     case (int)MapsFile.Climates.Woodlands:
                         climateNum = 7;
                         if (interestingErodedTerrainEnabled)
-                            persistanceRnd = persistance[climateNum] + ((height / maxTerrainHeight) * 2f);
+                            persistanceRnd = persistance[climateNum] + ((height / maxTerrainHeight) * 1.5f);
                         else
                             persistanceRnd = persistance[climateNum] + ((height / maxTerrainHeight) * 1.4f) - 0.30f;
                         break;
@@ -458,8 +458,9 @@ namespace WildernessOverhaul
         {
             int[] testArray = new int[4]{bl,br,tr,tl};
             for (int i = 0; i < array.Length; ++i) {
-                if(array[i][0] == testArray[0] && array[i][1] == testArray[1] && array[i][2] == testArray[2] && array[i][3] == testArray[3])
+                if(array[i][0] == testArray[0] && array[i][1] == testArray[1] && array[i][2] == testArray[2] && array[i][3] == testArray[3]) {
                     return i;
+                }
             }
             Debug.LogErrorFormat("Couldnt find index. Setting tile to water.");
             return 0;
@@ -469,7 +470,7 @@ namespace WildernessOverhaul
         static byte MakeLookup(int index, bool rotate, bool flip)
         {
             if (index > 63)
-                throw new IndexOutOfRangeException("Index out of range. Valid range 0-255");
+                throw new IndexOutOfRangeException("Index out of range. Valid range 0-63");
             if (rotate) index += 64;
             if (flip) index += 128;
 
@@ -480,6 +481,7 @@ namespace WildernessOverhaul
             lookupTable = new byte[113];
             lookupRegistry = new int[113][];
 
+            // Water
             lookupTable[0] = MakeLookup(0, false, false);
             lookupRegistry[0] = new int[4]{0,0,0,0};
 
@@ -742,7 +744,7 @@ namespace WildernessOverhaul
             lookupRegistry[107] = new int[4]{46,47,1,47};
             lookupRegistry[108] = new int[4]{47,46,47,1};
 
-            lookupTable[108] = MakeLookup(55, true, false);
+            lookupTable[109] = MakeLookup(55, true, false);
             lookupTable[110] = MakeLookup(55, false, true);
             lookupTable[111] = MakeLookup(55, true, true);
             lookupTable[112] = MakeLookup(55, false, false);
