@@ -35,7 +35,7 @@ namespace WildernessOverhaul
         // Subtropics, Mountain Woods, Woodland, Haunted Woods, Ocean
         static float[] frequency = {0.02f, 0.02f, 0.025f, 0.035f, 0.02f, 0.02f, 0.035f, 0.035f, 0.035f, 0.1f};
         static float[] amplitude = {0.3f, 0.3f, 0.3f, 0.4f, 0.3f, 0.3f, 0.4f, 0.4f, 0.4f, 0.95f};
-        static float[] persistance = {0.5f, 0.55f, 0.95f, 0.8f, 0.5f, 0.5f, 0.8f, 0.8f, 0.8f, 0.3f};
+        static float[] persistance = {0.5f, 0.55f, 0.95f, 0.8f, 0.5f, 0.5f, 0.8f, 0.6f, 0.8f, 0.3f};
         static int octaves = 5;
         static float[] upperWaterSpread = {-1.0f, -1.0f, 0.0f, 0.0f, -1.0f, -1.0f, 0.0f, 0.0f, 0.0f, 0.0f};
         static float[] lowerGrassSpread = {0.4f, 0.35f, 0.35f, 0.35f, 0.4f, 0.4f, 0.35f, 0.35f, 0.35f, 0.35f};
@@ -202,7 +202,7 @@ namespace WildernessOverhaul
                         break;
                     case (int)MapsFile.Climates.Subtropical:
                         climateNum = 5;
-                        persistanceRnd = persistance[climateNum] + ((height / maxTerrainHeight) * 2) - 0.25f;
+                        persistanceRnd = persistance[climateNum] + ((height / maxTerrainHeight) * 2f) - 0.25f;
                         break;
                     case (int)MapsFile.Climates.MountainWoods:
                         climateNum = 6;
@@ -211,7 +211,7 @@ namespace WildernessOverhaul
                     case (int)MapsFile.Climates.Woodlands:
                         climateNum = 7;
                         if (interestingErodedTerrainEnabled)
-                            persistanceRnd = 0.6f + ((height / maxTerrainHeight) * 2f); //persistance[climateNum] + ((height / maxTerrainHeight) * 2f) - 0.20f;
+                            persistanceRnd = persistance[climateNum] + ((height / maxTerrainHeight) * 2f);
                         else
                             persistanceRnd = persistance[climateNum] + ((height / maxTerrainHeight) * 1.4f) - 0.30f;
                         break;
@@ -277,7 +277,7 @@ namespace WildernessOverhaul
                     return;
                 }
                 // Adds a little +/- randomness to threshold so beach line isn't too regular
-                if (height <= beachElevation + (JobRand.Next(0, 100000000) / 10000000f)) {
+                if (height <= beachElevation + (JobRand.Next(100000000, 250000000) / 10000000f)) {
                     tileData[index] = dirt;
                     return;
                 }
@@ -342,16 +342,17 @@ namespace WildernessOverhaul
                 }
 
                 // Rock Mountain Face
-                if (SteepnessWithinLimits(true, Mathf.Clamp(90f - ((height / maxTerrainHeight)/0.85f * 100f),40f,90f), heightmapData, maxTerrainHeight, hx, hy, hDim, uB, index, tdDim, tileData)) {
+                int rnd = JobRand.Next(75,90);
+                if (SteepnessWithinLimits(true, Mathf.Clamp(rnd - ((height / maxTerrainHeight) / rnd),40f,90f), heightmapData, maxTerrainHeight, hx, hy, hDim, uB, index, tdDim, tileData)) {
                     tileData[index] = stone;
                     return;
                 }
 
-                int rnd = JobRand.Next(25,35);
-                if (tileData[index] == stone && SteepnessWithinLimits(false, Mathf.Clamp(90f - ((height / maxTerrainHeight)/0.85f * 100f),40f,90f), heightmapData, maxTerrainHeight, hx, hy, hDim, uB, index, tdDim, tileData)) {
+                /* rnd = JobRand.Next(25,35);
+                if (tileData[index] == stone && SteepnessWithinLimits(false, Mathf.Clamp(rnd - ((height / maxTerrainHeight) / rnd),40f,90f), heightmapData, maxTerrainHeight, hx, hy, hDim, uB, index, tdDim, tileData)) {
                     tileData[index] = grass;
                     return;
-                }
+                } */
 
                 // Max angle for dirt patches
                 rnd = JobRand.Next(20,25);

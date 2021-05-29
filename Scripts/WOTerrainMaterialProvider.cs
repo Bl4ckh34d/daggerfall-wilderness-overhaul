@@ -98,7 +98,6 @@ namespace DaggerfallWorkshop
                 textureArrayTerrainTiles = mod.GetAsset<Texture2DArray>("104-TexArray.asset");
             if (archive == 302) {
                 textureArrayTerrainTiles = mod.GetAsset<Texture2DArray>("302-TexArray.asset");
-                Debug.Log("Exchanged texture array");
             }
             if (archive == 303)
                 textureArrayTerrainTiles = mod.GetAsset<Texture2DArray>("303-TexArray.asset");

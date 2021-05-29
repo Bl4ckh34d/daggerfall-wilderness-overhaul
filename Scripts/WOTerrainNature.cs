@@ -269,6 +269,7 @@ namespace WildernessOverhaul
                         continue;
 
                     BaseDataObject baseData = new BaseDataObject(dfTerrain, dfBillboardBatch, terrain, scale, steepness, x, y, maxTerrainHeight);
+                    float currentPointHeight = terrain.SampleHeight(new Vector3(x * scale, 0, y * scale) + terrain.transform.position);
 
                     switch (climate.WorldClimate)
                     {
@@ -286,13 +287,18 @@ namespace WildernessOverhaul
 
                             if (tile == 1) // Dirt
                             {
-                                if (dfTerrain.MapData.worldHeight / 128f > Random.Range(0.04f, 0.08f))
+                                if (currentPointHeight > Random.Range(0.025f, 0.05f))
                                 {
                                     if (GetWeightedRecord(weight) == "forest")
                                     {
                                         if (Random.Range(0, 100) < Random.Range(70, 80))
                                         {
                                             AddBillboardToBatch(baseData, vegetationList.temperateWoodlandDeadTrees, Random.Range(0.15f, 0.30f), true); // Dead Trees
+
+                                            for (int i = 0; i < Random.Range(0, 3); i++)
+                                            {
+                                                AddBillboardToBatch(baseData, vegetationList.temperateWoodlandBeach, Random.Range(1.00f, 2.00f), true); // Beach
+                                            }
                                         }
                                         else
                                         {
@@ -300,12 +306,17 @@ namespace WildernessOverhaul
                                             {
                                                 for (int i = 0; i < Random.Range(1, 5); i++)
                                                 {
-                                                    AddBillboardToBatch(baseData, vegetationList.temperateWoodlandDeadTrees, Random.Range(0.75f, 1.10f), true, 3); // Needle Tree
+                                                    AddBillboardToBatch(baseData, vegetationList.temperateWoodlandDeadTrees, Random.Range(0.75f, 1.50f), true, 3); // Needle Tree
                                                 }
                                             }
                                             else
                                             {
                                                 AddBillboardToBatch(baseData, vegetationList.temperateWoodlandDeadTrees, Random.Range(0.15f, 0.30f), true); // Dead Trees
+
+                                                for (int i = 0; i < Random.Range(0, 3); i++)
+                                                {
+                                                    AddBillboardToBatch(baseData, vegetationList.temperateWoodlandBeach, Random.Range(1.00f, 2.00f), true); // Beach
+                                                }
                                             }
                                         }
                                     }
@@ -350,9 +361,14 @@ namespace WildernessOverhaul
                                     float rnd = Random.Range(0, 100);
                                     if (rnd < 4)
                                     {
-                                        for (int i = 0; i < Random.Range(12, 18); i++)
+                                        for (int i = 0; i < Random.Range(9, 14); i++)
                                         {
                                             AddBillboardToBatch(baseData, vegetationList.temperateWoodlandBushes, Random.Range(2.25f, 2.75f), true); // Bushes
+                                        }
+
+                                        for (int i = 0; i < Random.Range(3, 5); i++)
+                                        {
+                                            AddBillboardToBatch(baseData, vegetationList.temperateWoodlandBushes, Random.Range(0.50f, 0.75f), true); // Bushes
                                         }
                                     }
 
@@ -406,9 +422,14 @@ namespace WildernessOverhaul
                             {
                                 if (GetWeightedRecord(weight) == "forest")
                                 {
-                                    for (int i = 0; i < Random.Range(1, 4); i++)
+                                    for (int i = 0; i < Random.Range(0, 2); i++)
                                     {
-                                        AddBillboardToBatch(baseData, vegetationList.temperateWoodlandRocks, Random.Range(0.75f, 1.15f), true); // Stones
+                                        AddBillboardToBatch(baseData, vegetationList.temperateWoodlandRocks, Random.Range(0.25f, 1.00f), true); // Stones
+                                    }
+
+                                    for (int i = 0; i < Random.Range(0, 4); i++)
+                                    {
+                                        AddBillboardToBatch(baseData, vegetationList.temperateWoodlandDeadTrees, Random.Range(0.75f, 1.50f), true, 3); // Needle Tree
                                     }
 
                                     if (Random.Range(0, 100) < stochastics.mapStyle)
@@ -418,7 +439,10 @@ namespace WildernessOverhaul
                                 }
                                 if (GetWeightedRecord(weight) == "flower")
                                 {
-                                    AddBillboardToBatch(baseData, vegetationList.temperateWoodlandRocks, Random.Range(0.75f, 1.15f), true); // Stones
+                                    for (int i = 0; i < Random.Range(0, 2); i++)
+                                    {
+                                        AddBillboardToBatch(baseData, vegetationList.temperateWoodlandRocks, Random.Range(0.25f, 0.50f), true); // Stones
+                                    }
                                 }
                             }
                             break;
@@ -2806,14 +2830,14 @@ namespace WildernessOverhaul
             if (checkOnLand &&
                 !TileTypeCheck(pos, baseData, true, false, false, true, true) &&
                 TileTypeCheck(pos, baseData, false, true, false, false, false) &&
-                baseData.steepness < Mathf.Clamp(90f - ((height / baseData.maxTerrainHeight) / 0.85f * 100f), 40f, 90f))
+                baseData.steepness < Mathf.Clamp(100f - ((height / baseData.maxTerrainHeight) * 100f), 40f, 100f))
             {
                 baseData.dfBillboardBatch.AddItem(billboardCollection[record], pos);
             }
             if (!checkOnLand &&
                 TileTypeCheck(pos, baseData, true, false, false, false, false) &&
                 !TileTypeCheck(pos, baseData, false, false, false, true, true) &&
-                baseData.steepness < Mathf.Clamp(90f - ((height / baseData.maxTerrainHeight) / 0.85f * 100f), 40f, 90f))
+                baseData.steepness < Mathf.Clamp(100f - ((height / baseData.maxTerrainHeight) * 100f), 40f, 100f))
             {
                 baseData.dfBillboardBatch.AddItem(billboardCollection[record], pos);
             }
@@ -2950,7 +2974,7 @@ namespace WildernessOverhaul
            Vector3 pos,
            BaseDataObject baseData,
            bool isOnAnyWaterTile,
-           bool isOnPureGrassTile,
+           bool isOnPureGroundTile,
            bool isOnOrCloseToShallowWaterTile,
            bool isOnOrCloseToStreetTile,
            bool isCollidingWithBuilding)
@@ -3006,7 +3030,7 @@ namespace WildernessOverhaul
                     }
                 }
             }
-            if (isOnPureGrassTile)
+            if (isOnPureGroundTile)
             {
                 roundedX = (int)Mathf.Round(pos.x / baseData.scale);
                 roundedY = (int)Mathf.Round(pos.z / baseData.scale);
@@ -3014,7 +3038,7 @@ namespace WildernessOverhaul
                 {
                     sampleGround = baseData.dfTerrain.MapData.tilemapSamples[roundedX, roundedY] & 0x3F;
 
-                    if (sampleGround != 2)
+                    if (sampleGround != 1 && sampleGround != 2 && sampleGround != 3)
                     {
                         result = false;
                     }
