@@ -13,6 +13,7 @@ namespace WildernessOverhaul
 
         static WOTerrainTexturing woTexturing;
         static WOTerrainNature woNature;
+        static WOTerrainMaterialProvider woMatProvider;
 
         static Mod DREAMMod;
         static bool DREAMModEnabled;
@@ -105,9 +106,11 @@ namespace WildernessOverhaul
                 natureClearance4,
                 natureClearance5);
             woTexturing = new WOTerrainTexturing(InterestingErodedTerrainModEnabled, BasicRoadsModEnabled);
+            woMatProvider = new WOTerrainMaterialProvider(mod);
 
             DaggerfallUnity.Instance.TerrainNature = woNature;
             DaggerfallUnity.Instance.TerrainTexturing = woTexturing;
+            DaggerfallUnity.Instance.TerrainMaterialProvider = woMatProvider;
 
             mod.IsReady = true;
             Debug.Log("Wilderness Overhaul: Mod Initiated");
