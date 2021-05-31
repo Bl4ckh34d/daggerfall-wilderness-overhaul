@@ -216,6 +216,12 @@ namespace WildernessOverhaul
             CreateLookupTable();
         }
 
+        // Turn off the normal water tile conversion in DFU, do it in this mod instead.
+        public bool ConvertWaterTiles()
+        {
+            return false;
+        }
+
         public virtual JobHandle ScheduleAssignTilesJob(ITerrainSampler terrainSampler, ref MapPixelData mapData, JobHandle dependencies, bool march = true)
         {
             // Cache tile data to minimise noise sampling during march.
@@ -291,9 +297,14 @@ namespace WildernessOverhaul
                 int x = JobA.Row(index, tDim);
                 int y = JobA.Col(index, tDim);
 
-                // Do nothing if in location rect as texture already set, to 0xFF if zero
+                // Do nothing if in location rect as texture already set,
                 if (tilemapData[index] != 0)
+                {
+                    // Convert 0xFF to water now rather than let DFU do it
+                    if (tilemapData[index] == byte.MaxValue)
+                        tilemapData[index] = 0;
                     return;
+                }
 
                 // Assign tile texture
                 if (march)
