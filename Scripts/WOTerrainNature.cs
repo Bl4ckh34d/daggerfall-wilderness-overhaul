@@ -2966,17 +2966,15 @@ namespace WildernessOverhaul
            float sSMax
            )
         {
-            if (shootingStarsExist) {
-                Vector3 shootingStarPos = new Vector3(dfTerrain.transform.position.x, dfTerrain.transform.position.z, 0);
-                GameObject shootingStarInstance = mod.GetAsset<GameObject>("ShootingStars", true);
-                shootingStarInstance.transform.position = new Vector3(shootingStarPos.x, heightInTheSky, shootingStarPos.z);
-                shootingStarInstance.transform.parent = dfBillboardBatch.transform;
-                shootingStarInstance.transform.rotation = Quaternion.Euler(rotationAngleX, 0, 0);
-                shootingStarInstance.AddComponent<WOShootingStarController>();
-                shootingStarInstance.GetComponent<WOShootingStarController>().ps = shootingStarInstance.GetComponent<ParticleSystem>();
-                var emissionModule = shootingStarInstance.GetComponent<WOShootingStarController>().ps.emission;
-                emissionModule.rateOverTime = new ParticleSystem.MinMaxCurve(sSMin / 1000, sSMax / 1000);
-            }
+            Vector3 shootingStarPos = new Vector3(dfTerrain.transform.position.x, dfTerrain.transform.position.z, 0);
+            GameObject shootingStarInstance = mod.GetAsset<GameObject>("ShootingStars", true);
+            shootingStarInstance.transform.position = new Vector3(shootingStarPos.x, heightInTheSky, shootingStarPos.z);
+            shootingStarInstance.transform.parent = dfBillboardBatch.transform;
+            shootingStarInstance.transform.rotation = Quaternion.Euler(rotationAngleX, 0, 0);
+            shootingStarInstance.AddComponent<WOShootingStarController>();
+            shootingStarInstance.GetComponent<WOShootingStarController>().ps = shootingStarInstance.GetComponent<ParticleSystem>();
+            var emissionModule = shootingStarInstance.GetComponent<WOShootingStarController>().ps.emission;
+            emissionModule.rateOverTime = new ParticleSystem.MinMaxCurve(sSMin / 1000, sSMax / 1000);
         }
 
         static public bool TileTypeCheck(

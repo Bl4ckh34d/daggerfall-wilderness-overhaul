@@ -30,6 +30,7 @@ namespace DaggerfallWorkshop
 
 
         private readonly Shader shader = Shader.Find("WildernessOverhaul/TilemapTextureArray");
+        //private readonly Shader shader = Shader.Find("Daggerfall/TilemapTextureArray");
 
         internal static bool IsSupported
         {
