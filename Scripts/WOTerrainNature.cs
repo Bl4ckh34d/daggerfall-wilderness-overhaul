@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System.Collections.Generic;
 using DaggerfallConnect.Arena2;
 using DaggerfallConnect;
@@ -197,11 +197,13 @@ namespace WildernessOverhaul
             // Chance scaled by base climate type
             DFLocation.ClimateSettings climate = MapsFile.GetWorldClimateSettings(dfTerrain.MapData.worldClimate);
 
-            // Initialize stochastics
+            // Initialize stochastics & vegetation
             stochastics = new WOStochasticChances();
+            vegetationChance = new WOVegetationChance(1.0f, climate);
 
             // Adds one shooting star Particle System of every MapPixel
-            AddShootingStar(dfTerrain, dfBillboardBatch, 90f, 900f, shootingStarsMinimum, shootingStarsMaximum); // Shooting Stars
+            if (shootingStarsExist)
+                AddShootingStar(dfTerrain, dfBillboardBatch, 90f, 900f, shootingStarsMinimum, shootingStarsMaximum); // Shooting Stars
 
             for (int y = 0; y < tDim; y++)
             {
