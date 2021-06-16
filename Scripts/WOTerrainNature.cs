@@ -30,6 +30,7 @@ namespace WildernessOverhaul
         private static float natureClearance4;
         private static float natureClearance5;
         private static Mod mod;
+        public float height;
 
         // TERRAIN SETTINGS
         // Max steepness to still place nature billboards
@@ -199,7 +200,8 @@ namespace WildernessOverhaul
 
             // Initialize stochastics & vegetation
             stochastics = new WOStochasticChances();
-            vegetationChance = new WOVegetationChance(1.0f, climate);
+            vegetationChance = new WOVegetationChance();
+            vegetationList = new WOVegetationList();
 
             // Adds one shooting star Particle System of every MapPixel
             if (shootingStarsExist)
@@ -262,10 +264,12 @@ namespace WildernessOverhaul
                     //Defining height for the billboard placement
                     int hx = (int)Mathf.Clamp(hDim * ((float)x / (float)tDim), 0, hDim - 1);
                     int hy = (int)Mathf.Clamp(hDim * ((float)y / (float)tDim), 0, hDim - 1);
-                    float height = dfTerrain.MapData.heightmapSamples[hy, hx];
+                    height = dfTerrain.MapData.heightmapSamples[hy, hx];
 
-                    vegetationList = new WOVegetationList(height, DaggerfallUnity.Instance.WorldTime.Now.SeasonValue, stochastics.mapStyle);
-                    vegetationChance = new WOVegetationChance(height, climate);
+                    // Adjust Vegetation Lists to current positions height, climate zone and mapStyle
+                    vegetationList.ChangeVegetationLists(height, DaggerfallUnity.Instance.WorldTime.Now.SeasonValue, stochastics.mapStyle);
+                    // Adjust Vegetation Chance to current position height and climate zone
+                    vegetationChance.ChangeVegetationChances(height, dfTerrain.MapData.worldClimate);
 
                     if (tile == 0 || height <= 0)
                         continue;

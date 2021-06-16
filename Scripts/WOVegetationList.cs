@@ -67,29 +67,188 @@ namespace WildernessOverhaul
         public List<int> collectionRainforestTrees = new List<int>(new int[] { 12, 13, 14, 15, 30 });
         public List<int> collectionRainforestBeach = new List<int>(new int[] { });
 
-        public List<float> elevationLevels;
-
-        public WOVegetationList(float elevation, DaggerfallDateTime.Seasons season, float mapStyle) {
-
-            elevationLevels = new List<float>(new float[] {
+        public List<float> elevationLevels = new List<float>(new float[] {
                 Random.Range(0.66f,0.64f), Random.Range(0.61f,0.59f), Random.Range(0.56f,0.54f),
                 Random.Range(0.51f,0.49f), Random.Range(0.46f,0.44f), Random.Range(0.41f,0.39f),
                 Random.Range(0.36f, 0.34f), Random.Range(0.31f,0.29f), Random.Range(0.26f,0.24f),
                 Random.Range(0.21f,0.19f), Random.Range(0.11f,0.09f), Random.Range(0.076f,0.74f),
                 Random.Range(0.051f,0.049f), Random.Range(0.021f,0.019f)});
 
-            if (elevation > elevationLevels[0])
-            {
-                temperateWoodlandTrees = new List<int>(new int[] { 13, 14, 15, 17, 18, 25, 25, 25 });
-                temperateWoodlandDeadTrees = new List<int>(new int[] { 19, 20, 24, 25, 25, 25, 29, 30, 31 });
-                temperateWoodlandFlowers = new List<int>(new int[] { 21, 22 });
-                temperateWoodlandMushroom = new List<int>(new int[] { 7, 23 });
-                temperateWoodlandBushes = new List<int>(new int[] { 1, 1, 1, 27, 28 });
-                temperateWoodlandBeach = new List<int>(new int[] { 31, 3, 3, 4, 4, 5, 5, 6, 29 });
-                temperateWoodlandRocks = new List<int>(new int[] { 3, 4, 5, 6, 8, 10, 26 });
+        //TEMPERATE WOODLAND
+        //ELEVATION 0
+        public List<int> temperateWoodlandFlowersAtElevation0 = new List<int>(new int[] { 21, 22 });
+        public List<int> temperateWoodlandMushroomAtElevation0 = new List<int>(new int[] { 7, 23 });
+        public List<int> temperateWoodlandBushesAtElevation0 = new List<int>(new int[] { 1, 1, 1, 27, 28 });
+        public List<int> temperateWoodlandRocksAtElevation0 = new List<int>(new int[] { 3, 4, 5, 6, 8, 10, 26 });
+        public List<int> temperateWoodlandTreesAtElevation0 = new List<int>(new int[] { 13, 14, 15, 17, 18, 25, 25, 25 });
+        public List<int> temperateWoodlandBeachAtElevation0 = new List<int>(new int[] { 31, 3, 3, 4, 4, 5, 5, 6, 29 });
+        public List<int> temperateWoodlandDeadTreesAtElevation0 = new List<int>(new int[] { 19, 20, 24, 25, 25, 25, 29, 30, 31 });
 
-                if (season == DaggerfallDateTime.Seasons.Winter)
-                {
+        //ELEVATION 1
+        public List<int> temperateWoodlandTreesAtElevation1 = new List<int>(new int[] { 13, 14, 15, 17, 18, 25, 25, 25 });
+        public List<int> temperateWoodlandDeadTreesAtElevation1 = new List<int>(new int[] { 19, 20, 24, 25, 25, 25, 29, 30, 31 });
+        public List<int> temperateWoodlandFlowersAtElevation1 = new List<int>(new int[] { 21, 22 });
+        public List<int> temperateWoodlandMushroomAtElevation1 = new List<int>(new int[] { 7, 23 });
+        public List<int> temperateWoodlandBushesAtElevation1 = new List<int>(new int[] { 1, 1, 1, 27, 28 });
+        public List<int> temperateWoodlandBeachAtElevation1 = new List<int>(new int[] { 31, 3, 3, 4, 4, 5, 5, 6, 29 });
+        public List<int> temperateWoodlandRocksAtElevation1 = new List<int>(new int[] { 3, 4, 5, 6, 8, 10, 26 });
+
+        //ELEVATION 2
+        public List<int> temperateWoodlandTreesAtElevation2 = new List<int>(new int[] { 13, 14, 15, 17, 18, 25, 25, 25 });
+        public List<int> temperateWoodlandDeadTreesAtElevation2 = new List<int>(new int[] { 19, 20, 24, 25, 25, 25, 29, 30, 31 });
+        public List<int> temperateWoodlandFlowersAtElevation2 = new List<int>(new int[] { 21, 22 });
+        public List<int> temperateWoodlandMushroomAtElevation2 = new List<int>(new int[] { 7, 23 });
+        public List<int> temperateWoodlandBushesAtElevation2 = new List<int>(new int[] { 1, 1, 1, 27, 28 });
+        public List<int> temperateWoodlandBeachAtElevation2 = new List<int>(new int[] { 31, 3, 3, 4, 4, 5, 5, 6, 29 });
+        public List<int> temperateWoodlandRocksAtElevation2 = new List<int>(new int[] { 3, 4, 5, 6, 8, 10, 26 });
+
+        //ELEVATION 3
+        public List<int> temperateWoodlandTreesAtElevation3 = new List<int>(new int[] { 13, 14, 15, 17, 18, 25, 25, 25 });
+        public List<int> temperateWoodlandDeadTreesAtElevation3 = new List<int>(new int[] { 19, 20, 24, 25, 25, 25, 29, 30, 31 });
+        public List<int> temperateWoodlandFlowersAtElevation3 = new List<int>(new int[] { 21, 22 });
+        public List<int> temperateWoodlandMushroomAtElevation3 = new List<int>(new int[] { 7, 23 });
+        public List<int> temperateWoodlandBushesAtElevation3 = new List<int>(new int[] { 1, 1, 1, 27, 28 });
+        public List<int> temperateWoodlandBeachAtElevation3 = new List<int>(new int[] { 31, 3, 3, 4, 4, 5, 5, 6, 29 });
+        public List<int> temperateWoodlandRocksAtElevation3 = new List<int>(new int[] { 3, 4, 5, 6, 8, 10, 26 });
+
+        //ELEVATION 4
+        public List<int> temperateWoodlandTreesAtElevation4 = new List<int>(new int[] { 13, 14, 15, 17, 18, 25, 25, 25 });
+        public List<int> temperateWoodlandDeadTreesAtElevation4 = new List<int>(new int[] { 19, 20, 24, 25, 25, 25, 29, 30, 31 });
+        public List<int> temperateWoodlandFlowersAtElevation4 = new List<int>(new int[] { 21, 22 });
+        public List<int> temperateWoodlandMushroomAtElevation4 = new List<int>(new int[] { 7, 23 });
+        public List<int> temperateWoodlandBushesAtElevation4 = new List<int>(new int[] { 1, 1, 1, 27, 28 });
+        public List<int> temperateWoodlandBeachAtElevation4 = new List<int>(new int[] { 31, 3, 3, 4, 4, 5, 5, 6, 29 });
+        public List<int> temperateWoodlandRocksAtElevation4 = new List<int>(new int[] { 3, 4, 5, 6, 8, 10, 26 });
+
+        //ELEVATION 5
+        public List<int> temperateWoodlandTreesAtElevation5 = new List<int>(new int[] { 13, 14, 15, 17, 18, 25, 25, 25 });
+        public List<int> temperateWoodlandDeadTreesAtElevation5 = new List<int>(new int[] { 19, 20, 24, 25, 25, 25, 29, 30, 31 });
+        public List<int> temperateWoodlandFlowersAtElevation5 = new List<int>(new int[] { 21, 22 });
+        public List<int> temperateWoodlandMushroomAtElevation5 = new List<int>(new int[] { 7, 23 });
+        public List<int> temperateWoodlandBushesAtElevation5 = new List<int>(new int[] { 1, 1, 1, 27, 28 });
+        public List<int> temperateWoodlandBeachAtElevation5 = new List<int>(new int[] { 31, 3, 3, 4, 4, 5, 5, 6, 29 });
+        public List<int> temperateWoodlandRocksAtElevation5 = new List<int>(new int[] { 3, 4, 5, 6, 8, 10, 26 });
+
+        //ELEVATION 6
+        public List<int> temperateWoodlandTreesAtElevation6 = new List<int>(new int[] { 13, 14, 15, 17, 18, 25, 25, 25 });
+        public List<int> temperateWoodlandDeadTreesAtElevation6 = new List<int>(new int[] { 19, 20, 24, 25, 25, 25, 29, 30, 31 });
+        public List<int> temperateWoodlandFlowersAtElevation6 = new List<int>(new int[] { 21, 22 });
+        public List<int> temperateWoodlandMushroomAtElevation6 = new List<int>(new int[] { 7, 23 });
+        public List<int> temperateWoodlandBushesAtElevation6 = new List<int>(new int[] { 1, 1, 1, 27, 28 });
+        public List<int> temperateWoodlandBeachAtElevation6 = new List<int>(new int[] { 31, 3, 3, 4, 4, 5, 5, 6, 29 });
+        public List<int> temperateWoodlandRocksAtElevation6 = new List<int>(new int[] { 3, 4, 5, 6, 8, 10, 26 });
+
+        //ELEVATION 7
+        public List<int> temperateWoodlandTreesAtElevation7 = new List<int>(new int[] { 13, 14, 15, 17, 18, 25, 25, 25 });
+        public List<int> temperateWoodlandDeadTreesAtElevation7 = new List<int>(new int[] { 19, 20, 24, 25, 25, 25, 29, 30, 31 });
+        public List<int> temperateWoodlandFlowersAtElevation7 = new List<int>(new int[] { 21, 22 });
+        public List<int> temperateWoodlandMushroomAtElevation7 = new List<int>(new int[] { 7, 23 });
+        public List<int> temperateWoodlandBushesAtElevation7 = new List<int>(new int[] { 1, 1, 1, 27, 28 });
+        public List<int> temperateWoodlandBeachAtElevation7 = new List<int>(new int[] { 31, 3, 3, 4, 4, 5, 5, 6, 29 });
+        public List<int> temperateWoodlandRocksAtElevation7 = new List<int>(new int[] { 3, 4, 5, 6, 8, 10, 26 });
+
+        //ELEVATION 8
+        public List<int> temperateWoodlandTreesAtElevation8 = new List<int>(new int[] { 13, 14, 15, 17, 18, 25, 25, 25 });
+        public List<int> temperateWoodlandDeadTreesAtElevation8 = new List<int>(new int[] { 19, 20, 24, 25, 25, 25, 29, 30, 31 });
+        public List<int> temperateWoodlandFlowersAtElevation8 = new List<int>(new int[] { 21, 22 });
+        public List<int> temperateWoodlandMushroomAtElevation8 = new List<int>(new int[] { 7, 23 });
+        public List<int> temperateWoodlandBushesAtElevation8 = new List<int>(new int[] { 1, 1, 1, 27, 28 });
+        public List<int> temperateWoodlandBeachAtElevation8 = new List<int>(new int[] { 31, 3, 3, 4, 4, 5, 5, 6, 29 });
+        public List<int> temperateWoodlandRocksAtElevation8 = new List<int>(new int[] { 3, 4, 5, 6, 8, 10, 26 });
+
+        //ELEVATION 9
+        public List<int> temperateWoodlandTreesAtElevation9 = new List<int>(new int[] { 13, 14, 15, 17, 18, 25, 25, 25 });
+        public List<int> temperateWoodlandDeadTreesAtElevation9 = new List<int>(new int[] { 19, 20, 24, 25, 25, 25, 29, 30, 31 });
+        public List<int> temperateWoodlandFlowersAtElevation9 = new List<int>(new int[] { 21, 22 });
+        public List<int> temperateWoodlandMushroomAtElevation9 = new List<int>(new int[] { 7, 23 });
+        public List<int> temperateWoodlandBushesAtElevation9 = new List<int>(new int[] { 1, 1, 27, 28 });
+        public List<int> temperateWoodlandBeachAtElevation9 = new List<int>(new int[] { 31, 3, 3, 4, 4, 5, 5, 6, 29 });
+        public List<int> temperateWoodlandRocksAtElevation9 = new List<int>(new int[] { 3, 4, 5, 6, 8, 10, 26 });
+
+        //ELEVATION 10
+        public List<int> temperateWoodlandTreesAtElevation10A = new List<int>(new int[] { 13, 13, 25, 25, 25}); // Conifere Forest 1
+        public List<int> temperateWoodlandTreesAtElevation10B = new List<int>(new int[] { 13, 13, 13, 25, 25}); // Conifere forest 2
+        public List<int> temperateWoodlandTreesAtElevation10C = new List<int>(new int[] { 13, 25}); // Mixed Forest 1
+        public List<int> temperateWoodlandTreesAtElevation10D = new List<int>(new int[] { 17, 18}); // Deciduous Forest
+        public List<int> temperateWoodlandTreesAtElevation10E = new List<int>(new int[] { 11, 14, 14, 14, 15, 15}); // Birch Forest
+        public List<int> temperateWoodlandTreesAtElevation10F = new List<int>(new int[] { 13, 17, 18, 18, 18}); // Oak forest
+        public List<int> temperateWoodlandDeadTreesAtElevation10 = new List<int>(new int[] { 19, 20, 24, 25, 25, 25, 29, 30, 31 });
+        public List<int> temperateWoodlandFlowersAtElevation10 = new List<int>(new int[] { 21, 22 });
+        public List<int> temperateWoodlandMushroomAtElevation10 = new List<int>(new int[] { 7, 23 });
+        public List<int> temperateWoodlandBushesAtElevation10 = new List<int>(new int[] { 1, 1, 27, 28 });
+        public List<int> temperateWoodlandBeachAtElevation10 = new List<int>(new int[] { 31, 3, 3, 4, 4, 5, 5, 6, 29 });
+        public List<int> temperateWoodlandRocksAtElevation10 = new List<int>(new int[] { 3, 4, 5, 6, 8, 10, 26 });
+
+        //ELEVATION 11
+        public List<int> temperateWoodlandTreesAtElevation11A = new List<int>(new int[] { 13, 13, 25, 25, 25}); // Conifere forest
+        public List<int> temperateWoodlandTreesAtElevation11B = new List<int>(new int[] { 13, 14, 16, 17}); // Mixed Forest 1
+        public List<int> temperateWoodlandTreesAtElevation11C = new List<int>(new int[] { 16, 17, 18}); // Deciduous Forest
+        public List<int> temperateWoodlandTreesAtElevation11D = new List<int>(new int[] { 13, 15, 18}); // Mixed Forest 2
+        public List<int> temperateWoodlandTreesAtElevation11E = new List<int>(new int[] { 11, 14, 14, 14, 15, 15}); // Birch Forest
+        public List<int> temperateWoodlandTreesAtElevation11F = new List<int>(new int[] { 13, 17, 17, 18, 18, 18}); // Oak forest
+        public List<int> temperateWoodlandDeadTreesAtElevation11 = new List<int>(new int[] { 19, 20, 24, 25, 25, 29, 30, 31 });
+        public List<int> temperateWoodlandFlowersAtElevation11 = new List<int>(new int[] { 21, 22 });
+        public List<int> temperateWoodlandMushroomAtElevation11 = new List<int>(new int[] { 7, 23 });
+        public List<int> temperateWoodlandBushesAtElevation11 = new List<int>(new int[] { 1, 26, 27, 27, 28, 28 });
+        public List<int> temperateWoodlandBeachAtElevation11 = new List<int>(new int[] { 31, 3, 3, 4, 4, 5, 5, 6, 29 });
+        public List<int> temperateWoodlandRocksAtElevation11 = new List<int>(new int[] { 3, 4, 5, 6, 8, 10, 26 });
+
+        //ELEVATION 12
+        public List<int> temperateWoodlandTreesAtElevation12A = new List<int>(new int[] { 11, 12, 13, 14, 15, 16, 17, 18}); // Mixed Forest
+        public List<int> temperateWoodlandTreesAtElevation12B = new List<int>(new int[] { 12, 12, 12, 16, 16, 17}); // Beach forest 1
+        public List<int> temperateWoodlandTreesAtElevation12C = new List<int>(new int[] { 12, 16, 16, 16, 17, 17}); // Beach forest 2
+        public List<int> temperateWoodlandTreesAtElevation12D = new List<int>(new int[] { 14, 14, 14, 15, 15}); // Birch Forest 1
+        public List<int> temperateWoodlandTreesAtElevation12E = new List<int>(new int[] { 14, 14, 15, 15, 15}); // Birch Forest 2
+        public List<int> temperateWoodlandTreesAtElevation12F = new List<int>(new int[] { 16, 17, 18}); // Deciduous Forest
+        public List<int> temperateWoodlandDeadTreesAtElevation12 = new List<int>(new int[] { 19, 20, 24, 25, 29, 30, 31 });
+        public List<int> temperateWoodlandFlowersAtElevation12 = new List<int>(new int[] { 2, 21, 21, 21, 22, 22 });
+        public List<int> temperateWoodlandMushroomAtElevation12 = new List<int>(new int[] { 7, 7, 7, 9, 23, 23 });
+        public List<int> temperateWoodlandBushesAtElevation12 = new List<int>(new int[] { 1, 26, 27, 27, 28, 28 });
+        public List<int> temperateWoodlandBeachAtElevation12 = new List<int>(new int[] { 31, 3, 3, 4, 4, 5, 5, 6, 29 });
+        public List<int> temperateWoodlandRocksAtElevation12 = new List<int>(new int[] { 3, 4, 5, 6, 8, 10, 26 });
+
+
+        //ELEVATION 13
+        public List<int> temperateWoodlandTreesAtElevation13A = new List<int>(new int[] { 14, 14, 14, 15, 15}); // Birch Forest
+        public List<int> temperateWoodlandTreesAtElevation13B = new List<int>(new int[] { 13, 17, 17, 18, 18, 18}); // Oak forest
+        public List<int> temperateWoodlandTreesAtElevation13C = new List<int>(new int[] { 16, 17, 18}); // Deciduous Forest
+        public List<int> temperateWoodlandTreesAtElevation13D = new List<int>(new int[] { 12, 12, 12, 16, 17}); // Beach forest 1
+        public List<int> temperateWoodlandTreesAtElevation13E = new List<int>(new int[] { 12, 16, 17, 17, 17}); // Beach forest 2
+        public List<int> temperateWoodlandTreesAtElevation13F = new List<int>(new int[] { 12, 16, 16, 16, 17}); // Beach forest 3
+        public List<int> temperateWoodlandDeadTreesAtElevation13 = new List<int>(new int[] { 19, 20, 24, 29, 30, 31 });
+        public List<int> temperateWoodlandFlowersAtElevation13 = new List<int>(new int[] { 2, 21, 22 });
+        public List<int> temperateWoodlandMushroomAtElevation13 = new List<int>(new int[] { 7, 9, 23 });
+        public List<int> temperateWoodlandBushesAtElevation13 = new List<int>(new int[] { 26, 27, 28 });
+        public List<int> temperateWoodlandBeachAtElevation13 = new List<int>(new int[] { 31, 3, 3, 4, 4, 5, 5, 6, 29 });
+        public List<int> temperateWoodlandRocksAtElevation13 = new List<int>(new int[] { 3, 4, 5, 6, 8, 10, 26 });
+
+        //ELEVATION 14
+        public List<int> temperateWoodlandTreesAtElevation14A = new List<int>(new int[] { 16, 17, 18}); // Deciduous Forest
+        public List<int> temperateWoodlandTreesAtElevation14B = new List<int>(new int[] { 12, 12, 16, 17}); // Beach forest 3
+        public List<int> temperateWoodlandTreesAtElevation14C = new List<int>(new int[] { 12, 16, 17, 17}); // Beach forest 1
+        public List<int> temperateWoodlandTreesAtElevation14D = new List<int>(new int[] { 12, 16, 16, 17}); // Beach forest 2
+        public List<int> temperateWoodlandDeadTreesAtElevation14 = new List<int>(new int[] { 19, 19, 20, 20, 24, 24, 29, 29, 30, 31, 31 });
+        public List<int> temperateWoodlandFlowersAtElevation14 = new List<int>(new int[] { 2, 2, 2, 21, 22, 22 });
+        public List<int> temperateWoodlandMushroomAtElevation14 = new List<int>(new int[] { 7, 7, 9, 9, 9, 23 });
+        public List<int> temperateWoodlandBushesAtElevation14 = new List<int>(new int[] { 26, 26, 26, 27, 28 });
+        public List<int> temperateWoodlandBeachAtElevation14 = new List<int>(new int[] { 31, 3, 3, 4, 4, 5, 5, 6, 29 });
+        public List<int> temperateWoodlandRocksAtElevation14 = new List<int>(new int[] { 3, 4, 5, 6, 8, 10, 26 });
+
+
+        public void ChangeVegetationLists(float elevation, DaggerfallDateTime.Seasons season, float mapStyle) {
+
+            float rnd;
+
+            if (season == DaggerfallDateTime.Seasons.Winter) {
+                if (elevation > elevationLevels[0]) {
+                    temperateWoodlandTrees = temperateWoodlandTreesAtElevation0;
+                    temperateWoodlandDeadTrees = temperateWoodlandDeadTreesAtElevation0;
+                    temperateWoodlandFlowers = temperateWoodlandFlowersAtElevation0;
+                    temperateWoodlandMushroom = temperateWoodlandMushroomAtElevation0;
+                    temperateWoodlandBushes = temperateWoodlandBushesAtElevation0;
+                    temperateWoodlandBeach = temperateWoodlandBeachAtElevation0;
+                    temperateWoodlandRocks = temperateWoodlandRocksAtElevation0;
+
                     mountainsTrees = new List<int>(new int[] { 29 });
                     mountainsNeedleTrees = new List<int>(new int[] { 11, 25 });
                     mountainsDeadTrees = new List<int>(new int[] { 19, 20, 24, 30, 29 });
@@ -102,9 +261,394 @@ namespace WildernessOverhaul
                     woodlandHillsTrees = new List<int>(new int[] { 5, 11, 12, 12, 13, 14, 14, 25, 12 });
                     woodlandHillsNeedleTrees = new List<int>(new int[] { 12, 25, 12 });
                     woodlandHillsDirtPlants = new List<int>(new int[] { 22, 29, 26, 31 });
+                } else {
+                    if (elevation > elevationLevels[1]) {
+                        temperateWoodlandTrees = temperateWoodlandTreesAtElevation1;
+                        temperateWoodlandDeadTrees = temperateWoodlandDeadTreesAtElevation1;
+                        temperateWoodlandFlowers = temperateWoodlandFlowersAtElevation1;
+                        temperateWoodlandMushroom = temperateWoodlandMushroomAtElevation1;
+                        temperateWoodlandBushes = temperateWoodlandBushesAtElevation1;
+                        temperateWoodlandBeach = temperateWoodlandBeachAtElevation1;
+                        temperateWoodlandRocks = temperateWoodlandRocksAtElevation1;
+
+                        mountainsTrees = new List<int>(new int[] { 29, 29, 29, 29, 29, 29, 29, 29, 29, 29, 11, 25, 25 });
+                        mountainsNeedleTrees = new List<int>(new int[] { 11, 25, 25 });
+                        mountainsDeadTrees = new List<int>(new int[] { 19, 20, 24, 30, 29 });
+                        mountainsFlowers = new List<int>(new int[] { 7 });
+                        mountainsRocks = new List<int>(new int[] { 1, 3, 4, 6, 9, 8, 10, 14, 17, 18, 27, 28, 31 });
+                        mountainsGrass = new List<int>(new int[] { 7, 7, 7, 9, 26 });
+
+                        woodlandHillsFlowers = new List<int>(new int[] { 7, 22, 22, 22, 22 });
+                        woodlandHillsBushes = new List<int>(new int[] { 23, 27 });
+                        woodlandHillsTrees = new List<int>(new int[] { 5, 11, 12, 12, 13, 14, 14, 25, 12 });
+                        woodlandHillsNeedleTrees = new List<int>(new int[] { 12, 25, 12 });
+                        woodlandHillsDirtPlants = new List<int>(new int[] { 22, 29, 26, 31 });
+                    } else {
+                        if (elevation > elevationLevels[2]) {
+                            temperateWoodlandTrees = temperateWoodlandTreesAtElevation2;
+                            temperateWoodlandDeadTrees = temperateWoodlandDeadTreesAtElevation2;
+                            temperateWoodlandFlowers = temperateWoodlandFlowersAtElevation2;
+                            temperateWoodlandMushroom = temperateWoodlandMushroomAtElevation2;
+                            temperateWoodlandBushes = temperateWoodlandBushesAtElevation2;
+                            temperateWoodlandBeach = temperateWoodlandBeachAtElevation2;
+                            temperateWoodlandRocks = temperateWoodlandRocksAtElevation2;
+
+                            mountainsTrees = new List<int>(new int[] { 29, 29, 29, 29, 29, 29, 29, 11, 25, 25, 25 });
+                            mountainsNeedleTrees = new List<int>(new int[] { 11, 25, 25 });
+                            mountainsDeadTrees = new List<int>(new int[] { 19, 20, 24, 30, 29 });
+                            mountainsFlowers = new List<int>(new int[] { 7 });
+                            mountainsRocks = new List<int>(new int[] { 1, 3, 4, 6, 9, 8, 10, 14, 17, 18, 27, 28, 31 });
+                            mountainsGrass = new List<int>(new int[] { 7, 7, 7, 9, 23, 26 });
+
+                            woodlandHillsFlowers = new List<int>(new int[] { 7, 22, 22, 22, 22 });
+                            woodlandHillsBushes = new List<int>(new int[] { 23, 27 });
+                            woodlandHillsTrees = new List<int>(new int[] { 5, 11, 12, 12, 13, 14, 14, 25, 12 });
+                            woodlandHillsNeedleTrees = new List<int>(new int[] { 12, 25, 12 });
+                            woodlandHillsDirtPlants = new List<int>(new int[] { 22, 29, 26, 31 });
+                        } else {
+                            if (elevation > elevationLevels[3]) {
+                                temperateWoodlandTrees = temperateWoodlandTreesAtElevation3;
+                                temperateWoodlandDeadTrees = temperateWoodlandDeadTreesAtElevation3;
+                                temperateWoodlandFlowers = temperateWoodlandFlowersAtElevation3;
+                                temperateWoodlandMushroom = temperateWoodlandMushroomAtElevation3;
+                                temperateWoodlandBushes = temperateWoodlandBushesAtElevation3;
+                                temperateWoodlandBeach = temperateWoodlandBeachAtElevation3;
+                                temperateWoodlandRocks = temperateWoodlandRocksAtElevation3;
+
+                                mountainsTrees = new List<int>(new int[] { 29, 29, 29, 29, 29, 29, 29, 11, 25, 25 });
+                                mountainsNeedleTrees = new List<int>(new int[] { 11, 25, 25 });
+                                mountainsDeadTrees = new List<int>(new int[] { 19, 20, 24, 30, 29 });
+                                mountainsFlowers = new List<int>(new int[] { 7 });
+                                mountainsRocks = new List<int>(new int[] { 1, 3, 4, 6, 9, 8, 10, 14, 17, 18, 27, 28, 31 });
+                                mountainsGrass = new List<int>(new int[] { 7, 7, 7, 9, 23, 26 });
+
+                                woodlandHillsFlowers = new List<int>(new int[] { 7, 22, 22, 22, 22 });
+                                woodlandHillsBushes = new List<int>(new int[] { 23, 27 });
+                                woodlandHillsTrees = new List<int>(new int[] { 5, 11, 12, 12, 13, 14, 14, 25, 12 });
+                                woodlandHillsNeedleTrees = new List<int>(new int[] { 12, 25, 12 });
+                                woodlandHillsDirtPlants = new List<int>(new int[] { 22, 29, 26, 31 });
+                            } else {
+                                if (elevation > elevationLevels[4]) {
+                                    temperateWoodlandTrees = temperateWoodlandTreesAtElevation4;
+                                    temperateWoodlandDeadTrees = temperateWoodlandDeadTreesAtElevation4;
+                                    temperateWoodlandFlowers = temperateWoodlandFlowersAtElevation4;
+                                    temperateWoodlandMushroom = temperateWoodlandMushroomAtElevation4;
+                                    temperateWoodlandBushes = temperateWoodlandBushesAtElevation4;
+                                    temperateWoodlandBeach = temperateWoodlandBeachAtElevation4;
+                                    temperateWoodlandRocks = temperateWoodlandRocksAtElevation4;
+
+                                    mountainsTrees = new List<int>(new int[] { 29, 29, 29, 29, 29, 5, 11, 25, 25 });
+                                    mountainsNeedleTrees = new List<int>(new int[] { 5, 11, 11, 25, 25, 25 });
+                                    mountainsDeadTrees = new List<int>(new int[] { 19, 20, 24, 30, 29 });
+                                    mountainsFlowers = new List<int>(new int[] { 7 });
+                                    mountainsRocks = new List<int>(new int[] { 1, 3, 4, 6, 9, 8, 10, 14, 17, 18, 27, 28, 31 });
+                                    mountainsGrass = new List<int>(new int[] { 7, 7, 7, 9, 23, 26 });
+
+                                    woodlandHillsFlowers = new List<int>(new int[] { 7, 22, 22, 22, 22 });
+                                    woodlandHillsBushes = new List<int>(new int[] { 23, 27 });
+                                    woodlandHillsTrees = new List<int>(new int[] { 5, 11, 12, 12, 13, 14, 14, 25, 12 });
+                                    woodlandHillsNeedleTrees = new List<int>(new int[] { 12, 25, 12 });
+                                    woodlandHillsDirtPlants = new List<int>(new int[] { 22, 29, 26, 31 });
+                                } else {
+                                    if (elevation > elevationLevels[5]) {
+                                        temperateWoodlandTrees = temperateWoodlandTreesAtElevation5;
+                                        temperateWoodlandDeadTrees = temperateWoodlandDeadTreesAtElevation5;
+                                        temperateWoodlandFlowers = temperateWoodlandFlowersAtElevation5;
+                                        temperateWoodlandMushroom = temperateWoodlandMushroomAtElevation5;
+                                        temperateWoodlandBushes = temperateWoodlandBushesAtElevation5;
+                                        temperateWoodlandBeach = temperateWoodlandBeachAtElevation5;
+                                        temperateWoodlandRocks = temperateWoodlandRocksAtElevation5;
+
+                                        mountainsTrees = new List<int>(new int[] { 29, 29, 29, 29, 29, 5, 11, 13, 21, 25, 25, 25 });
+                                        mountainsNeedleTrees = new List<int>(new int[] { 5, 11, 11, 25, 25, 25 });
+                                        mountainsDeadTrees = new List<int>(new int[] { 16, 19, 20, 24, 30, 29 });
+                                        mountainsFlowers = new List<int>(new int[] { 7 });
+                                        mountainsRocks = new List<int>(new int[] { 1, 3, 4, 6, 9, 8, 10, 14, 17, 18, 27, 28, 31 });
+                                        mountainsGrass = new List<int>(new int[] { 7, 7, 9, 23, 23, 23, 26 });
+
+                                        woodlandHillsFlowers = new List<int>(new int[] { 7, 22, 22, 22, 22 });
+                                        woodlandHillsBushes = new List<int>(new int[] { 23, 27 });
+                                        woodlandHillsTrees = new List<int>(new int[] { 5, 11, 12, 12, 13, 14, 14, 25, 12 });
+                                        woodlandHillsNeedleTrees = new List<int>(new int[] { 12, 25, 12 });
+                                        woodlandHillsDirtPlants = new List<int>(new int[] { 22, 29, 26, 31 });
+                                    } else {
+                                        if (elevation > elevationLevels[6]) {
+                                            temperateWoodlandTrees = temperateWoodlandTreesAtElevation6;
+                                            temperateWoodlandDeadTrees = temperateWoodlandDeadTreesAtElevation6;
+                                            temperateWoodlandFlowers = temperateWoodlandFlowersAtElevation6;
+                                            temperateWoodlandMushroom = temperateWoodlandMushroomAtElevation6;
+                                            temperateWoodlandBushes = temperateWoodlandBushesAtElevation6;
+                                            temperateWoodlandBeach = temperateWoodlandBeachAtElevation6;
+                                            temperateWoodlandRocks = temperateWoodlandRocksAtElevation6;
+
+                                            mountainsTrees = new List<int>(new int[] { 29, 29, 29, 5, 11, 11, 13, 21, 25, 25, 25 });
+                                            mountainsNeedleTrees = new List<int>(new int[] { 5, 11, 11, 25, 25, 25 });
+                                            mountainsDeadTrees = new List<int>(new int[] { 16, 19, 20, 24, 30, 29 });
+                                            mountainsFlowers = new List<int>(new int[] { 7 });
+                                            mountainsRocks = new List<int>(new int[] { 1, 3, 4, 6, 9, 8, 10, 14, 17, 18, 27, 28, 31 });
+                                            mountainsGrass = new List<int>(new int[] { 7, 7, 9, 23, 23, 23, 26 });
+
+                                            woodlandHillsFlowers = new List<int>(new int[] { 7, 22, 22, 22, 22 });
+                                            woodlandHillsBushes = new List<int>(new int[] { 23, 27 });
+                                            woodlandHillsTrees = new List<int>(new int[] { 5, 11, 12, 12, 13, 14, 14, 25, 12 });
+                                            woodlandHillsNeedleTrees = new List<int>(new int[] { 12, 25, 12 });
+                                            woodlandHillsDirtPlants = new List<int>(new int[] { 22, 29, 26, 31 });
+                                        } else {
+                                            if (elevation > elevationLevels[7]) {
+                                                temperateWoodlandTrees = temperateWoodlandTreesAtElevation7;
+                                                temperateWoodlandDeadTrees = temperateWoodlandDeadTreesAtElevation7;
+                                                temperateWoodlandFlowers = temperateWoodlandFlowersAtElevation7;
+                                                temperateWoodlandMushroom = temperateWoodlandMushroomAtElevation7;
+                                                temperateWoodlandBushes = temperateWoodlandBushesAtElevation7;
+                                                temperateWoodlandBeach = temperateWoodlandBeachAtElevation7;
+                                                temperateWoodlandRocks = temperateWoodlandRocksAtElevation7;
+
+                                                mountainsTrees = new List<int>(new int[] { 29, 29, 29, 5, 11, 11, 13, 21, 25, 25, 25 });
+                                                mountainsNeedleTrees = new List<int>(new int[] { 5, 11, 11, 25, 25, 25 });
+                                                mountainsDeadTrees = new List<int>(new int[] { 16, 19, 20, 24, 30, 29 });
+                                                mountainsFlowers = new List<int>(new int[] { 7 });
+                                                mountainsRocks = new List<int>(new int[] { 1, 3, 4, 6, 9, 8, 10, 14, 17, 18, 27, 28, 31 });
+                                                mountainsGrass = new List<int>(new int[] { 7, 7, 9, 23, 23, 23, 26 });
+
+                                                woodlandHillsFlowers = new List<int>(new int[] { 7, 22, 22, 22, 22 });
+                                                woodlandHillsBushes = new List<int>(new int[] { 23, 23, 27 });
+                                                woodlandHillsTrees = new List<int>(new int[] { 5, 11, 12, 12, 13, 14, 14, 25, 12 });
+                                                woodlandHillsNeedleTrees = new List<int>(new int[] { 12, 25, 12 });
+                                                woodlandHillsDirtPlants = new List<int>(new int[] { 22, 29, 26, 31 });
+                                            } else {
+                                                if (elevation > elevationLevels[8]) {
+                                                    temperateWoodlandTrees = temperateWoodlandTreesAtElevation8;
+                                                    temperateWoodlandDeadTrees = temperateWoodlandDeadTreesAtElevation8;
+                                                    temperateWoodlandFlowers = temperateWoodlandFlowersAtElevation8;
+                                                    temperateWoodlandMushroom = temperateWoodlandMushroomAtElevation8;
+                                                    temperateWoodlandBushes = temperateWoodlandBushesAtElevation8;
+                                                    temperateWoodlandBeach = temperateWoodlandBeachAtElevation8;
+                                                    temperateWoodlandRocks = temperateWoodlandRocksAtElevation8;
+
+                                                    mountainsTrees = new List<int>(new int[] { 29, 29, 5, 11, 11, 13, 21, 25, 25 });
+                                                    mountainsNeedleTrees = new List<int>(new int[] { 5, 11, 11, 25, 25 });
+                                                    mountainsDeadTrees = new List<int>(new int[] { 16, 19, 20, 24, 30, 29 });
+                                                    mountainsFlowers = new List<int>(new int[] { 7 });
+                                                    mountainsRocks = new List<int>(new int[] { 1, 3, 4, 6, 9, 8, 10, 14, 17, 18, 27, 28, 31 });
+                                                    mountainsGrass = new List<int>(new int[] { 7, 7, 9, 23, 23, 26 });
+
+                                                    woodlandHillsFlowers = new List<int>(new int[] { 7, 22, 22, 22 });
+                                                    woodlandHillsBushes = new List<int>(new int[] { 26, 27 });
+                                                    woodlandHillsTrees = new List<int>(new int[] { 5, 11, 12, 12, 13, 14, 14, 25, 12 });
+                                                    woodlandHillsNeedleTrees = new List<int>(new int[] { 12, 25, 12 });
+                                                    woodlandHillsDirtPlants = new List<int>(new int[] { 22, 29, 26, 9, 31 });
+                                                } else {
+                                                    if (elevation > elevationLevels[9]) {
+                                                        temperateWoodlandTrees = temperateWoodlandTreesAtElevation9;
+                                                        temperateWoodlandDeadTrees = temperateWoodlandDeadTreesAtElevation9;
+                                                        temperateWoodlandFlowers = temperateWoodlandFlowersAtElevation9;
+                                                        temperateWoodlandMushroom = temperateWoodlandMushroomAtElevation9;
+                                                        temperateWoodlandBushes = temperateWoodlandBushesAtElevation9;
+                                                        temperateWoodlandBeach = temperateWoodlandBeachAtElevation9;
+                                                        temperateWoodlandRocks = temperateWoodlandRocksAtElevation9;
+
+                                                        mountainsTrees = new List<int>(new int[] { 29, 5, 11, 11, 13, 24, 21, 25, 25 });
+                                                        mountainsNeedleTrees = new List<int>(new int[] { 5, 11, 11, 25, 25, 25 });
+                                                        mountainsDeadTrees = new List<int>(new int[] { 16, 19, 20, 24, 30, 29 });
+                                                        mountainsFlowers = new List<int>(new int[] { 7 });
+                                                        mountainsRocks = new List<int>(new int[] { 1, 3, 4, 6, 9, 8, 10, 14, 17, 18, 27, 28, 31 });
+                                                        mountainsGrass = new List<int>(new int[] { 7, 7, 9, 23, 23, 26 });
+
+                                                        woodlandHillsFlowers = new List<int>(new int[] { 7, 21, 22, 22 });
+                                                        woodlandHillsBushes = new List<int>(new int[] { 27 });
+                                                        woodlandHillsTrees = new List<int>(new int[] { 5, 11, 12, 12, 13, 13, 14, 14, 16, 25, 12 });
+                                                        woodlandHillsNeedleTrees = new List<int>(new int[] { 5, 11, 12, 25, 12 });
+                                                        woodlandHillsDirtPlants = new List<int>(new int[] { 22, 29, 26, 9, 31 });
+                                                    } else {
+                                                        if (elevation > elevationLevels[10]) {
+                                                            rnd = mapStyle + Random.Range(-10f,10f);
+                                                            if (rnd <= 30)
+                                                                temperateWoodlandTrees = temperateWoodlandTreesAtElevation10A;
+                                                            if (rnd > 30)
+                                                                temperateWoodlandTrees = temperateWoodlandTreesAtElevation10B;
+                                                            if (rnd > 35)
+                                                                temperateWoodlandTrees = temperateWoodlandTreesAtElevation10C;
+                                                            if (rnd > 41)
+                                                                temperateWoodlandTrees = temperateWoodlandTreesAtElevation10D;
+                                                            if (rnd > 47)
+                                                                temperateWoodlandTrees = temperateWoodlandTreesAtElevation10E;
+                                                            if (rnd > 55)
+                                                                temperateWoodlandTrees = temperateWoodlandTreesAtElevation10F;
+                                                            temperateWoodlandDeadTrees = temperateWoodlandDeadTreesAtElevation10;
+                                                            temperateWoodlandFlowers = temperateWoodlandFlowersAtElevation10;
+                                                            temperateWoodlandMushroom = temperateWoodlandMushroomAtElevation10;
+                                                            temperateWoodlandBushes = temperateWoodlandBushesAtElevation10;
+                                                            temperateWoodlandBeach = temperateWoodlandBeachAtElevation10;
+                                                            temperateWoodlandRocks = temperateWoodlandRocksAtElevation10;
+
+                                                            mountainsTrees = new List<int>(new int[] { 5, 5, 11, 11, 11, 13, 13, 24, 24, 24, 21, 25 });
+                                                            mountainsNeedleTrees = new List<int>(new int[] { 5, 5, 11, 11, 11, 25 });
+                                                            mountainsDeadTrees = new List<int>(new int[] { 16, 19, 20, 30, 30, 29, 29 });
+                                                            mountainsFlowers = new List<int>(new int[] { 7 });
+                                                            mountainsRocks = new List<int>(new int[] { 1, 3, 4, 6, 9, 8, 10, 14, 17, 18, 27, 28, 31 });
+                                                            mountainsGrass = new List<int>(new int[] { 7, 9, 9, 23, 26, 26 });
+
+                                                            woodlandHillsFlowers = new List<int>(new int[] { 7, 21, 21, 21, 22, 22 });
+                                                            woodlandHillsBushes = new List<int>(new int[] { 23, 27, 27 });
+                                                            woodlandHillsTrees = new List<int>(new int[] { 12, 12, 13, 14, 14, 16 });
+                                                            woodlandHillsNeedleTrees = new List<int>(new int[] { 5, 5, 11, 11, 12, 25, 12 });
+                                                            woodlandHillsDirtPlants = new List<int>(new int[] { 22, 29, 26, 9, 31 });
+                                                        } else {
+                                                            if (elevation > elevationLevels[11]) {
+                                                                rnd = mapStyle + Random.Range(-10f,10f);
+                                                                if (rnd <= 30)
+                                                                temperateWoodlandTrees = temperateWoodlandTreesAtElevation11A;
+                                                                if (rnd > 30)
+                                                                    temperateWoodlandTrees = temperateWoodlandTreesAtElevation11B;
+                                                                if (rnd > 35)
+                                                                    temperateWoodlandTrees = temperateWoodlandTreesAtElevation11C;
+                                                                if (rnd > 41)
+                                                                    temperateWoodlandTrees = temperateWoodlandTreesAtElevation11D;
+                                                                if (rnd > 47)
+                                                                    temperateWoodlandTrees = temperateWoodlandTreesAtElevation11E;
+                                                                if (rnd > 55)
+                                                                    temperateWoodlandTrees = temperateWoodlandTreesAtElevation11F;
+                                                                temperateWoodlandDeadTrees = temperateWoodlandDeadTreesAtElevation11;
+                                                                temperateWoodlandFlowers = temperateWoodlandFlowersAtElevation11;
+                                                                temperateWoodlandMushroom = temperateWoodlandMushroomAtElevation11;
+                                                                temperateWoodlandBushes = temperateWoodlandBushesAtElevation11;
+                                                                temperateWoodlandBeach = temperateWoodlandBeachAtElevation11;
+                                                                temperateWoodlandRocks = temperateWoodlandRocksAtElevation11;
+
+                                                                mountainsTrees = new List<int>(new int[] { 5, 5, 11, 11, 11, 13, 13, 24, 24, 24, 21, 25 });
+                                                                mountainsNeedleTrees = new List<int>(new int[] { 5, 5, 11, 11, 11, 11, 25 });
+                                                                mountainsDeadTrees = new List<int>(new int[] { 16, 19, 20, 30, 30, 29, 29 });
+                                                                mountainsFlowers = new List<int>(new int[] { 7 });
+                                                                mountainsRocks = new List<int>(new int[] { 1, 3, 4, 6, 9, 8, 10, 14, 17, 18, 27, 28, 31 });
+                                                                mountainsGrass = new List<int>(new int[] { 7, 9, 9, 23, 26, 26 });
+
+                                                                woodlandHillsFlowers = new List<int>(new int[] { 7, 21, 22 });
+                                                                woodlandHillsBushes = new List<int>(new int[] { 27, 31 });
+                                                                woodlandHillsTrees = new List<int>(new int[] { 12, 12, 13, 13, 14, 14, 14, 16, 16 });
+                                                                woodlandHillsNeedleTrees = new List<int>(new int[] { 5, 5, 11, 11, 11, 12, 25, 12 });
+                                                                woodlandHillsDirtPlants = new List<int>(new int[] { 22, 29, 26, 9 });
+                                                            } else {
+                                                                if (elevation > elevationLevels[12]) {
+                                                                    rnd = mapStyle + Random.Range(-10f,10f);
+                                                                    if (rnd <= 30)
+                                                                        temperateWoodlandTrees = temperateWoodlandTreesAtElevation12A;
+                                                                    if (rnd > 30)
+                                                                        temperateWoodlandTrees = temperateWoodlandTreesAtElevation12B;
+                                                                    if (rnd > 35)
+                                                                        temperateWoodlandTrees = temperateWoodlandTreesAtElevation12C;
+                                                                    if (rnd > 41)
+                                                                        temperateWoodlandTrees = temperateWoodlandTreesAtElevation12D;
+                                                                    if (rnd > 47)
+                                                                        temperateWoodlandTrees = temperateWoodlandTreesAtElevation12E;
+                                                                    if (rnd > 55)
+                                                                        temperateWoodlandTrees = temperateWoodlandTreesAtElevation12F;
+                                                                    temperateWoodlandDeadTrees = temperateWoodlandDeadTreesAtElevation12;
+                                                                    temperateWoodlandFlowers = temperateWoodlandFlowersAtElevation12;
+                                                                    temperateWoodlandMushroom = temperateWoodlandMushroomAtElevation12;
+                                                                    temperateWoodlandBushes = temperateWoodlandBushesAtElevation12;
+                                                                    temperateWoodlandBeach = temperateWoodlandBeachAtElevation12;
+                                                                    temperateWoodlandRocks = temperateWoodlandRocksAtElevation12;
+
+                                                                    mountainsTrees = new List<int>(new int[] { 5, 5, 11, 11, 11, 13, 13, 24, 24, 24, 21, 25 });
+                                                                    mountainsNeedleTrees = new List<int>(new int[] { 5, 5, 11, 11, 11, 25 });
+                                                                    mountainsDeadTrees = new List<int>(new int[] { 16, 19, 20, 30, 30, 29, 29 });
+                                                                    mountainsFlowers = new List<int>(new int[] { 7 });
+                                                                    mountainsRocks = new List<int>(new int[] { 1, 3, 4, 6, 9, 8, 10, 14, 17, 18, 27, 28, 31 });
+                                                                    mountainsGrass = new List<int>(new int[] { 7, 9, 9, 23, 26, 26 });
+
+                                                                    woodlandHillsFlowers = new List<int>(new int[] { 7, 21, 21, 21 });
+                                                                    woodlandHillsBushes = new List<int>(new int[] { 27, 27 });
+                                                                    woodlandHillsTrees = new List<int>(new int[] { 12, 13, 13, 13, 14, 14, 14, 16, 16 });
+                                                                    woodlandHillsNeedleTrees = new List<int>(new int[] { 5, 5, 11, 11, 12 });
+                                                                    woodlandHillsDirtPlants = new List<int>(new int[] { 22, 29, 26, 9, 31 });
+                                                                } else {
+                                                                    if (elevation > elevationLevels[13]) {
+                                                                        rnd = mapStyle + Random.Range(-10f,10f);
+                                                                        if (rnd <= 30)
+                                                                            temperateWoodlandTrees = temperateWoodlandTreesAtElevation13A;
+                                                                        if (rnd > 30)
+                                                                            temperateWoodlandTrees = temperateWoodlandTreesAtElevation13B;
+                                                                        if (rnd > 35)
+                                                                            temperateWoodlandTrees = temperateWoodlandTreesAtElevation13C;
+                                                                        if (rnd > 41)
+                                                                            temperateWoodlandTrees = temperateWoodlandTreesAtElevation13D;
+                                                                        if (rnd > 47)
+                                                                            temperateWoodlandTrees = temperateWoodlandTreesAtElevation13E;
+                                                                        if (rnd > 55)
+                                                                            temperateWoodlandTrees = temperateWoodlandTreesAtElevation13F;
+                                                                        temperateWoodlandDeadTrees = temperateWoodlandDeadTreesAtElevation13;
+                                                                        temperateWoodlandFlowers = temperateWoodlandFlowersAtElevation13;
+                                                                        temperateWoodlandMushroom = temperateWoodlandMushroomAtElevation13;
+                                                                        temperateWoodlandBushes = temperateWoodlandBushesAtElevation13;
+                                                                        temperateWoodlandBeach = temperateWoodlandBeachAtElevation13;
+                                                                        temperateWoodlandRocks = temperateWoodlandRocksAtElevation13;
+
+                                                                        mountainsTrees = new List<int>(new int[] { 5, 5, 11, 11, 11, 13, 13, 24, 24, 24, 21, 25 });
+                                                                        mountainsNeedleTrees = new List<int>(new int[] { 5, 5, 11, 11, 11, 11, 25 });
+                                                                        mountainsDeadTrees = new List<int>(new int[] { 16, 19, 20, 30, 30, 29, 29 });
+                                                                        mountainsFlowers = new List<int>(new int[] { 7 });
+                                                                        mountainsRocks = new List<int>(new int[] { 1, 3, 4, 6, 9, 8, 10, 14, 17, 18, 27, 28, 31 });
+                                                                        mountainsGrass = new List<int>(new int[] { 7, 9, 9, 9, 23, 26, 26, 26 });
+
+                                                                        woodlandHillsFlowers = new List<int>(new int[] { 7, 21, 21 });
+                                                                        woodlandHillsBushes = new List<int>(new int[] { 27, 27, 27, 31 });
+                                                                        woodlandHillsTrees = new List<int>(new int[] { 13, 14, 14, 14, 16 });
+                                                                        woodlandHillsNeedleTrees = new List<int>(new int[] { 5, 11, 11 });
+                                                                        woodlandHillsDirtPlants = new List<int>(new int[] { 22, 29, 26, 9 });
+                                                                    } else {
+                                                                        rnd = mapStyle + Random.Range(-15f,15f);
+                                                                        if (rnd <= 30)
+                                                                            temperateWoodlandTrees = temperateWoodlandTreesAtElevation14A;
+                                                                        if (rnd > 30)
+                                                                            temperateWoodlandTrees = temperateWoodlandTreesAtElevation14B;
+                                                                        if (rnd > 42)
+                                                                            temperateWoodlandTrees = temperateWoodlandTreesAtElevation14C;
+                                                                        if (rnd > 55)
+                                                                            temperateWoodlandTrees = temperateWoodlandTreesAtElevation14D;
+                                                                        temperateWoodlandDeadTrees = temperateWoodlandDeadTreesAtElevation14;
+                                                                        temperateWoodlandFlowers = temperateWoodlandFlowersAtElevation14;
+                                                                        temperateWoodlandMushroom = temperateWoodlandMushroomAtElevation14;
+                                                                        temperateWoodlandBushes = temperateWoodlandBushesAtElevation14;
+                                                                        temperateWoodlandBeach = temperateWoodlandBeachAtElevation14;
+                                                                        temperateWoodlandRocks = temperateWoodlandRocksAtElevation14;
+
+                                                                        mountainsTrees = new List<int>(new int[] { 5, 5, 23, 23, 11, 11, 11, 13, 13, 24, 24, 24, 21, 25 });
+                                                                        mountainsNeedleTrees = new List<int>(new int[] { 5, 5, 11, 11, 11, 25 });
+                                                                        mountainsDeadTrees = new List<int>(new int[] { 16, 19, 20, 30, 30, 29, 29 });
+                                                                        mountainsFlowers = new List<int>(new int[] { 7 });
+                                                                        mountainsRocks = new List<int>(new int[] { 1, 3, 4, 6, 9, 8, 10, 14, 17, 18, 27, 28, 31 });
+                                                                        mountainsBeach = new List<int>(new int[] { 8, 26, 29, 7, 7, 7, 23, 23 });
+                                                                        mountainsGrass = new List<int>(new int[] { 7, 9, 9, 9, 23, 26, 26, 26 });
+
+                                                                        woodlandHillsFlowers = new List<int>(new int[] { 7, 7, 9, 9, 21, 26, 26 });
+                                                                        woodlandHillsBushes = new List<int>(new int[] { 27, 27, 31 });
+                                                                        woodlandHillsTrees = new List<int>(new int[] { 13, 13, 14, 16, 16 });
+                                                                        woodlandHillsNeedleTrees = new List<int>(new int[] { 5, 11, 11 });
+                                                                        woodlandHillsDirtPlants = new List<int>(new int[] { 22, 29, 26, 9 });
+                                                                    }
+                                                                }
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
                 }
-                else
-                {
+            } else {
+                if (elevation > elevationLevels[0]) {
+                    temperateWoodlandTrees = temperateWoodlandTreesAtElevation0;
+                    temperateWoodlandDeadTrees = temperateWoodlandDeadTreesAtElevation0;
+                    temperateWoodlandFlowers = temperateWoodlandFlowersAtElevation0;
+                    temperateWoodlandMushroom = temperateWoodlandMushroomAtElevation0;
+                    temperateWoodlandBushes = temperateWoodlandBushesAtElevation0;
+                    temperateWoodlandBeach = temperateWoodlandBeachAtElevation0;
+                    temperateWoodlandRocks = temperateWoodlandRocksAtElevation0;
+
                     mountainsTrees = new List<int>(new int[] { 22 });
                     mountainsNeedleTrees = new List<int>(new int[] { 12, 25, 30, 12, 25, 30 });
                     mountainsDeadTrees = new List<int>(new int[] { 19, 20, 24, 26, 29 });
@@ -117,642 +661,382 @@ namespace WildernessOverhaul
                     woodlandHillsTrees = new List<int>(new int[] { 5, 11, 12, 12, 13, 14, 15, 25, 30 });
                     woodlandHillsNeedleTrees = new List<int>(new int[] { 12, 25, 30 });
                     woodlandHillsDirtPlants = new List<int>(new int[] { 26, 29, 23, 31 });
-                }
-            }
+                } else {
+                    if (elevation > elevationLevels[1]) {
+                        temperateWoodlandTrees = temperateWoodlandTreesAtElevation1;
+                        temperateWoodlandDeadTrees = temperateWoodlandDeadTreesAtElevation1;
+                        temperateWoodlandFlowers = temperateWoodlandFlowersAtElevation1;
+                        temperateWoodlandMushroom = temperateWoodlandMushroomAtElevation1;
+                        temperateWoodlandBushes = temperateWoodlandBushesAtElevation1;
+                        temperateWoodlandBeach = temperateWoodlandBeachAtElevation1;
+                        temperateWoodlandRocks = temperateWoodlandRocksAtElevation1;
 
-            else if (elevation <= elevationLevels[0] && elevation > elevationLevels[1])
-            {
-                temperateWoodlandTrees = new List<int>(new int[] { 13, 14, 15, 17, 18, 25, 25, 25 });
-                temperateWoodlandDeadTrees = new List<int>(new int[] { 19, 20, 24, 25, 25, 25, 29, 30, 31 });
-                temperateWoodlandFlowers = new List<int>(new int[] { 21, 22 });
-                temperateWoodlandMushroom = new List<int>(new int[] { 7, 23 });
-                temperateWoodlandBushes = new List<int>(new int[] { 1, 1, 1, 27, 28 });
-                temperateWoodlandBeach = new List<int>(new int[] { 31, 3, 3, 4, 4, 5, 5, 6, 29 });
-                temperateWoodlandRocks = new List<int>(new int[] { 3, 4, 5, 6, 8, 10, 26 });
+                        mountainsTrees = new List<int>(new int[] { 22, 22, 22, 22, 22, 22, 22, 22, 22, 22, 12, 25, 30 });
+                        mountainsNeedleTrees = new List<int>(new int[] { 12, 25, 30, 12, 25, 30 });
+                        mountainsDeadTrees = new List<int>(new int[] { 19, 20, 24, 26, 29 });
+                        mountainsFlowers = new List<int>(new int[] { 22 });
+                        mountainsRocks = new List<int>(new int[] { 1, 3, 4, 6, 7, 8, 10, 14, 17, 18, 27, 28, 31 });
+                        mountainsGrass = new List<int>(new int[] { 2, 2, 2, 7, 23 });
 
-                if (season == DaggerfallDateTime.Seasons.Winter)
-                {
-                    mountainsTrees = new List<int>(new int[] { 29, 29, 29, 29, 29, 29, 29, 29, 29, 29, 11, 25, 25 });
-                    mountainsNeedleTrees = new List<int>(new int[] { 11, 25, 25 });
-                    mountainsDeadTrees = new List<int>(new int[] { 19, 20, 24, 30, 29 });
-                    mountainsFlowers = new List<int>(new int[] { 7 });
-                    mountainsRocks = new List<int>(new int[] { 1, 3, 4, 6, 9, 8, 10, 14, 17, 18, 27, 28, 31 });
-                    mountainsGrass = new List<int>(new int[] { 7, 7, 7, 9, 26 });
+                        woodlandHillsFlowers = new List<int>(new int[] { 2, 22, 22, 22, 22 });
+                        woodlandHillsBushes = new List<int>(new int[] { 9, 27 });
+                        woodlandHillsTrees = new List<int>(new int[] { 5, 11, 12, 12, 13, 14, 15, 25, 30 });
+                        woodlandHillsNeedleTrees = new List<int>(new int[] { 12, 25, 30 });
+                        woodlandHillsDirtPlants = new List<int>(new int[] { 26, 29, 23, 31 });
+                    } else {
+                        if (elevation > elevationLevels[2]) {
+                            temperateWoodlandTrees = temperateWoodlandTreesAtElevation2;
+                            temperateWoodlandDeadTrees = temperateWoodlandDeadTreesAtElevation2;
+                            temperateWoodlandFlowers = temperateWoodlandFlowersAtElevation2;
+                            temperateWoodlandMushroom = temperateWoodlandMushroomAtElevation2;
+                            temperateWoodlandBushes = temperateWoodlandBushesAtElevation2;
+                            temperateWoodlandBeach = temperateWoodlandBeachAtElevation2;
+                            temperateWoodlandRocks = temperateWoodlandRocksAtElevation2;
 
-                    woodlandHillsFlowers = new List<int>(new int[] { 7, 22, 22, 22, 22 });
-                    woodlandHillsBushes = new List<int>(new int[] { 23, 27 });
-                    woodlandHillsTrees = new List<int>(new int[] { 5, 11, 12, 12, 13, 14, 14, 25, 12 });
-                    woodlandHillsNeedleTrees = new List<int>(new int[] { 12, 25, 12 });
-                    woodlandHillsDirtPlants = new List<int>(new int[] { 22, 29, 26, 31 });
-                }
-                else
-                {
-                    mountainsTrees = new List<int>(new int[] { 22, 22, 22, 22, 22, 22, 22, 22, 22, 22, 12, 25, 30 });
-                    mountainsNeedleTrees = new List<int>(new int[] { 12, 25, 30, 12, 25, 30 });
-                    mountainsDeadTrees = new List<int>(new int[] { 19, 20, 24, 26, 29 });
-                    mountainsFlowers = new List<int>(new int[] { 22 });
-                    mountainsRocks = new List<int>(new int[] { 1, 3, 4, 6, 7, 8, 10, 14, 17, 18, 27, 28, 31 });
-                    mountainsGrass = new List<int>(new int[] { 2, 2, 2, 7, 23 });
+                            mountainsTrees = new List<int>(new int[] { 22, 22, 22, 22, 22, 22, 22, 22, 22, 22, 12, 12, 25, 25, 30, 30 });
+                            mountainsNeedleTrees = new List<int>(new int[] { 12, 25, 30, 12, 25, 30 });
+                            mountainsDeadTrees = new List<int>(new int[] { 19, 20, 24, 26, 29 });
+                            mountainsFlowers = new List<int>(new int[] { 22 });
+                            mountainsRocks = new List<int>(new int[] { 1, 3, 4, 6, 7, 8, 10, 14, 17, 18, 27, 28, 31 });
+                            mountainsGrass = new List<int>(new int[] { 2, 2, 2, 7, 9, 23 });
 
-                    woodlandHillsFlowers = new List<int>(new int[] { 2, 22, 22, 22, 22 });
-                    woodlandHillsBushes = new List<int>(new int[] { 9, 27 });
-                    woodlandHillsTrees = new List<int>(new int[] { 5, 11, 12, 12, 13, 14, 15, 25, 30 });
-                    woodlandHillsNeedleTrees = new List<int>(new int[] { 12, 25, 30 });
-                    woodlandHillsDirtPlants = new List<int>(new int[] { 26, 29, 23, 31 });
-                }
-            }
-            else if (elevation <= elevationLevels[1] && elevation > elevationLevels[2])
-            {
-                temperateWoodlandTrees = new List<int>(new int[] { 13, 14, 15, 17, 18, 25, 25, 25 });
-                temperateWoodlandDeadTrees = new List<int>(new int[] { 19, 20, 24, 25, 25, 25, 29, 30, 31 });
-                temperateWoodlandFlowers = new List<int>(new int[] { 21, 22 });
-                temperateWoodlandMushroom = new List<int>(new int[] { 7, 23 });
-                temperateWoodlandBushes = new List<int>(new int[] { 1, 1, 1, 27, 28 });
-                temperateWoodlandBeach = new List<int>(new int[] { 31, 3, 3, 4, 4, 5, 5, 6, 29 });
-                temperateWoodlandRocks = new List<int>(new int[] { 3, 4, 5, 6, 8, 10, 26 });
+                            woodlandHillsFlowers = new List<int>(new int[] { 2, 22, 22, 22, 22 });
+                            woodlandHillsBushes = new List<int>(new int[] { 9, 27 });
+                            woodlandHillsTrees = new List<int>(new int[] { 5, 11, 12, 12, 13, 14, 15, 25, 30 });
+                            woodlandHillsNeedleTrees = new List<int>(new int[] { 12, 25, 30 });
+                            woodlandHillsDirtPlants = new List<int>(new int[] { 26, 29, 23, 31 });
+                        } else {
+                            if (elevation > elevationLevels[3]) {
+                                temperateWoodlandTrees = temperateWoodlandTreesAtElevation3;
+                                temperateWoodlandDeadTrees = temperateWoodlandDeadTreesAtElevation3;
+                                temperateWoodlandFlowers = temperateWoodlandFlowersAtElevation3;
+                                temperateWoodlandMushroom = temperateWoodlandMushroomAtElevation3;
+                                temperateWoodlandBushes = temperateWoodlandBushesAtElevation3;
+                                temperateWoodlandBeach = temperateWoodlandBeachAtElevation3;
+                                temperateWoodlandRocks = temperateWoodlandRocksAtElevation3;
 
-                if (season == DaggerfallDateTime.Seasons.Winter)
-                {
-                    mountainsTrees = new List<int>(new int[] { 29, 29, 29, 29, 29, 29, 29, 11, 25, 25, 25 });
-                    mountainsNeedleTrees = new List<int>(new int[] { 11, 25, 25 });
-                    mountainsDeadTrees = new List<int>(new int[] { 19, 20, 24, 30, 29 });
-                    mountainsFlowers = new List<int>(new int[] { 7 });
-                    mountainsRocks = new List<int>(new int[] { 1, 3, 4, 6, 9, 8, 10, 14, 17, 18, 27, 28, 31 });
-                    mountainsGrass = new List<int>(new int[] { 7, 7, 7, 9, 23, 26 });
+                                mountainsTrees = new List<int>(new int[] { 22, 22, 22, 22, 22, 22, 22, 22, 12, 12, 25, 25, 30, 30 });
+                                mountainsNeedleTrees = new List<int>(new int[] { 12, 25, 30, 12, 25, 30 });
+                                mountainsDeadTrees = new List<int>(new int[] { 19, 20, 24, 26, 29 });
+                                mountainsFlowers = new List<int>(new int[] { 22 });
+                                mountainsRocks = new List<int>(new int[] { 1, 3, 4, 6, 7, 8, 10, 14, 17, 18, 27, 28, 31 });
+                                mountainsGrass = new List<int>(new int[] { 2, 2, 2, 7, 9, 23 });
 
-                    woodlandHillsFlowers = new List<int>(new int[] { 7, 22, 22, 22, 22 });
-                    woodlandHillsBushes = new List<int>(new int[] { 23, 27 });
-                    woodlandHillsTrees = new List<int>(new int[] { 5, 11, 12, 12, 13, 14, 14, 25, 12 });
-                    woodlandHillsNeedleTrees = new List<int>(new int[] { 12, 25, 12 });
-                    woodlandHillsDirtPlants = new List<int>(new int[] { 22, 29, 26, 31 });
-                }
-                else
-                {
-                    mountainsTrees = new List<int>(new int[] { 22, 22, 22, 22, 22, 22, 22, 22, 22, 22, 12, 12, 25, 25, 30, 30 });
-                    mountainsNeedleTrees = new List<int>(new int[] { 12, 25, 30, 12, 25, 30 });
-                    mountainsDeadTrees = new List<int>(new int[] { 19, 20, 24, 26, 29 });
-                    mountainsFlowers = new List<int>(new int[] { 22 });
-                    mountainsRocks = new List<int>(new int[] { 1, 3, 4, 6, 7, 8, 10, 14, 17, 18, 27, 28, 31 });
-                    mountainsGrass = new List<int>(new int[] { 2, 2, 2, 7, 9, 23 });
+                                woodlandHillsFlowers = new List<int>(new int[] { 2, 22, 22, 22, 22 });
+                                woodlandHillsBushes = new List<int>(new int[] { 9, 27 });
+                                woodlandHillsTrees = new List<int>(new int[] { 5, 11, 12, 12, 13, 14, 15, 25, 30 });
+                                woodlandHillsNeedleTrees = new List<int>(new int[] { 12, 25, 30 });
+                                woodlandHillsDirtPlants = new List<int>(new int[] { 26, 29, 23, 31 });
+                            } else {
+                                if (elevation > elevationLevels[4]) {
+                                    temperateWoodlandTrees = temperateWoodlandTreesAtElevation4;
+                                    temperateWoodlandDeadTrees = temperateWoodlandDeadTreesAtElevation4;
+                                    temperateWoodlandFlowers = temperateWoodlandFlowersAtElevation4;
+                                    temperateWoodlandMushroom = temperateWoodlandMushroomAtElevation4;
+                                    temperateWoodlandBushes = temperateWoodlandBushesAtElevation4;
+                                    temperateWoodlandBeach = temperateWoodlandBeachAtElevation4;
+                                    temperateWoodlandRocks = temperateWoodlandRocksAtElevation4;
 
-                    woodlandHillsFlowers = new List<int>(new int[] { 2, 22, 22, 22, 22 });
-                    woodlandHillsBushes = new List<int>(new int[] { 9, 27 });
-                    woodlandHillsTrees = new List<int>(new int[] { 5, 11, 12, 12, 13, 14, 15, 25, 30 });
-                    woodlandHillsNeedleTrees = new List<int>(new int[] { 12, 25, 30 });
-                    woodlandHillsDirtPlants = new List<int>(new int[] { 26, 29, 23, 31 });
-                }
-            }
-            else if (elevation <= elevationLevels[2] && elevation > elevationLevels[3])
-            {
-                temperateWoodlandTrees = new List<int>(new int[] { 13, 14, 15, 17, 18, 25, 25, 25 });
-                temperateWoodlandDeadTrees = new List<int>(new int[] { 19, 20, 24, 25, 25, 25, 29, 30, 31 });
-                temperateWoodlandFlowers = new List<int>(new int[] { 21, 22 });
-                temperateWoodlandMushroom = new List<int>(new int[] { 7, 23 });
-                temperateWoodlandBushes = new List<int>(new int[] { 1, 1, 1, 27, 28 });
-                temperateWoodlandBeach = new List<int>(new int[] { 31, 3, 3, 4, 4, 5, 5, 6, 29 });
-                temperateWoodlandRocks = new List<int>(new int[] { 3, 4, 5, 6, 8, 10, 26 });
+                                    mountainsTrees = new List<int>(new int[] { 22, 22, 22, 22, 22, 22, 22, 5, 11, 12, 12, 25, 25, 30, 30 });
+                                    mountainsNeedleTrees = new List<int>(new int[] { 5, 11, 12, 25, 30, 12, 25, 30 });
+                                    mountainsDeadTrees = new List<int>(new int[] { 19, 20, 24, 26, 29 });
+                                    mountainsFlowers = new List<int>(new int[] { 22 });
+                                    mountainsRocks = new List<int>(new int[] { 1, 3, 4, 6, 7, 8, 10, 14, 17, 18, 27, 28, 31 });
+                                    mountainsGrass = new List<int>(new int[] { 2, 2, 2, 7, 9, 23 });
 
-                if (season == DaggerfallDateTime.Seasons.Winter)
-                {
-                    mountainsTrees = new List<int>(new int[] { 29, 29, 29, 29, 29, 29, 29, 11, 25, 25 });
-                    mountainsNeedleTrees = new List<int>(new int[] { 11, 25, 25 });
-                    mountainsDeadTrees = new List<int>(new int[] { 19, 20, 24, 30, 29 });
-                    mountainsFlowers = new List<int>(new int[] { 7 });
-                    mountainsRocks = new List<int>(new int[] { 1, 3, 4, 6, 9, 8, 10, 14, 17, 18, 27, 28, 31 });
-                    mountainsGrass = new List<int>(new int[] { 7, 7, 7, 9, 23, 26 });
+                                    woodlandHillsFlowers = new List<int>(new int[] { 2, 22, 22, 22, 22 });
+                                    woodlandHillsBushes = new List<int>(new int[] { 9, 27 });
+                                    woodlandHillsTrees = new List<int>(new int[] { 5, 11, 12, 12, 13, 14, 15, 25, 30 });
+                                    woodlandHillsNeedleTrees = new List<int>(new int[] { 12, 25, 30 });
+                                    woodlandHillsDirtPlants = new List<int>(new int[] { 26, 29, 23, 31 });
+                                } else {
+                                    if (elevation > elevationLevels[5]) {
+                                        temperateWoodlandTrees = temperateWoodlandTreesAtElevation5;
+                                        temperateWoodlandDeadTrees = temperateWoodlandDeadTreesAtElevation5;
+                                        temperateWoodlandFlowers = temperateWoodlandFlowersAtElevation5;
+                                        temperateWoodlandMushroom = temperateWoodlandMushroomAtElevation5;
+                                        temperateWoodlandBushes = temperateWoodlandBushesAtElevation5;
+                                        temperateWoodlandBeach = temperateWoodlandBeachAtElevation5;
+                                        temperateWoodlandRocks = temperateWoodlandRocksAtElevation5;
 
-                    woodlandHillsFlowers = new List<int>(new int[] { 7, 22, 22, 22, 22 });
-                    woodlandHillsBushes = new List<int>(new int[] { 23, 27 });
-                    woodlandHillsTrees = new List<int>(new int[] { 5, 11, 12, 12, 13, 14, 14, 25, 12 });
-                    woodlandHillsNeedleTrees = new List<int>(new int[] { 12, 25, 12 });
-                    woodlandHillsDirtPlants = new List<int>(new int[] { 22, 29, 26, 31 });
-                }
-                else
-                {
-                    mountainsTrees = new List<int>(new int[] { 22, 22, 22, 22, 22, 22, 22, 22, 12, 12, 25, 25, 30, 30 });
-                    mountainsNeedleTrees = new List<int>(new int[] { 12, 25, 30, 12, 25, 30 });
-                    mountainsDeadTrees = new List<int>(new int[] { 19, 20, 24, 26, 29 });
-                    mountainsFlowers = new List<int>(new int[] { 22 });
-                    mountainsRocks = new List<int>(new int[] { 1, 3, 4, 6, 7, 8, 10, 14, 17, 18, 27, 28, 31 });
-                    mountainsGrass = new List<int>(new int[] { 2, 2, 2, 7, 9, 23 });
+                                        mountainsTrees = new List<int>(new int[] { 22, 22, 22, 22, 22, 5, 11, 12, 13, 21, 25, 25, 30, 30 });
+                                        mountainsNeedleTrees = new List<int>(new int[] { 5, 11, 12, 12, 25, 25, 30, 30 });
+                                        mountainsDeadTrees = new List<int>(new int[] { 16, 19, 20, 24, 26, 29 });
+                                        mountainsFlowers = new List<int>(new int[] { 22 });
+                                        mountainsRocks = new List<int>(new int[] { 1, 3, 4, 6, 7, 8, 10, 14, 17, 18, 27, 28, 31 });
+                                        mountainsGrass = new List<int>(new int[] { 2, 2, 7, 9, 9, 9, 23 });
 
-                    woodlandHillsFlowers = new List<int>(new int[] { 2, 22, 22, 22, 22 });
-                    woodlandHillsBushes = new List<int>(new int[] { 9, 27 });
-                    woodlandHillsTrees = new List<int>(new int[] { 5, 11, 12, 12, 13, 14, 15, 25, 30 });
-                    woodlandHillsNeedleTrees = new List<int>(new int[] { 12, 25, 30 });
-                    woodlandHillsDirtPlants = new List<int>(new int[] { 26, 29, 23, 31 });
-                }
-            }
-            else if (elevation <= elevationLevels[3] && elevation > elevationLevels[4])
-            {
-                temperateWoodlandTrees = new List<int>(new int[] { 13, 14, 15, 17, 18, 25, 25, 25 });
-                temperateWoodlandDeadTrees = new List<int>(new int[] { 19, 20, 24, 25, 25, 25, 29, 30, 31 });
-                temperateWoodlandFlowers = new List<int>(new int[] { 21, 22 });
-                temperateWoodlandMushroom = new List<int>(new int[] { 7, 23 });
-                temperateWoodlandBushes = new List<int>(new int[] { 1, 1, 1, 27, 28 });
-                temperateWoodlandBeach = new List<int>(new int[] { 31, 3, 3, 4, 4, 5, 5, 6, 29 });
-                temperateWoodlandRocks = new List<int>(new int[] { 3, 4, 5, 6, 8, 10, 26 });
+                                        woodlandHillsFlowers = new List<int>(new int[] { 2, 22, 22, 22, 22 });
+                                        woodlandHillsBushes = new List<int>(new int[] { 9, 27 });
+                                        woodlandHillsTrees = new List<int>(new int[] { 5, 11, 12, 12, 13, 14, 15, 25, 30 });
+                                        woodlandHillsNeedleTrees = new List<int>(new int[] { 12, 25, 30 });
+                                        woodlandHillsDirtPlants = new List<int>(new int[] { 26, 29, 23, 31 });
+                                    } else {
+                                        if (elevation > elevationLevels[6]) {
+                                            temperateWoodlandTrees = temperateWoodlandTreesAtElevation6;
+                                            temperateWoodlandDeadTrees = temperateWoodlandDeadTreesAtElevation6;
+                                            temperateWoodlandFlowers = temperateWoodlandFlowersAtElevation6;
+                                            temperateWoodlandMushroom = temperateWoodlandMushroomAtElevation6;
+                                            temperateWoodlandBushes = temperateWoodlandBushesAtElevation6;
+                                            temperateWoodlandBeach = temperateWoodlandBeachAtElevation6;
+                                            temperateWoodlandRocks = temperateWoodlandRocksAtElevation6;
 
-                if (season == DaggerfallDateTime.Seasons.Winter)
-                {
-                    mountainsTrees = new List<int>(new int[] { 29, 29, 29, 29, 29, 5, 11, 25, 25 });
-                    mountainsNeedleTrees = new List<int>(new int[] { 5, 11, 11, 25, 25, 25 });
-                    mountainsDeadTrees = new List<int>(new int[] { 19, 20, 24, 30, 29 });
-                    mountainsFlowers = new List<int>(new int[] { 7 });
-                    mountainsRocks = new List<int>(new int[] { 1, 3, 4, 6, 9, 8, 10, 14, 17, 18, 27, 28, 31 });
-                    mountainsGrass = new List<int>(new int[] { 7, 7, 7, 9, 23, 26 });
+                                            mountainsTrees = new List<int>(new int[] { 22, 22, 22, 22, 5, 11, 12, 13, 21, 25, 25, 30, 30 });
+                                            mountainsNeedleTrees = new List<int>(new int[] { 5, 11, 12, 12, 25, 25, 30, 30 });
+                                            mountainsDeadTrees = new List<int>(new int[] { 16, 19, 20, 24, 26, 29 });
+                                            mountainsFlowers = new List<int>(new int[] { 22 });
+                                            mountainsRocks = new List<int>(new int[] { 1, 3, 4, 6, 7, 8, 10, 14, 17, 18, 27, 28, 31 });
+                                            mountainsGrass = new List<int>(new int[] { 2, 2, 7, 9, 9, 9, 23 });
 
-                    woodlandHillsFlowers = new List<int>(new int[] { 7, 22, 22, 22, 22 });
-                    woodlandHillsBushes = new List<int>(new int[] { 23, 27 });
-                    woodlandHillsTrees = new List<int>(new int[] { 5, 11, 12, 12, 13, 14, 14, 25, 12 });
-                    woodlandHillsNeedleTrees = new List<int>(new int[] { 12, 25, 12 });
-                    woodlandHillsDirtPlants = new List<int>(new int[] { 22, 29, 26, 31 });
-                }
-                else
-                {
-                    mountainsTrees = new List<int>(new int[] { 22, 22, 22, 22, 22, 22, 22, 5, 11, 12, 12, 25, 25, 30, 30 });
-                    mountainsNeedleTrees = new List<int>(new int[] { 5, 11, 12, 25, 30, 12, 25, 30 });
-                    mountainsDeadTrees = new List<int>(new int[] { 19, 20, 24, 26, 29 });
-                    mountainsFlowers = new List<int>(new int[] { 22 });
-                    mountainsRocks = new List<int>(new int[] { 1, 3, 4, 6, 7, 8, 10, 14, 17, 18, 27, 28, 31 });
-                    mountainsGrass = new List<int>(new int[] { 2, 2, 2, 7, 9, 23 });
+                                            woodlandHillsFlowers = new List<int>(new int[] { 2, 22, 22, 22, 22 });
+                                            woodlandHillsBushes = new List<int>(new int[] { 9, 27 });
+                                            woodlandHillsTrees = new List<int>(new int[] { 5, 11, 12, 12, 13, 14, 15, 25, 30 });
+                                            woodlandHillsNeedleTrees = new List<int>(new int[] { 12, 25, 30 });
+                                            woodlandHillsDirtPlants = new List<int>(new int[] { 26, 29, 23, 31 });
+                                        } else {
+                                            if (elevation > elevationLevels[7]) {
+                                                temperateWoodlandTrees = temperateWoodlandTreesAtElevation7;
+                                                temperateWoodlandDeadTrees = temperateWoodlandDeadTreesAtElevation7;
+                                                temperateWoodlandFlowers = temperateWoodlandFlowersAtElevation7;
+                                                temperateWoodlandMushroom = temperateWoodlandMushroomAtElevation7;
+                                                temperateWoodlandBushes = temperateWoodlandBushesAtElevation7;
+                                                temperateWoodlandBeach = temperateWoodlandBeachAtElevation7;
+                                                temperateWoodlandRocks = temperateWoodlandRocksAtElevation7;
 
-                    woodlandHillsFlowers = new List<int>(new int[] { 2, 22, 22, 22, 22 });
-                    woodlandHillsBushes = new List<int>(new int[] { 9, 27 });
-                    woodlandHillsTrees = new List<int>(new int[] { 5, 11, 12, 12, 13, 14, 15, 25, 30 });
-                    woodlandHillsNeedleTrees = new List<int>(new int[] { 12, 25, 30 });
-                    woodlandHillsDirtPlants = new List<int>(new int[] { 26, 29, 23, 31 });
-                }
-            }
-            else if (elevation <= elevationLevels[4] && elevation > elevationLevels[5])
-            {
-                temperateWoodlandTrees = new List<int>(new int[] { 13, 14, 15, 17, 18, 25, 25, 25 });
-                temperateWoodlandDeadTrees = new List<int>(new int[] { 19, 20, 24, 25, 25, 25, 29, 30, 31 });
-                temperateWoodlandFlowers = new List<int>(new int[] { 21, 22 });
-                temperateWoodlandMushroom = new List<int>(new int[] { 7, 23 });
-                temperateWoodlandBushes = new List<int>(new int[] { 1, 1, 1, 27, 28 });
-                temperateWoodlandBeach = new List<int>(new int[] { 31, 3, 3, 4, 4, 5, 5, 6, 29 });
-                temperateWoodlandRocks = new List<int>(new int[] { 3, 4, 5, 6, 8, 10, 26 });
+                                                mountainsTrees = new List<int>(new int[] { 22, 22, 22, 5, 11, 12, 13, 21, 25, 25, 30, 30 });
+                                                mountainsNeedleTrees = new List<int>(new int[] { 5, 11, 12, 12, 25, 25, 30, 30 });
+                                                mountainsDeadTrees = new List<int>(new int[] { 16, 19, 20, 24, 26, 29 });
+                                                mountainsFlowers = new List<int>(new int[] { 22 });
+                                                mountainsRocks = new List<int>(new int[] { 1, 3, 4, 6, 7, 8, 10, 14, 17, 18, 27, 28, 31 });
+                                                mountainsGrass = new List<int>(new int[] { 2, 2, 7, 9, 9, 9, 23 });
 
-                if (season == DaggerfallDateTime.Seasons.Winter)
-                {
-                    mountainsTrees = new List<int>(new int[] { 29, 29, 29, 29, 29, 5, 11, 13, 21, 25, 25, 25 });
-                    mountainsNeedleTrees = new List<int>(new int[] { 5, 11, 11, 25, 25, 25 });
-                    mountainsDeadTrees = new List<int>(new int[] { 16, 19, 20, 24, 30, 29 });
-                    mountainsFlowers = new List<int>(new int[] { 7 });
-                    mountainsRocks = new List<int>(new int[] { 1, 3, 4, 6, 9, 8, 10, 14, 17, 18, 27, 28, 31 });
-                    mountainsGrass = new List<int>(new int[] { 7, 7, 9, 23, 23, 23, 26 });
+                                                woodlandHillsFlowers = new List<int>(new int[] { 2, 22, 22, 22, 22 });
+                                                woodlandHillsBushes = new List<int>(new int[] { 9, 9, 27 });
+                                                woodlandHillsTrees = new List<int>(new int[] { 5, 11, 12, 12, 13, 14, 15, 25, 30 });
+                                                woodlandHillsNeedleTrees = new List<int>(new int[] { 12, 25, 30 });
+                                                woodlandHillsDirtPlants = new List<int>(new int[] { 26, 29, 23, 31 });
+                                            } else {
+                                                if (elevation > elevationLevels[8]) {
+                                                    temperateWoodlandTrees = temperateWoodlandTreesAtElevation8;
+                                                    temperateWoodlandDeadTrees = temperateWoodlandDeadTreesAtElevation8;
+                                                    temperateWoodlandFlowers = temperateWoodlandFlowersAtElevation8;
+                                                    temperateWoodlandMushroom = temperateWoodlandMushroomAtElevation8;
+                                                    temperateWoodlandBushes = temperateWoodlandBushesAtElevation8;
+                                                    temperateWoodlandBeach = temperateWoodlandBeachAtElevation8;
+                                                    temperateWoodlandRocks = temperateWoodlandRocksAtElevation8;
 
-                    woodlandHillsFlowers = new List<int>(new int[] { 7, 22, 22, 22, 22 });
-                    woodlandHillsBushes = new List<int>(new int[] { 23, 27 });
-                    woodlandHillsTrees = new List<int>(new int[] { 5, 11, 12, 12, 13, 14, 14, 25, 12 });
-                    woodlandHillsNeedleTrees = new List<int>(new int[] { 12, 25, 12 });
-                    woodlandHillsDirtPlants = new List<int>(new int[] { 22, 29, 26, 31 });
-                }
-                else
-                {
-                    mountainsTrees = new List<int>(new int[] { 22, 22, 22, 22, 22, 5, 11, 12, 13, 21, 25, 25, 30, 30 });
-                    mountainsNeedleTrees = new List<int>(new int[] { 5, 11, 12, 12, 25, 25, 30, 30 });
-                    mountainsDeadTrees = new List<int>(new int[] { 16, 19, 20, 24, 26, 29 });
-                    mountainsFlowers = new List<int>(new int[] { 22 });
-                    mountainsRocks = new List<int>(new int[] { 1, 3, 4, 6, 7, 8, 10, 14, 17, 18, 27, 28, 31 });
-                    mountainsGrass = new List<int>(new int[] { 2, 2, 7, 9, 9, 9, 23 });
+                                                    mountainsTrees = new List<int>(new int[] { 22, 22, 5, 11, 12, 13, 21, 25, 30 });
+                                                    mountainsNeedleTrees = new List<int>(new int[] { 5, 11, 12, 25, 30 });
+                                                    mountainsDeadTrees = new List<int>(new int[] { 16, 19, 20, 24, 26, 29 });
+                                                    mountainsFlowers = new List<int>(new int[] { 22 });
+                                                    mountainsRocks = new List<int>(new int[] { 1, 3, 4, 6, 7, 8, 10, 14, 17, 18, 27, 28, 31 });
+                                                    mountainsGrass = new List<int>(new int[] { 2, 2, 7, 9, 9, 23 });
 
-                    woodlandHillsFlowers = new List<int>(new int[] { 2, 22, 22, 22, 22 });
-                    woodlandHillsBushes = new List<int>(new int[] { 9, 27 });
-                    woodlandHillsTrees = new List<int>(new int[] { 5, 11, 12, 12, 13, 14, 15, 25, 30 });
-                    woodlandHillsNeedleTrees = new List<int>(new int[] { 12, 25, 30 });
-                    woodlandHillsDirtPlants = new List<int>(new int[] { 26, 29, 23, 31 });
-                }
-            }
-            else if (elevation <= elevationLevels[5] && elevation > elevationLevels[6])
-            {
-                temperateWoodlandTrees = new List<int>(new int[] { 13, 14, 15, 17, 18, 25, 25, 25 });
-                temperateWoodlandDeadTrees = new List<int>(new int[] { 19, 20, 24, 25, 25, 25, 29, 30, 31 });
-                temperateWoodlandFlowers = new List<int>(new int[] { 21, 22 });
-                temperateWoodlandMushroom = new List<int>(new int[] { 7, 23 });
-                temperateWoodlandBushes = new List<int>(new int[] { 1, 1, 1, 27, 28 });
-                temperateWoodlandBeach = new List<int>(new int[] { 31, 3, 3, 4, 4, 5, 5, 6, 29 });
-                temperateWoodlandRocks = new List<int>(new int[] { 3, 4, 5, 6, 8, 10, 26 });
+                                                    woodlandHillsFlowers = new List<int>(new int[] { 2, 22, 22, 22 });
+                                                    woodlandHillsBushes = new List<int>(new int[] { 9, 27 });
+                                                    woodlandHillsTrees = new List<int>(new int[] { 5, 11, 12, 12, 13, 14, 15, 25, 30 });
+                                                    woodlandHillsNeedleTrees = new List<int>(new int[] { 12, 25, 30 });
+                                                    woodlandHillsDirtPlants = new List<int>(new int[] { 26, 29, 23, 7, 31 });
+                                                } else {
+                                                    if (elevation > elevationLevels[9]) {
+                                                        temperateWoodlandTrees = temperateWoodlandTreesAtElevation9;
+                                                        temperateWoodlandDeadTrees = temperateWoodlandDeadTreesAtElevation9;
+                                                        temperateWoodlandFlowers = temperateWoodlandFlowersAtElevation9;
+                                                        temperateWoodlandMushroom = temperateWoodlandMushroomAtElevation9;
+                                                        temperateWoodlandBushes = temperateWoodlandBushesAtElevation9;
+                                                        temperateWoodlandBeach = temperateWoodlandBeachAtElevation9;
+                                                        temperateWoodlandRocks = temperateWoodlandRocksAtElevation9;
 
-                if (season == DaggerfallDateTime.Seasons.Winter)
-                {
-                    mountainsTrees = new List<int>(new int[] { 29, 29, 29, 5, 11, 11, 13, 21, 25, 25, 25 });
-                    mountainsNeedleTrees = new List<int>(new int[] { 5, 11, 11, 25, 25, 25 });
-                    mountainsDeadTrees = new List<int>(new int[] { 16, 19, 20, 24, 30, 29 });
-                    mountainsFlowers = new List<int>(new int[] { 7 });
-                    mountainsRocks = new List<int>(new int[] { 1, 3, 4, 6, 9, 8, 10, 14, 17, 18, 27, 28, 31 });
-                    mountainsGrass = new List<int>(new int[] { 7, 7, 9, 23, 23, 23, 26 });
+                                                        mountainsTrees = new List<int>(new int[] { 22, 5, 11, 12, 13, 15, 21, 25, 30 });
+                                                        mountainsNeedleTrees = new List<int>(new int[] { 5, 11, 12, 25, 30, 12, 25, 30 });
+                                                        mountainsDeadTrees = new List<int>(new int[] { 16, 19, 20, 24, 26, 29 });
+                                                        mountainsFlowers = new List<int>(new int[] { 22 });
+                                                        mountainsRocks = new List<int>(new int[] { 1, 3, 4, 6, 7, 8, 10, 14, 17, 18, 27, 28, 31 });
+                                                        mountainsGrass = new List<int>(new int[] { 2, 2, 7, 9, 9, 23 });
 
-                    woodlandHillsFlowers = new List<int>(new int[] { 7, 22, 22, 22, 22 });
-                    woodlandHillsBushes = new List<int>(new int[] { 23, 27 });
-                    woodlandHillsTrees = new List<int>(new int[] { 5, 11, 12, 12, 13, 14, 14, 25, 12 });
-                    woodlandHillsNeedleTrees = new List<int>(new int[] { 12, 25, 12 });
-                    woodlandHillsDirtPlants = new List<int>(new int[] { 22, 29, 26, 31 });
-                }
-                else
-                {
-                    mountainsTrees = new List<int>(new int[] { 22, 22, 22, 22, 5, 11, 12, 13, 21, 25, 25, 30, 30 });
-                    mountainsNeedleTrees = new List<int>(new int[] { 5, 11, 12, 12, 25, 25, 30, 30 });
-                    mountainsDeadTrees = new List<int>(new int[] { 16, 19, 20, 24, 26, 29 });
-                    mountainsFlowers = new List<int>(new int[] { 22 });
-                    mountainsRocks = new List<int>(new int[] { 1, 3, 4, 6, 7, 8, 10, 14, 17, 18, 27, 28, 31 });
-                    mountainsGrass = new List<int>(new int[] { 2, 2, 7, 9, 9, 9, 23 });
+                                                        woodlandHillsFlowers = new List<int>(new int[] { 2, 21, 22, 22 });
+                                                        woodlandHillsBushes = new List<int>(new int[] { 27 });
+                                                        woodlandHillsTrees = new List<int>(new int[] { 5, 11, 12, 12, 13, 13, 14, 14, 16, 25, 12 });
+                                                        woodlandHillsNeedleTrees = new List<int>(new int[] { 5, 11, 12, 25, 12 });
+                                                        woodlandHillsDirtPlants = new List<int>(new int[] { 26, 29, 23, 7, 31 });
+                                                    } else {
+                                                        if (elevation > elevationLevels[10]) {
+                                                            rnd = mapStyle + Random.Range(-10f,10f);
+                                                            if (rnd <= 30)
+                                                                temperateWoodlandTrees = temperateWoodlandTreesAtElevation10A;
+                                                            if (rnd > 30)
+                                                                temperateWoodlandTrees = temperateWoodlandTreesAtElevation10B;
+                                                            if (rnd > 35)
+                                                                temperateWoodlandTrees = temperateWoodlandTreesAtElevation10C;
+                                                            if (rnd > 41)
+                                                                temperateWoodlandTrees = temperateWoodlandTreesAtElevation10D;
+                                                            if (rnd > 47)
+                                                                temperateWoodlandTrees = temperateWoodlandTreesAtElevation10E;
+                                                            if (rnd > 55)
+                                                                temperateWoodlandTrees = temperateWoodlandTreesAtElevation10F;
+                                                            temperateWoodlandDeadTrees = temperateWoodlandDeadTreesAtElevation10;
+                                                            temperateWoodlandFlowers = temperateWoodlandFlowersAtElevation10;
+                                                            temperateWoodlandMushroom = temperateWoodlandMushroomAtElevation10;
+                                                            temperateWoodlandBushes = temperateWoodlandBushesAtElevation10;
+                                                            temperateWoodlandBeach = temperateWoodlandBeachAtElevation10;
+                                                            temperateWoodlandRocks = temperateWoodlandRocksAtElevation10;
 
-                    woodlandHillsFlowers = new List<int>(new int[] { 2, 22, 22, 22, 22 });
-                    woodlandHillsBushes = new List<int>(new int[] { 9, 27 });
-                    woodlandHillsTrees = new List<int>(new int[] { 5, 11, 12, 12, 13, 14, 15, 25, 30 });
-                    woodlandHillsNeedleTrees = new List<int>(new int[] { 12, 25, 30 });
-                    woodlandHillsDirtPlants = new List<int>(new int[] { 26, 29, 23, 31 });
-                }
-            }
-            else if (elevation <= elevationLevels[6] && elevation > elevationLevels[7])
-            {
-                temperateWoodlandTrees = new List<int>(new int[] { 13, 14, 15, 17, 18, 25, 25, 25 });
-                temperateWoodlandDeadTrees = new List<int>(new int[] { 19, 20, 24, 25, 25, 25, 29, 30, 31 });
-                temperateWoodlandFlowers = new List<int>(new int[] { 21, 22 });
-                temperateWoodlandMushroom = new List<int>(new int[] { 7, 23 });
-                temperateWoodlandBushes = new List<int>(new int[] { 1, 1, 1, 27, 28 });
-                temperateWoodlandBeach = new List<int>(new int[] { 31, 3, 3, 4, 4, 5, 5, 6, 29 });
-                temperateWoodlandRocks = new List<int>(new int[] { 3, 4, 5, 6, 8, 10, 26 });
+                                                            mountainsTrees = new List<int>(new int[] { 5, 5, 11, 11, 12, 13, 13, 15, 15, 15, 21, 30 });
+                                                            mountainsNeedleTrees = new List<int>(new int[] { 5, 5, 11, 11, 12, 12, 30 });
+                                                            mountainsDeadTrees = new List<int>(new int[] { 16, 19, 20, 26, 26, 29, 29 });
+                                                            mountainsFlowers = new List<int>(new int[] { 22 });
+                                                            mountainsRocks = new List<int>(new int[] { 1, 3, 4, 6, 7, 8, 10, 14, 17, 18, 27, 28, 31 });
+                                                            mountainsGrass = new List<int>(new int[] { 2, 7, 7, 9, 23, 23 });
 
-                if (season == DaggerfallDateTime.Seasons.Winter)
-                {
-                    mountainsTrees = new List<int>(new int[] { 29, 29, 29, 5, 11, 11, 13, 21, 25, 25, 25 });
-                    mountainsNeedleTrees = new List<int>(new int[] { 5, 11, 11, 25, 25, 25 });
-                    mountainsDeadTrees = new List<int>(new int[] { 16, 19, 20, 24, 30, 29 });
-                    mountainsFlowers = new List<int>(new int[] { 7 });
-                    mountainsRocks = new List<int>(new int[] { 1, 3, 4, 6, 9, 8, 10, 14, 17, 18, 27, 28, 31 });
-                    mountainsGrass = new List<int>(new int[] { 7, 7, 9, 23, 23, 23, 26 });
+                                                            woodlandHillsFlowers = new List<int>(new int[] { 2, 21, 21, 21, 22, 22 });
+                                                            woodlandHillsBushes = new List<int>(new int[] { 9, 27, 27 });
+                                                            woodlandHillsTrees = new List<int>(new int[] { 12, 12, 13, 14, 15, 16 });
+                                                            woodlandHillsNeedleTrees = new List<int>(new int[] { 5, 5, 11, 11, 12, 25, 30 });
+                                                            woodlandHillsDirtPlants = new List<int>(new int[] { 26, 29, 23, 7, 31 });
+                                                        } else {
+                                                            if (elevation > elevationLevels[11]) {
+                                                                rnd = mapStyle + Random.Range(-10f,10f);
+                                                                if (rnd <= 30)
+                                                                temperateWoodlandTrees = temperateWoodlandTreesAtElevation11A;
+                                                                if (rnd > 30)
+                                                                    temperateWoodlandTrees = temperateWoodlandTreesAtElevation11B;
+                                                                if (rnd > 35)
+                                                                    temperateWoodlandTrees = temperateWoodlandTreesAtElevation11C;
+                                                                if (rnd > 41)
+                                                                    temperateWoodlandTrees = temperateWoodlandTreesAtElevation11D;
+                                                                if (rnd > 47)
+                                                                    temperateWoodlandTrees = temperateWoodlandTreesAtElevation11E;
+                                                                if (rnd > 55)
+                                                                    temperateWoodlandTrees = temperateWoodlandTreesAtElevation11F;
+                                                                temperateWoodlandDeadTrees = temperateWoodlandDeadTreesAtElevation11;
+                                                                temperateWoodlandFlowers = temperateWoodlandFlowersAtElevation11;
+                                                                temperateWoodlandMushroom = temperateWoodlandMushroomAtElevation11;
+                                                                temperateWoodlandBushes = temperateWoodlandBushesAtElevation11;
+                                                                temperateWoodlandBeach = temperateWoodlandBeachAtElevation11;
+                                                                temperateWoodlandRocks = temperateWoodlandRocksAtElevation11;
 
-                    woodlandHillsFlowers = new List<int>(new int[] { 7, 22, 22, 22, 22 });
-                    woodlandHillsBushes = new List<int>(new int[] { 23, 23, 27 });
-                    woodlandHillsTrees = new List<int>(new int[] { 5, 11, 12, 12, 13, 14, 14, 25, 12 });
-                    woodlandHillsNeedleTrees = new List<int>(new int[] { 12, 25, 12 });
-                    woodlandHillsDirtPlants = new List<int>(new int[] { 22, 29, 26, 31 });
-                }
-                else
-                {
-                    mountainsTrees = new List<int>(new int[] { 22, 22, 22, 5, 11, 12, 13, 21, 25, 25, 30, 30 });
-                    mountainsNeedleTrees = new List<int>(new int[] { 5, 11, 12, 12, 25, 25, 30, 30 });
-                    mountainsDeadTrees = new List<int>(new int[] { 16, 19, 20, 24, 26, 29 });
-                    mountainsFlowers = new List<int>(new int[] { 22 });
-                    mountainsRocks = new List<int>(new int[] { 1, 3, 4, 6, 7, 8, 10, 14, 17, 18, 27, 28, 31 });
-                    mountainsGrass = new List<int>(new int[] { 2, 2, 7, 9, 9, 9, 23 });
+                                                                mountainsTrees = new List<int>(new int[] { 5, 5, 11, 11, 12, 13, 13, 15, 15, 15, 21, 30 });
+                                                                mountainsNeedleTrees = new List<int>(new int[] { 5, 5, 11, 11, 12, 12, 30 });
+                                                                mountainsDeadTrees = new List<int>(new int[] { 16, 19, 20, 26, 26, 29, 29 });
+                                                                mountainsFlowers = new List<int>(new int[] { 22 });
+                                                                mountainsRocks = new List<int>(new int[] { 1, 3, 4, 6, 7, 8, 10, 14, 17, 18, 27, 28, 31 });
+                                                                mountainsGrass = new List<int>(new int[] { 2, 7, 7, 9, 23, 23 });
 
-                    woodlandHillsFlowers = new List<int>(new int[] { 2, 22, 22, 22, 22 });
-                    woodlandHillsBushes = new List<int>(new int[] { 9, 9, 27 });
-                    woodlandHillsTrees = new List<int>(new int[] { 5, 11, 12, 12, 13, 14, 15, 25, 30 });
-                    woodlandHillsNeedleTrees = new List<int>(new int[] { 12, 25, 30 });
-                    woodlandHillsDirtPlants = new List<int>(new int[] { 26, 29, 23, 31 });
-                }
-            }
-            else if (elevation <= elevationLevels[7] && elevation > elevationLevels[8])
-            {
-                temperateWoodlandTrees = new List<int>(new int[] { 13, 14, 15, 17, 18, 25, 25, 25 });
-                temperateWoodlandDeadTrees = new List<int>(new int[] { 19, 20, 24, 25, 25, 25, 29, 30, 31 });
-                temperateWoodlandFlowers = new List<int>(new int[] { 21, 22 });
-                temperateWoodlandMushroom = new List<int>(new int[] { 7, 23 });
-                temperateWoodlandBushes = new List<int>(new int[] { 1, 1, 1, 27, 28 });
-                temperateWoodlandBeach = new List<int>(new int[] { 31, 3, 3, 4, 4, 5, 5, 6, 29 });
-                temperateWoodlandRocks = new List<int>(new int[] { 3, 4, 5, 6, 8, 10, 26 });
+                                                                woodlandHillsFlowers = new List<int>(new int[] { 2, 21, 22 });
+                                                                woodlandHillsBushes = new List<int>(new int[] { 27 });
+                                                                woodlandHillsTrees = new List<int>(new int[] { 12, 12, 13, 13, 14, 14, 15, 15, 16, 16 });
+                                                                woodlandHillsNeedleTrees = new List<int>(new int[] { 5, 5, 11, 11, 11, 12, 25, 30 });
+                                                                woodlandHillsDirtPlants = new List<int>(new int[] { 26, 29, 23, 7, 31 });
+                                                            } else {
+                                                                if (elevation > elevationLevels[12]) {
+                                                                    rnd = mapStyle + Random.Range(-10f,10f);
+                                                                    if (rnd <= 30)
+                                                                        temperateWoodlandTrees = temperateWoodlandTreesAtElevation12A;
+                                                                    if (rnd > 30)
+                                                                        temperateWoodlandTrees = temperateWoodlandTreesAtElevation12B;
+                                                                    if (rnd > 35)
+                                                                        temperateWoodlandTrees = temperateWoodlandTreesAtElevation12C;
+                                                                    if (rnd > 41)
+                                                                        temperateWoodlandTrees = temperateWoodlandTreesAtElevation12D;
+                                                                    if (rnd > 47)
+                                                                        temperateWoodlandTrees = temperateWoodlandTreesAtElevation12E;
+                                                                    if (rnd > 55)
+                                                                        temperateWoodlandTrees = temperateWoodlandTreesAtElevation12F;
+                                                                    temperateWoodlandDeadTrees = temperateWoodlandDeadTreesAtElevation12;
+                                                                    temperateWoodlandFlowers = temperateWoodlandFlowersAtElevation12;
+                                                                    temperateWoodlandMushroom = temperateWoodlandMushroomAtElevation12;
+                                                                    temperateWoodlandBushes = temperateWoodlandBushesAtElevation12;
+                                                                    temperateWoodlandBeach = temperateWoodlandBeachAtElevation12;
+                                                                    temperateWoodlandRocks = temperateWoodlandRocksAtElevation12;
 
-                if (season == DaggerfallDateTime.Seasons.Winter)
-                {
-                    mountainsTrees = new List<int>(new int[] { 29, 29, 5, 11, 11, 13, 21, 25, 25 });
-                    mountainsNeedleTrees = new List<int>(new int[] { 5, 11, 11, 25, 25 });
-                    mountainsDeadTrees = new List<int>(new int[] { 16, 19, 20, 24, 30, 29 });
-                    mountainsFlowers = new List<int>(new int[] { 7 });
-                    mountainsRocks = new List<int>(new int[] { 1, 3, 4, 6, 9, 8, 10, 14, 17, 18, 27, 28, 31 });
-                    mountainsGrass = new List<int>(new int[] { 7, 7, 9, 23, 23, 26 });
+                                                                    mountainsTrees = new List<int>(new int[] { 5, 5, 11, 11, 12, 13, 13, 15, 15, 15, 21, 30 });
+                                                                    mountainsNeedleTrees = new List<int>(new int[] { 5, 5, 11, 11, 12, 12, 30 });
+                                                                    mountainsDeadTrees = new List<int>(new int[] { 16, 19, 20, 26, 26, 29, 29 });
+                                                                    mountainsFlowers = new List<int>(new int[] { 22 });
+                                                                    mountainsRocks = new List<int>(new int[] { 1, 3, 4, 6, 7, 8, 10, 14, 17, 18, 27, 28, 31 });
+                                                                    mountainsGrass = new List<int>(new int[] { 2, 7, 7, 9, 23, 23 });
 
-                    woodlandHillsFlowers = new List<int>(new int[] { 7, 22, 22, 22 });
-                    woodlandHillsBushes = new List<int>(new int[] { 26, 27 });
-                    woodlandHillsTrees = new List<int>(new int[] { 5, 11, 12, 12, 13, 14, 14, 25, 12 });
-                    woodlandHillsNeedleTrees = new List<int>(new int[] { 12, 25, 12 });
-                    woodlandHillsDirtPlants = new List<int>(new int[] { 22, 29, 26, 9, 31 });
-                }
-                else
-                {
-                    mountainsTrees = new List<int>(new int[] { 22, 22, 5, 11, 12, 13, 21, 25, 30 });
-                    mountainsNeedleTrees = new List<int>(new int[] { 5, 11, 12, 25, 30 });
-                    mountainsDeadTrees = new List<int>(new int[] { 16, 19, 20, 24, 26, 29 });
-                    mountainsFlowers = new List<int>(new int[] { 22 });
-                    mountainsRocks = new List<int>(new int[] { 1, 3, 4, 6, 7, 8, 10, 14, 17, 18, 27, 28, 31 });
-                    mountainsGrass = new List<int>(new int[] { 2, 2, 7, 9, 9, 23 });
+                                                                    woodlandHillsFlowers = new List<int>(new int[] { 2, 21, 21, 21 });
+                                                                    woodlandHillsBushes = new List<int>(new int[] { 27, 27, 31 });
+                                                                    woodlandHillsTrees = new List<int>(new int[] { 12, 13, 13, 13, 14, 14, 15, 15, 16, 16 });
+                                                                    woodlandHillsNeedleTrees = new List<int>(new int[] { 5, 5, 11, 11, 12 });
+                                                                    woodlandHillsDirtPlants = new List<int>(new int[] { 26, 29, 23, 7 });
+                                                                } else {
+                                                                    if (elevation > elevationLevels[13]) {
+                                                                        rnd = mapStyle + Random.Range(-10f,10f);
+                                                                        if (rnd <= 30)
+                                                                            temperateWoodlandTrees = temperateWoodlandTreesAtElevation13A;
+                                                                        if (rnd > 30)
+                                                                            temperateWoodlandTrees = temperateWoodlandTreesAtElevation13B;
+                                                                        if (rnd > 35)
+                                                                            temperateWoodlandTrees = temperateWoodlandTreesAtElevation13C;
+                                                                        if (rnd > 41)
+                                                                            temperateWoodlandTrees = temperateWoodlandTreesAtElevation13D;
+                                                                        if (rnd > 47)
+                                                                            temperateWoodlandTrees = temperateWoodlandTreesAtElevation13E;
+                                                                        if (rnd > 55)
+                                                                            temperateWoodlandTrees = temperateWoodlandTreesAtElevation13F;
+                                                                        temperateWoodlandDeadTrees = temperateWoodlandDeadTreesAtElevation13;
+                                                                        temperateWoodlandFlowers = temperateWoodlandFlowersAtElevation13;
+                                                                        temperateWoodlandMushroom = temperateWoodlandMushroomAtElevation13;
+                                                                        temperateWoodlandBushes = temperateWoodlandBushesAtElevation13;
+                                                                        temperateWoodlandBeach = temperateWoodlandBeachAtElevation13;
+                                                                        temperateWoodlandRocks = temperateWoodlandRocksAtElevation13;
 
-                    woodlandHillsFlowers = new List<int>(new int[] { 2, 22, 22, 22 });
-                    woodlandHillsBushes = new List<int>(new int[] { 9, 27 });
-                    woodlandHillsTrees = new List<int>(new int[] { 5, 11, 12, 12, 13, 14, 15, 25, 30 });
-                    woodlandHillsNeedleTrees = new List<int>(new int[] { 12, 25, 30 });
-                    woodlandHillsDirtPlants = new List<int>(new int[] { 26, 29, 23, 7, 31 });
-                }
-            }
-            else if (elevation <= elevationLevels[8] && elevation > elevationLevels[9])
-            {
-                temperateWoodlandTrees = new List<int>(new int[] { 13, 14, 15, 17, 18, 25, 25, 25 });
-                temperateWoodlandDeadTrees = new List<int>(new int[] { 19, 20, 24, 25, 25, 25, 29, 30, 31 });
-                temperateWoodlandFlowers = new List<int>(new int[] { 21, 22 });
-                temperateWoodlandMushroom = new List<int>(new int[] { 7, 23 });
-                temperateWoodlandBushes = new List<int>(new int[] { 1, 1, 27, 28 });
-                temperateWoodlandBeach = new List<int>(new int[] { 31, 3, 3, 4, 4, 5, 5, 6, 29 });
-                temperateWoodlandRocks = new List<int>(new int[] { 3, 4, 5, 6, 8, 10, 26 });
+                                                                        mountainsTrees = new List<int>(new int[] { 5, 5, 11, 11, 12, 13, 13, 15, 15, 15, 21, 30 });
+                                                                        mountainsNeedleTrees = new List<int>(new int[] { 5, 5, 11, 11, 12, 12, 30 });
+                                                                        mountainsDeadTrees = new List<int>(new int[] { 16, 19, 20, 26, 26, 29, 29 });
+                                                                        mountainsFlowers = new List<int>(new int[] { 22 });
+                                                                        mountainsRocks = new List<int>(new int[] { 1, 3, 4, 6, 7, 8, 10, 14, 17, 18, 27, 28, 31 });
+                                                                        mountainsGrass = new List<int>(new int[] { 2, 7, 7, 7, 9, 23, 23, 23 });
 
-                if (season == DaggerfallDateTime.Seasons.Winter)
-                {
-                    mountainsTrees = new List<int>(new int[] { 29, 5, 11, 11, 13, 24, 21, 25, 25 });
-                    mountainsNeedleTrees = new List<int>(new int[] { 5, 11, 11, 25, 25, 25 });
-                    mountainsDeadTrees = new List<int>(new int[] { 16, 19, 20, 24, 30, 29 });
-                    mountainsFlowers = new List<int>(new int[] { 7 });
-                    mountainsRocks = new List<int>(new int[] { 1, 3, 4, 6, 9, 8, 10, 14, 17, 18, 27, 28, 31 });
-                    mountainsGrass = new List<int>(new int[] { 7, 7, 9, 23, 23, 26 });
+                                                                        woodlandHillsFlowers = new List<int>(new int[] { 2, 21, 21 });
+                                                                        woodlandHillsBushes = new List<int>(new int[] { 27, 27, 27, 31 });
+                                                                        woodlandHillsTrees = new List<int>(new int[] { 13, 14, 14, 15, 15, 16 });
+                                                                        woodlandHillsNeedleTrees = new List<int>(new int[] { 5, 11, 11 });
+                                                                        woodlandHillsDirtPlants = new List<int>(new int[] { 26, 29, 23, 7 });
+                                                                    } else {
+                                                                        rnd = mapStyle + Random.Range(-15f,15f);
+                                                                        if (rnd <= 30)
+                                                                            temperateWoodlandTrees = temperateWoodlandTreesAtElevation14A;
+                                                                        if (rnd > 30)
+                                                                            temperateWoodlandTrees = temperateWoodlandTreesAtElevation14B;
+                                                                        if (rnd > 42)
+                                                                            temperateWoodlandTrees = temperateWoodlandTreesAtElevation14C;
+                                                                        if (rnd > 55)
+                                                                            temperateWoodlandTrees = temperateWoodlandTreesAtElevation14D;
+                                                                        temperateWoodlandDeadTrees = temperateWoodlandDeadTreesAtElevation14;
+                                                                        temperateWoodlandFlowers = temperateWoodlandFlowersAtElevation14;
+                                                                        temperateWoodlandMushroom = temperateWoodlandMushroomAtElevation14;
+                                                                        temperateWoodlandBushes = temperateWoodlandBushesAtElevation14;
+                                                                        temperateWoodlandBeach = temperateWoodlandBeachAtElevation14;
+                                                                        temperateWoodlandRocks = temperateWoodlandRocksAtElevation14;
 
-                    woodlandHillsFlowers = new List<int>(new int[] { 7, 21, 22, 22 });
-                    woodlandHillsBushes = new List<int>(new int[] { 27 });
-                    woodlandHillsTrees = new List<int>(new int[] { 5, 11, 12, 12, 13, 13, 14, 14, 16, 25, 12 });
-                    woodlandHillsNeedleTrees = new List<int>(new int[] { 5, 11, 12, 25, 12 });
-                    woodlandHillsDirtPlants = new List<int>(new int[] { 22, 29, 26, 9, 31 });
-                }
-                else
-                {
-                    mountainsTrees = new List<int>(new int[] { 22, 5, 11, 12, 13, 15, 21, 25, 30 });
-                    mountainsNeedleTrees = new List<int>(new int[] { 5, 11, 12, 25, 30, 12, 25, 30 });
-                    mountainsDeadTrees = new List<int>(new int[] { 16, 19, 20, 24, 26, 29 });
-                    mountainsFlowers = new List<int>(new int[] { 22 });
-                    mountainsRocks = new List<int>(new int[] { 1, 3, 4, 6, 7, 8, 10, 14, 17, 18, 27, 28, 31 });
-                    mountainsGrass = new List<int>(new int[] { 2, 2, 7, 9, 9, 23 });
+                                                                        mountainsTrees = new List<int>(new int[] { 5, 5, 9, 9, 11, 11, 12, 13, 13, 15, 15, 15, 21, 30 });
+                                                                        mountainsNeedleTrees = new List<int>(new int[] { 5, 5, 11, 11, 12, 12, 30 });
+                                                                        mountainsDeadTrees = new List<int>(new int[] { 16, 19, 20, 26, 26, 29, 29 });
+                                                                        mountainsFlowers = new List<int>(new int[] { 22 });
+                                                                        mountainsRocks = new List<int>(new int[] { 1, 3, 4, 6, 7, 8, 10, 14, 17, 18, 27, 28, 31 });
+                                                                        mountainsGrass = new List<int>(new int[] { 2, 7, 7, 7, 9, 23, 23, 23 });
 
-                    woodlandHillsFlowers = new List<int>(new int[] { 2, 21, 22, 22 });
-                    woodlandHillsBushes = new List<int>(new int[] { 27 });
-                    woodlandHillsTrees = new List<int>(new int[] { 5, 11, 12, 12, 13, 13, 14, 14, 16, 25, 12 });
-                    woodlandHillsNeedleTrees = new List<int>(new int[] { 5, 11, 12, 25, 12 });
-                    woodlandHillsDirtPlants = new List<int>(new int[] { 26, 29, 23, 7, 31 });
-                }
-            }
-            else if (elevation <= elevationLevels[9] && elevation > elevationLevels[10])
-            {
-                float rnd = mapStyle + Random.Range(-10f,10f);
-                if (rnd <= 30) // Conifere forest 1
-                    temperateWoodlandTrees = new List<int>(new int[] { 13, 13, 25, 25, 25});
-                if (rnd > 30) // Mischwald 1
-                    temperateWoodlandTrees = new List<int>(new int[] { 13, 25});
-                if (rnd > 35) // Laubwald
-                    temperateWoodlandTrees = new List<int>(new int[] { 17, 18});
-                if (rnd > 41) // Conifere forest 2
-                    temperateWoodlandTrees = new List<int>(new int[] { 13, 13, 13, 25, 25});
-                if (rnd > 47) // Birkenwald
-                    temperateWoodlandTrees = new List<int>(new int[] { 11, 14, 14, 14, 15, 15});
-                if (rnd > 55) // Oak forest
-                    temperateWoodlandTrees = new List<int>(new int[] { 13, 17, 18, 18, 18});
-                temperateWoodlandDeadTrees = new List<int>(new int[] { 19, 20, 24, 25, 25, 25, 29, 30, 31 });
-                temperateWoodlandFlowers = new List<int>(new int[] { 21, 22 });
-                temperateWoodlandMushroom = new List<int>(new int[] { 7, 23 });
-                temperateWoodlandBushes = new List<int>(new int[] { 1, 1, 27, 28 });
-                temperateWoodlandBeach = new List<int>(new int[] { 31, 3, 3, 4, 4, 5, 5, 6, 29 });
-                temperateWoodlandRocks = new List<int>(new int[] { 3, 4, 5, 6, 8, 10, 26 });
-
-                if (season == DaggerfallDateTime.Seasons.Winter)
-                {
-                    mountainsTrees = new List<int>(new int[] { 5, 5, 11, 11, 11, 13, 13, 24, 24, 24, 21, 25 });
-                    mountainsNeedleTrees = new List<int>(new int[] { 5, 5, 11, 11, 11, 25 });
-                    mountainsDeadTrees = new List<int>(new int[] { 16, 19, 20, 30, 30, 29, 29 });
-                    mountainsFlowers = new List<int>(new int[] { 7 });
-                    mountainsRocks = new List<int>(new int[] { 1, 3, 4, 6, 9, 8, 10, 14, 17, 18, 27, 28, 31 });
-                    mountainsGrass = new List<int>(new int[] { 7, 9, 9, 23, 26, 26 });
-
-                    woodlandHillsFlowers = new List<int>(new int[] { 7, 21, 21, 21, 22, 22 });
-                    woodlandHillsBushes = new List<int>(new int[] { 23, 27, 27 });
-                    woodlandHillsTrees = new List<int>(new int[] { 12, 12, 13, 14, 14, 16 });
-                    woodlandHillsNeedleTrees = new List<int>(new int[] { 5, 5, 11, 11, 12, 25, 12 });
-                    woodlandHillsDirtPlants = new List<int>(new int[] { 22, 29, 26, 9, 31 });
-                }
-                else
-                {
-                    mountainsTrees = new List<int>(new int[] { 5, 5, 11, 11, 12, 13, 13, 15, 15, 15, 21, 30 });
-                    mountainsNeedleTrees = new List<int>(new int[] { 5, 5, 11, 11, 12, 12, 30 });
-                    mountainsDeadTrees = new List<int>(new int[] { 16, 19, 20, 26, 26, 29, 29 });
-                    mountainsFlowers = new List<int>(new int[] { 22 });
-                    mountainsRocks = new List<int>(new int[] { 1, 3, 4, 6, 7, 8, 10, 14, 17, 18, 27, 28, 31 });
-                    mountainsGrass = new List<int>(new int[] { 2, 7, 7, 9, 23, 23 });
-
-                    woodlandHillsFlowers = new List<int>(new int[] { 2, 21, 21, 21, 22, 22 });
-                    woodlandHillsBushes = new List<int>(new int[] { 9, 27, 27 });
-                    woodlandHillsTrees = new List<int>(new int[] { 12, 12, 13, 14, 15, 16 });
-                    woodlandHillsNeedleTrees = new List<int>(new int[] { 5, 5, 11, 11, 12, 25, 30 });
-                    woodlandHillsDirtPlants = new List<int>(new int[] { 26, 29, 23, 7, 31 });
-                }
-            }
-            else if (elevation <= elevationLevels[10] && elevation > elevationLevels[11])
-            {
-                float rnd = mapStyle + Random.Range(-10f,10f);
-                if (rnd <= 30) // Conifere forest
-                    temperateWoodlandTrees = new List<int>(new int[] { 13, 13, 25, 25, 25});
-                if (rnd > 30) // Mischwald 1
-                    temperateWoodlandTrees = new List<int>(new int[] { 13, 14, 16, 17});
-                if (rnd > 35) // Laubwald
-                    temperateWoodlandTrees = new List<int>(new int[] { 16, 17, 18});
-                if (rnd > 41) // Mischwald 2
-                    temperateWoodlandTrees = new List<int>(new int[] { 13, 15, 18});
-                if (rnd > 47) // Birkenwald
-                    temperateWoodlandTrees = new List<int>(new int[] { 11, 14, 14, 14, 15, 15});
-                if (rnd > 55) // Oak forest
-                    temperateWoodlandTrees = new List<int>(new int[] { 13, 17, 17, 18, 18, 18});
-
-                temperateWoodlandTrees = new List<int>(new int[] { 13, 13, 14, 14, 15, 17, 18, 25 });
-                temperateWoodlandDeadTrees = new List<int>(new int[] { 19, 20, 24, 25, 25, 29, 30, 31 });
-                temperateWoodlandFlowers = new List<int>(new int[] { 21, 22 });
-                temperateWoodlandMushroom = new List<int>(new int[] { 7, 23 });
-                temperateWoodlandBushes = new List<int>(new int[] { 1, 26, 27, 27, 28, 28 });
-                temperateWoodlandBeach = new List<int>(new int[] { 31, 3, 3, 4, 4, 5, 5, 6, 29 });
-                temperateWoodlandRocks = new List<int>(new int[] { 3, 4, 5, 6, 8, 10, 26 });
-
-                if (season == DaggerfallDateTime.Seasons.Winter)
-                {
-                    mountainsTrees = new List<int>(new int[] { 5, 5, 11, 11, 11, 13, 13, 24, 24, 24, 21, 25 });
-                    mountainsNeedleTrees = new List<int>(new int[] { 5, 5, 11, 11, 11, 11, 25 });
-                    mountainsDeadTrees = new List<int>(new int[] { 16, 19, 20, 30, 30, 29, 29 });
-                    mountainsFlowers = new List<int>(new int[] { 7 });
-                    mountainsRocks = new List<int>(new int[] { 1, 3, 4, 6, 9, 8, 10, 14, 17, 18, 27, 28, 31 });
-                    mountainsGrass = new List<int>(new int[] { 7, 9, 9, 23, 26, 26 });
-
-                    woodlandHillsFlowers = new List<int>(new int[] { 7, 21, 22 });
-                    woodlandHillsBushes = new List<int>(new int[] { 27, 31 });
-                    woodlandHillsTrees = new List<int>(new int[] { 12, 12, 13, 13, 14, 14, 14, 16, 16 });
-                    woodlandHillsNeedleTrees = new List<int>(new int[] { 5, 5, 11, 11, 11, 12, 25, 12 });
-                    woodlandHillsDirtPlants = new List<int>(new int[] { 22, 29, 26, 9 });
-                }
-                else
-                {
-                    mountainsTrees = new List<int>(new int[] { 5, 5, 11, 11, 12, 13, 13, 15, 15, 15, 21, 30 });
-                    mountainsNeedleTrees = new List<int>(new int[] { 5, 5, 11, 11, 12, 12, 30 });
-                    mountainsDeadTrees = new List<int>(new int[] { 16, 19, 20, 26, 26, 29, 29 });
-                    mountainsFlowers = new List<int>(new int[] { 22 });
-                    mountainsRocks = new List<int>(new int[] { 1, 3, 4, 6, 7, 8, 10, 14, 17, 18, 27, 28, 31 });
-                    mountainsGrass = new List<int>(new int[] { 2, 7, 7, 9, 23, 23 });
-
-                    woodlandHillsFlowers = new List<int>(new int[] { 2, 21, 22 });
-                    woodlandHillsBushes = new List<int>(new int[] { 27 });
-                    woodlandHillsTrees = new List<int>(new int[] { 12, 12, 13, 13, 14, 14, 15, 15, 16, 16 });
-                    woodlandHillsNeedleTrees = new List<int>(new int[] { 5, 5, 11, 11, 11, 12, 25, 30 });
-                    woodlandHillsDirtPlants = new List<int>(new int[] { 26, 29, 23, 7, 31 });
-                }
-            }
-            else if (elevation <= elevationLevels[11] && elevation > elevationLevels[12])
-            {
-                float rnd = mapStyle + Random.Range(-10f,10f);
-                if (rnd <= 30) // Mischwald
-                    temperateWoodlandTrees = new List<int>(new int[] { 11, 12, 13, 14, 15, 16, 17, 18});
-                if (rnd > 30) // Beach forest 1
-                    temperateWoodlandTrees = new List<int>(new int[] { 12, 12, 12, 16, 16, 17});
-                if (rnd > 35) // Beach forest 2
-                    temperateWoodlandTrees = new List<int>(new int[] { 12, 16, 16, 16, 17, 17});
-                if (rnd > 41) // Birkenwald 1
-                    temperateWoodlandTrees = new List<int>(new int[] { 14, 14, 14, 15, 15});
-                if (rnd > 47) // Birkenwald 2
-                    temperateWoodlandTrees = new List<int>(new int[] { 14, 14, 15, 15, 15});
-                if (rnd > 55) // Laubwald
-                    temperateWoodlandTrees = new List<int>(new int[] { 16, 17, 18});
-
-                temperateWoodlandDeadTrees = new List<int>(new int[] { 19, 20, 24, 25, 29, 30, 31 });
-                temperateWoodlandFlowers = new List<int>(new int[] { 2, 21, 21, 21, 22, 22 });
-                temperateWoodlandMushroom = new List<int>(new int[] { 7, 7, 7, 9, 23, 23 });
-                temperateWoodlandBushes = new List<int>(new int[] { 1, 26, 27, 27, 28, 28 });
-                temperateWoodlandBeach = new List<int>(new int[] { 31, 3, 3, 4, 4, 5, 5, 6, 29 });
-                temperateWoodlandRocks = new List<int>(new int[] { 3, 4, 5, 6, 8, 10, 26 });
-
-                if (season == DaggerfallDateTime.Seasons.Winter)
-                {
-                    mountainsTrees = new List<int>(new int[] { 5, 5, 11, 11, 11, 13, 13, 24, 24, 24, 21, 25 });
-                    mountainsNeedleTrees = new List<int>(new int[] { 5, 5, 11, 11, 11, 25 });
-                    mountainsDeadTrees = new List<int>(new int[] { 16, 19, 20, 30, 30, 29, 29 });
-                    mountainsFlowers = new List<int>(new int[] { 7 });
-                    mountainsRocks = new List<int>(new int[] { 1, 3, 4, 6, 9, 8, 10, 14, 17, 18, 27, 28, 31 });
-                    mountainsGrass = new List<int>(new int[] { 7, 9, 9, 23, 26, 26 });
-
-                    woodlandHillsFlowers = new List<int>(new int[] { 7, 21, 21, 21 });
-                    woodlandHillsBushes = new List<int>(new int[] { 27, 27 });
-                    woodlandHillsTrees = new List<int>(new int[] { 12, 13, 13, 13, 14, 14, 14, 16, 16 });
-                    woodlandHillsNeedleTrees = new List<int>(new int[] { 5, 5, 11, 11, 12 });
-                    woodlandHillsDirtPlants = new List<int>(new int[] { 22, 29, 26, 9, 31 });
-                }
-                else
-                {
-                    mountainsTrees = new List<int>(new int[] { 5, 5, 11, 11, 12, 13, 13, 15, 15, 15, 21, 30 });
-                    mountainsNeedleTrees = new List<int>(new int[] { 5, 5, 11, 11, 12, 12, 30 });
-                    mountainsDeadTrees = new List<int>(new int[] { 16, 19, 20, 26, 26, 29, 29 });
-                    mountainsFlowers = new List<int>(new int[] { 22 });
-                    mountainsRocks = new List<int>(new int[] { 1, 3, 4, 6, 7, 8, 10, 14, 17, 18, 27, 28, 31 });
-                    mountainsGrass = new List<int>(new int[] { 2, 7, 7, 9, 23, 23 });
-
-                    woodlandHillsFlowers = new List<int>(new int[] { 2, 21, 21, 21 });
-                    woodlandHillsBushes = new List<int>(new int[] { 27, 27, 31 });
-                    woodlandHillsTrees = new List<int>(new int[] { 12, 13, 13, 13, 14, 14, 15, 15, 16, 16 });
-                    woodlandHillsNeedleTrees = new List<int>(new int[] { 5, 5, 11, 11, 12 });
-                    woodlandHillsDirtPlants = new List<int>(new int[] { 26, 29, 23, 7 });
-                }
-            }
-            else if (elevation <= elevationLevels[12] && elevation > elevationLevels[13])
-            {
-                float rnd = mapStyle + Random.Range(-10f,10f);
-                if (rnd <= 30) // Birkenwald
-                    temperateWoodlandTrees = new List<int>(new int[] { 14, 14, 14, 15, 15});
-                if (rnd > 30) // Oak forest
-                    temperateWoodlandTrees = new List<int>(new int[] { 13, 17, 17, 18, 18, 18});
-                if (rnd > 35) // Laubwald
-                    temperateWoodlandTrees = new List<int>(new int[] { 16, 17, 18});
-                if (rnd > 41) // Beach forest 1
-                    temperateWoodlandTrees = new List<int>(new int[] { 12, 12, 12, 16, 17});
-                if (rnd > 47) // Beach forest 2
-                    temperateWoodlandTrees = new List<int>(new int[] { 12, 16, 17, 17, 17});
-                if (rnd > 55) // Beach forest 3
-                    temperateWoodlandTrees = new List<int>(new int[] { 12, 16, 16, 16, 17});
-                temperateWoodlandDeadTrees = new List<int>(new int[] { 19, 20, 24, 29, 30, 31 });
-                temperateWoodlandFlowers = new List<int>(new int[] { 2, 21, 22 });
-                temperateWoodlandMushroom = new List<int>(new int[] { 7, 9, 23 });
-                temperateWoodlandBushes = new List<int>(new int[] { 26, 27, 28 });
-                temperateWoodlandBeach = new List<int>(new int[] { 31, 3, 3, 4, 4, 5, 5, 6, 29 });
-                temperateWoodlandRocks = new List<int>(new int[] { 3, 4, 5, 6, 8, 10, 26 });
-
-                if (season == DaggerfallDateTime.Seasons.Winter)
-                {
-                    mountainsTrees = new List<int>(new int[] { 5, 5, 11, 11, 11, 13, 13, 24, 24, 24, 21, 25 });
-                    mountainsNeedleTrees = new List<int>(new int[] { 5, 5, 11, 11, 11, 11, 25 });
-                    mountainsDeadTrees = new List<int>(new int[] { 16, 19, 20, 30, 30, 29, 29 });
-                    mountainsFlowers = new List<int>(new int[] { 7 });
-                    mountainsRocks = new List<int>(new int[] { 1, 3, 4, 6, 9, 8, 10, 14, 17, 18, 27, 28, 31 });
-                    mountainsGrass = new List<int>(new int[] { 7, 9, 9, 9, 23, 26, 26, 26 });
-
-                    woodlandHillsFlowers = new List<int>(new int[] { 7, 21, 21 });
-                    woodlandHillsBushes = new List<int>(new int[] { 27, 27, 27, 31 });
-                    woodlandHillsTrees = new List<int>(new int[] { 13, 14, 14, 14, 16 });
-                    woodlandHillsNeedleTrees = new List<int>(new int[] { 5, 11, 11 });
-                    woodlandHillsDirtPlants = new List<int>(new int[] { 22, 29, 26, 9 });
-                }
-                else
-                {
-                    mountainsTrees = new List<int>(new int[] { 5, 5, 11, 11, 12, 13, 13, 15, 15, 15, 21, 30 });
-                    mountainsNeedleTrees = new List<int>(new int[] { 5, 5, 11, 11, 12, 12, 30 });
-                    mountainsDeadTrees = new List<int>(new int[] { 16, 19, 20, 26, 26, 29, 29 });
-                    mountainsFlowers = new List<int>(new int[] { 22 });
-                    mountainsRocks = new List<int>(new int[] { 1, 3, 4, 6, 7, 8, 10, 14, 17, 18, 27, 28, 31 });
-                    mountainsGrass = new List<int>(new int[] { 2, 7, 7, 7, 9, 23, 23, 23 });
-
-                    woodlandHillsFlowers = new List<int>(new int[] { 2, 21, 21 });
-                    woodlandHillsBushes = new List<int>(new int[] { 27, 27, 27, 31 });
-                    woodlandHillsTrees = new List<int>(new int[] { 13, 14, 14, 15, 15, 16 });
-                    woodlandHillsNeedleTrees = new List<int>(new int[] { 5, 11, 11 });
-                    woodlandHillsDirtPlants = new List<int>(new int[] { 26, 29, 23, 7 });
-                }
-            }
-            else if (elevation <= elevationLevels[13])
-            {
-                float rnd = mapStyle + Random.Range(-15f,15f);
-                if (rnd <= 30) // Laubwald
-                    temperateWoodlandTrees = new List<int>(new int[] { 16, 17, 18});
-                if (rnd > 30) // Beach forest 3
-                    temperateWoodlandTrees = new List<int>(new int[] { 12, 12, 16, 17});
-                if (rnd > 42) // Beach forest 1
-                    temperateWoodlandTrees = new List<int>(new int[] { 12, 16, 17, 17});
-                if (rnd > 55) // Beach forest 2
-                    temperateWoodlandTrees = new List<int>(new int[] { 12, 16, 16, 17});
-
-                temperateWoodlandDeadTrees = new List<int>(new int[] { 19, 19, 20, 20, 24, 24, 29, 29, 30, 31, 31 });
-                temperateWoodlandFlowers = new List<int>(new int[] { 2, 2, 2, 21, 22, 22 });
-                temperateWoodlandMushroom = new List<int>(new int[] { 7, 7, 9, 9, 9, 23 });
-                temperateWoodlandBushes = new List<int>(new int[] { 26, 26, 26, 27, 28 });
-                temperateWoodlandBeach = new List<int>(new int[] { 31, 3, 3, 4, 4, 5, 5, 6, 29 });
-                temperateWoodlandRocks = new List<int>(new int[] { 3, 4, 5, 6, 8, 10, 26 });
-
-                if (season == DaggerfallDateTime.Seasons.Winter)
-                {
-                    mountainsTrees = new List<int>(new int[] { 5, 5, 23, 23, 11, 11, 11, 13, 13, 24, 24, 24, 21, 25 });
-                    mountainsNeedleTrees = new List<int>(new int[] { 5, 5, 11, 11, 11, 25 });
-                    mountainsDeadTrees = new List<int>(new int[] { 16, 19, 20, 30, 30, 29, 29 });
-                    mountainsFlowers = new List<int>(new int[] { 7 });
-                    mountainsRocks = new List<int>(new int[] { 1, 3, 4, 6, 9, 8, 10, 14, 17, 18, 27, 28, 31 });
-                    mountainsBeach = new List<int>(new int[] { 8, 26, 29, 7, 7, 7, 23, 23 });
-                    mountainsGrass = new List<int>(new int[] { 7, 9, 9, 9, 23, 26, 26, 26 });
-
-                    woodlandHillsFlowers = new List<int>(new int[] { 7, 7, 9, 9, 21, 26, 26 });
-                    woodlandHillsBushes = new List<int>(new int[] { 27, 27, 31 });
-                    woodlandHillsTrees = new List<int>(new int[] { 13, 13, 14, 16, 16 });
-                    woodlandHillsNeedleTrees = new List<int>(new int[] { 5, 11, 11 });
-                    woodlandHillsDirtPlants = new List<int>(new int[] { 22, 29, 26, 9 });
-                }
-                else
-                {
-                    mountainsTrees = new List<int>(new int[] { 5, 5, 9, 9, 11, 11, 12, 13, 13, 15, 15, 15, 21, 30 });
-                    mountainsNeedleTrees = new List<int>(new int[] { 5, 5, 11, 11, 12, 12, 30 });
-                    mountainsDeadTrees = new List<int>(new int[] { 16, 19, 20, 26, 26, 29, 29 });
-                    mountainsFlowers = new List<int>(new int[] { 22 });
-                    mountainsRocks = new List<int>(new int[] { 1, 3, 4, 6, 7, 8, 10, 14, 17, 18, 27, 28, 31 });
-                    mountainsGrass = new List<int>(new int[] { 2, 7, 7, 7, 9, 23, 23, 23 });
-
-                    woodlandHillsFlowers = new List<int>(new int[] { 2, 2, 7, 7, 21, 23, 23 });
-                    woodlandHillsBushes = new List<int>(new int[] { 27, 27, 31 });
-                    woodlandHillsTrees = new List<int>(new int[] { 13, 14, 15, 16, 16 });
-                    woodlandHillsNeedleTrees = new List<int>(new int[] { 5, 11, 11 });
-                    woodlandHillsDirtPlants = new List<int>(new int[] { 26, 29, 23, 7 });
+                                                                        woodlandHillsFlowers = new List<int>(new int[] { 2, 2, 7, 7, 21, 23, 23 });
+                                                                        woodlandHillsBushes = new List<int>(new int[] { 27, 27, 31 });
+                                                                        woodlandHillsTrees = new List<int>(new int[] { 13, 14, 15, 16, 16 });
+                                                                        woodlandHillsNeedleTrees = new List<int>(new int[] { 5, 11, 11 });
+                                                                        woodlandHillsDirtPlants = new List<int>(new int[] { 26, 29, 23, 7 });
+                                                                    }
+                                                                }
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
                 }
             }
         }

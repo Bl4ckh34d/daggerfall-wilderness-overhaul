@@ -222,7 +222,7 @@ namespace WildernessOverhaul
                     case (int)MapsFile.Climates.Woodlands:
                         climateNum = 7;
                         if (interestingErodedTerrainEnabled)
-                            persistanceRnd = persistance[climateNum] + ((height / maxTerrainHeight) * 1.5f);
+                            persistanceRnd = persistance[climateNum] + ((height / maxTerrainHeight) * 1.2f);
                         else
                             persistanceRnd = persistance[climateNum] + ((height / maxTerrainHeight) * 1.4f) - 0.30f;
                         break;
