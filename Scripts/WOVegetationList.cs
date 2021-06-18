@@ -239,6 +239,13 @@ namespace WildernessOverhaul
 
             float rnd;
 
+            elevationLevels = new List<float>(new float[] {
+                Random.Range(0.66f,0.64f), Random.Range(0.61f,0.59f), Random.Range(0.56f,0.54f),
+                Random.Range(0.51f,0.49f), Random.Range(0.46f,0.44f), Random.Range(0.41f,0.39f),
+                Random.Range(0.36f, 0.34f), Random.Range(0.31f,0.29f), Random.Range(0.26f,0.24f),
+                Random.Range(0.21f,0.19f), Random.Range(0.11f,0.09f), Random.Range(0.076f,0.74f),
+                Random.Range(0.051f,0.049f), Random.Range(0.021f,0.019f)});
+
             if (season == DaggerfallDateTime.Seasons.Winter) {
                 if (elevation > elevationLevels[0]) {
                     temperateWoodlandTrees = temperateWoodlandTreesAtElevation0;
@@ -861,7 +868,7 @@ namespace WildernessOverhaul
                                                         woodlandHillsDirtPlants = new List<int>(new int[] { 26, 29, 23, 7, 31 });
                                                     } else {
                                                         if (elevation > elevationLevels[10]) {
-                                                            rnd = mapStyle + Random.Range(-10f,10f);
+                                                            rnd = mapStyle + Random.Range(-15f,15f);
                                                             if (rnd <= 30)
                                                                 temperateWoodlandTrees = temperateWoodlandTreesAtElevation10A;
                                                             if (rnd > 30)
@@ -895,7 +902,7 @@ namespace WildernessOverhaul
                                                             woodlandHillsDirtPlants = new List<int>(new int[] { 26, 29, 23, 7, 31 });
                                                         } else {
                                                             if (elevation > elevationLevels[11]) {
-                                                                rnd = mapStyle + Random.Range(-10f,10f);
+                                                                rnd = mapStyle + Random.Range(-15f,15f);
                                                                 if (rnd <= 30)
                                                                 temperateWoodlandTrees = temperateWoodlandTreesAtElevation11A;
                                                                 if (rnd > 30)
@@ -929,7 +936,7 @@ namespace WildernessOverhaul
                                                                 woodlandHillsDirtPlants = new List<int>(new int[] { 26, 29, 23, 7, 31 });
                                                             } else {
                                                                 if (elevation > elevationLevels[12]) {
-                                                                    rnd = mapStyle + Random.Range(-10f,10f);
+                                                                    rnd = mapStyle + Random.Range(-15f,15f);
                                                                     if (rnd <= 30)
                                                                         temperateWoodlandTrees = temperateWoodlandTreesAtElevation12A;
                                                                     if (rnd > 30)
@@ -963,7 +970,7 @@ namespace WildernessOverhaul
                                                                     woodlandHillsDirtPlants = new List<int>(new int[] { 26, 29, 23, 7 });
                                                                 } else {
                                                                     if (elevation > elevationLevels[13]) {
-                                                                        rnd = mapStyle + Random.Range(-10f,10f);
+                                                                        rnd = mapStyle + Random.Range(-15f,15f);
                                                                         if (rnd <= 30)
                                                                             temperateWoodlandTrees = temperateWoodlandTreesAtElevation13A;
                                                                         if (rnd > 30)
@@ -996,7 +1003,7 @@ namespace WildernessOverhaul
                                                                         woodlandHillsNeedleTrees = new List<int>(new int[] { 5, 11, 11 });
                                                                         woodlandHillsDirtPlants = new List<int>(new int[] { 26, 29, 23, 7 });
                                                                     } else {
-                                                                        rnd = mapStyle + Random.Range(-15f,15f);
+                                                                        rnd = mapStyle + Random.Range(-20f,20f);
                                                                         if (rnd <= 30)
                                                                             temperateWoodlandTrees = temperateWoodlandTreesAtElevation14A;
                                                                         if (rnd > 30)
