@@ -7,10 +7,10 @@ using DaggerfallWorkshop.Game.Weather;
 
 public class WORandomMover : MonoBehaviour
 {
-  [SerializeField] [Range(0f, 10f)] float speed;
+  [SerializeField] [Range(0f, 10f)] float speed = 1;
   [SerializeField] [Range(0.1f, 10f)] float posChangeTime;
-  [SerializeField] [Range(0f, 5f)] float maxRoamingRangeVertical;
-  [SerializeField] [Range(0f, 2.5f)] float maxRoamingRangeHorizontal;
+  [SerializeField] [Range(0f, 5f)] float maxRoamingRangeVertical = 2;
+  [SerializeField] [Range(0f, 2.5f)] float maxRoamingRangeHorizontal = 3;
 
   DaggerfallUnity dfUnity;
   WeatherManager weatherManager;

@@ -35,7 +35,7 @@ namespace WildernessOverhaul
         // Subtropics, Mountain Woods, Woodland, Haunted Woods, Ocean
         static float[] frequency = {0.02f, 0.02f, 0.025f, 0.035f, 0.02f, 0.02f, 0.035f, 0.035f, 0.035f, 0.1f};
         static float[] amplitude = {0.3f, 0.3f, 0.3f, 0.4f, 0.3f, 0.3f, 0.4f, 0.4f, 0.4f, 0.95f};
-        static float[] persistance = {0.5f, 0.55f, 0.95f, 0.8f, 0.5f, 0.5f, 0.8f, 0.9f, 0.8f, 0.3f};
+        static float[] persistance = {0.5f, 0.55f, 0.95f, 0.8f, 0.5f, 0.5f, 0.8f, 0.5f, 0.8f, 0.3f};
         static int octaves = 5;
         static float[] upperWaterSpread = {-1.0f, -1.0f, 0.0f, 0.0f, -1.0f, -1.0f, 0.0f, 0.0f, 0.0f, 0.0f};
         static float[] lowerGrassSpread = {0.4f, 0.35f, 0.35f, 0.35f, 0.4f, 0.4f, 0.35f, 0.35f, 0.35f, 0.35f};
@@ -222,7 +222,7 @@ namespace WildernessOverhaul
                     case (int)MapsFile.Climates.Woodlands:
                         climateNum = 7;
                         if (interestingErodedTerrainEnabled)
-                            persistanceRnd = persistance[climateNum] + (height / maxTerrainHeight);
+                            persistanceRnd = persistance[climateNum] + ((height / maxTerrainHeight) * 2.5f);
                         else
                             persistanceRnd = persistance[climateNum] + ((height / maxTerrainHeight) * 1.4f) - 0.30f;
                         break;
@@ -283,10 +283,25 @@ namespace WildernessOverhaul
                 float height = heightmapData[JobA.Idx(hy, hx, hDim)] * maxTerrainHeight;
 
                 // Ocean and Beach texture
-                if (height <= oceanElevation) {
+                if (height < oceanElevation - 0.001f) {
                     tileData[index] = water;
                     return;
                 }
+
+                // Adds a little +/- randomness to threshold so beach line isn't too regular
+                // Thinner beach where a rock face is diving down steep into water
+                if (height < beachElevation - 3) {
+                    tileData[index] = dirt;
+                    return;
+                }
+
+                // Rock Mountain Face
+                int rnd = JobRand.Next(75,90);
+                if (SteepnessWithinLimits(true, Mathf.Clamp(rnd - ((height / maxTerrainHeight) / rnd),40f,90f), heightmapData, maxTerrainHeight, hx, hy, hDim, uB, index, tdDim, tileData)) {
+                    tileData[index] = stone;
+                    return;
+                }
+
                 // Adds a little +/- randomness to threshold so beach line isn't too regular
                 if (height <= beachElevation + (JobRand.Next(100000000, 250000000) / 10000000f)) {
                     tileData[index] = dirt;
@@ -299,10 +314,7 @@ namespace WildernessOverhaul
 
                 // Set texture tile using weighted noise
                 float weight = 0;
-                if (interestingErodedTerrainEnabled)
-                    weight += NoiseWeight(latitude, longitude, height);
-                else
-                    weight += NoiseWeight(latitude, longitude, height);
+                weight += NoiseWeight(latitude, longitude, height);
 
 
                 int climateNum = 9;
@@ -352,12 +364,7 @@ namespace WildernessOverhaul
                     return;
                 }
 
-                // Rock Mountain Face
-                int rnd = JobRand.Next(75,90);
-                if (SteepnessWithinLimits(true, Mathf.Clamp(rnd - ((height / maxTerrainHeight) / rnd),40f,90f), heightmapData, maxTerrainHeight, hx, hy, hDim, uB, index, tdDim, tileData)) {
-                    tileData[index] = stone;
-                    return;
-                }
+
 
                 /* rnd = JobRand.Next(25,35);
                 if (tileData[index] == stone && SteepnessWithinLimits(false, Mathf.Clamp(rnd - ((height / maxTerrainHeight) / rnd),40f,90f), heightmapData, maxTerrainHeight, hx, hy, hDim, uB, index, tdDim, tileData)) {

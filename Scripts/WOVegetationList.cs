@@ -469,7 +469,9 @@ namespace WildernessOverhaul
                                                     } else {
                                                         if (elevation > elevationLevels[10]) {
                                                             rnd = mapStyle + Random.Range(-10f,10f);
-                                                            if (rnd <= 30)
+                                                            if (rnd <= 25)
+                                                                temperateWoodlandTrees = temperateWoodlandTreesAtElevation10F;
+                                                            if (rnd > 25)
                                                                 temperateWoodlandTrees = temperateWoodlandTreesAtElevation10A;
                                                             if (rnd > 30)
                                                                 temperateWoodlandTrees = temperateWoodlandTreesAtElevation10B;
@@ -481,6 +483,8 @@ namespace WildernessOverhaul
                                                                 temperateWoodlandTrees = temperateWoodlandTreesAtElevation10E;
                                                             if (rnd > 55)
                                                                 temperateWoodlandTrees = temperateWoodlandTreesAtElevation10F;
+                                                            if (rnd > 60)
+                                                                temperateWoodlandTrees = temperateWoodlandTreesAtElevation10A;
                                                             temperateWoodlandDeadTrees = temperateWoodlandDeadTreesAtElevation10;
                                                             temperateWoodlandFlowers = temperateWoodlandFlowersAtElevation10;
                                                             temperateWoodlandMushroom = temperateWoodlandMushroomAtElevation10;
@@ -503,8 +507,10 @@ namespace WildernessOverhaul
                                                         } else {
                                                             if (elevation > elevationLevels[11]) {
                                                                 rnd = mapStyle + Random.Range(-10f,10f);
-                                                                if (rnd <= 30)
-                                                                temperateWoodlandTrees = temperateWoodlandTreesAtElevation11A;
+                                                                if (rnd <= 25)
+                                                                    temperateWoodlandTrees = temperateWoodlandTreesAtElevation11F;
+                                                                if (rnd > 25)
+                                                                    temperateWoodlandTrees = temperateWoodlandTreesAtElevation11A;
                                                                 if (rnd > 30)
                                                                     temperateWoodlandTrees = temperateWoodlandTreesAtElevation11B;
                                                                 if (rnd > 35)
@@ -515,6 +521,8 @@ namespace WildernessOverhaul
                                                                     temperateWoodlandTrees = temperateWoodlandTreesAtElevation11E;
                                                                 if (rnd > 55)
                                                                     temperateWoodlandTrees = temperateWoodlandTreesAtElevation11F;
+                                                                if (rnd > 60)
+                                                                    temperateWoodlandTrees = temperateWoodlandTreesAtElevation11A;
                                                                 temperateWoodlandDeadTrees = temperateWoodlandDeadTreesAtElevation11;
                                                                 temperateWoodlandFlowers = temperateWoodlandFlowersAtElevation11;
                                                                 temperateWoodlandMushroom = temperateWoodlandMushroomAtElevation11;
@@ -537,7 +545,9 @@ namespace WildernessOverhaul
                                                             } else {
                                                                 if (elevation > elevationLevels[12]) {
                                                                     rnd = mapStyle + Random.Range(-10f,10f);
-                                                                    if (rnd <= 30)
+                                                                    if (rnd <= 25)
+                                                                        temperateWoodlandTrees = temperateWoodlandTreesAtElevation12F;
+                                                                    if (rnd > 25)
                                                                         temperateWoodlandTrees = temperateWoodlandTreesAtElevation12A;
                                                                     if (rnd > 30)
                                                                         temperateWoodlandTrees = temperateWoodlandTreesAtElevation12B;
@@ -549,6 +559,8 @@ namespace WildernessOverhaul
                                                                         temperateWoodlandTrees = temperateWoodlandTreesAtElevation12E;
                                                                     if (rnd > 55)
                                                                         temperateWoodlandTrees = temperateWoodlandTreesAtElevation12F;
+                                                                    if (rnd > 60)
+                                                                        temperateWoodlandTrees = temperateWoodlandTreesAtElevation12A;
                                                                     temperateWoodlandDeadTrees = temperateWoodlandDeadTreesAtElevation12;
                                                                     temperateWoodlandFlowers = temperateWoodlandFlowersAtElevation12;
                                                                     temperateWoodlandMushroom = temperateWoodlandMushroomAtElevation12;
@@ -571,7 +583,9 @@ namespace WildernessOverhaul
                                                                 } else {
                                                                     if (elevation > elevationLevels[13]) {
                                                                         rnd = mapStyle + Random.Range(-10f,10f);
-                                                                        if (rnd <= 30)
+                                                                        if (rnd <= 25)
+                                                                            temperateWoodlandTrees = temperateWoodlandTreesAtElevation13F;
+                                                                        if (rnd > 25)
                                                                             temperateWoodlandTrees = temperateWoodlandTreesAtElevation13A;
                                                                         if (rnd > 30)
                                                                             temperateWoodlandTrees = temperateWoodlandTreesAtElevation13B;
@@ -583,6 +597,8 @@ namespace WildernessOverhaul
                                                                             temperateWoodlandTrees = temperateWoodlandTreesAtElevation13E;
                                                                         if (rnd > 55)
                                                                             temperateWoodlandTrees = temperateWoodlandTreesAtElevation13F;
+                                                                        if (rnd > 60)
+                                                                            temperateWoodlandTrees = temperateWoodlandTreesAtElevation13A;
                                                                         temperateWoodlandDeadTrees = temperateWoodlandDeadTreesAtElevation13;
                                                                         temperateWoodlandFlowers = temperateWoodlandFlowersAtElevation13;
                                                                         temperateWoodlandMushroom = temperateWoodlandMushroomAtElevation13;
@@ -604,7 +620,9 @@ namespace WildernessOverhaul
                                                                         woodlandHillsDirtPlants = new List<int>(new int[] { 22, 29, 26, 9 });
                                                                     } else {
                                                                         rnd = mapStyle + Random.Range(-15f,15f);
-                                                                        if (rnd <= 30)
+                                                                        if (rnd <= 18)
+                                                                            temperateWoodlandTrees = temperateWoodlandTreesAtElevation14D;
+                                                                        if (rnd > 18)
                                                                             temperateWoodlandTrees = temperateWoodlandTreesAtElevation14A;
                                                                         if (rnd > 30)
                                                                             temperateWoodlandTrees = temperateWoodlandTreesAtElevation14B;
@@ -612,6 +630,8 @@ namespace WildernessOverhaul
                                                                             temperateWoodlandTrees = temperateWoodlandTreesAtElevation14C;
                                                                         if (rnd > 55)
                                                                             temperateWoodlandTrees = temperateWoodlandTreesAtElevation14D;
+                                                                        if (rnd > 67)
+                                                                            temperateWoodlandTrees = temperateWoodlandTreesAtElevation14A;
                                                                         temperateWoodlandDeadTrees = temperateWoodlandDeadTreesAtElevation14;
                                                                         temperateWoodlandFlowers = temperateWoodlandFlowersAtElevation14;
                                                                         temperateWoodlandMushroom = temperateWoodlandMushroomAtElevation14;
@@ -868,8 +888,10 @@ namespace WildernessOverhaul
                                                         woodlandHillsDirtPlants = new List<int>(new int[] { 26, 29, 23, 7, 31 });
                                                     } else {
                                                         if (elevation > elevationLevels[10]) {
-                                                            rnd = mapStyle + Random.Range(-15f,15f);
-                                                            if (rnd <= 30)
+                                                            rnd = mapStyle + Random.Range(-10f,10f);
+                                                            if (rnd <= 25)
+                                                                temperateWoodlandTrees = temperateWoodlandTreesAtElevation10F;
+                                                            if (rnd > 25)
                                                                 temperateWoodlandTrees = temperateWoodlandTreesAtElevation10A;
                                                             if (rnd > 30)
                                                                 temperateWoodlandTrees = temperateWoodlandTreesAtElevation10B;
@@ -881,6 +903,8 @@ namespace WildernessOverhaul
                                                                 temperateWoodlandTrees = temperateWoodlandTreesAtElevation10E;
                                                             if (rnd > 55)
                                                                 temperateWoodlandTrees = temperateWoodlandTreesAtElevation10F;
+                                                            if (rnd > 60)
+                                                                temperateWoodlandTrees = temperateWoodlandTreesAtElevation10A;
                                                             temperateWoodlandDeadTrees = temperateWoodlandDeadTreesAtElevation10;
                                                             temperateWoodlandFlowers = temperateWoodlandFlowersAtElevation10;
                                                             temperateWoodlandMushroom = temperateWoodlandMushroomAtElevation10;
@@ -902,9 +926,11 @@ namespace WildernessOverhaul
                                                             woodlandHillsDirtPlants = new List<int>(new int[] { 26, 29, 23, 7, 31 });
                                                         } else {
                                                             if (elevation > elevationLevels[11]) {
-                                                                rnd = mapStyle + Random.Range(-15f,15f);
-                                                                if (rnd <= 30)
-                                                                temperateWoodlandTrees = temperateWoodlandTreesAtElevation11A;
+                                                                rnd = mapStyle + Random.Range(-10f,10f);
+                                                                if (rnd <= 25)
+                                                                    temperateWoodlandTrees = temperateWoodlandTreesAtElevation11F;
+                                                                if (rnd > 25)
+                                                                    temperateWoodlandTrees = temperateWoodlandTreesAtElevation11A;
                                                                 if (rnd > 30)
                                                                     temperateWoodlandTrees = temperateWoodlandTreesAtElevation11B;
                                                                 if (rnd > 35)
@@ -915,6 +941,8 @@ namespace WildernessOverhaul
                                                                     temperateWoodlandTrees = temperateWoodlandTreesAtElevation11E;
                                                                 if (rnd > 55)
                                                                     temperateWoodlandTrees = temperateWoodlandTreesAtElevation11F;
+                                                                if (rnd > 60)
+                                                                    temperateWoodlandTrees = temperateWoodlandTreesAtElevation11A;
                                                                 temperateWoodlandDeadTrees = temperateWoodlandDeadTreesAtElevation11;
                                                                 temperateWoodlandFlowers = temperateWoodlandFlowersAtElevation11;
                                                                 temperateWoodlandMushroom = temperateWoodlandMushroomAtElevation11;
@@ -936,8 +964,10 @@ namespace WildernessOverhaul
                                                                 woodlandHillsDirtPlants = new List<int>(new int[] { 26, 29, 23, 7, 31 });
                                                             } else {
                                                                 if (elevation > elevationLevels[12]) {
-                                                                    rnd = mapStyle + Random.Range(-15f,15f);
-                                                                    if (rnd <= 30)
+                                                                    rnd = mapStyle + Random.Range(-10f,10f);
+                                                                    if (rnd <= 25)
+                                                                        temperateWoodlandTrees = temperateWoodlandTreesAtElevation12F;
+                                                                    if (rnd > 25)
                                                                         temperateWoodlandTrees = temperateWoodlandTreesAtElevation12A;
                                                                     if (rnd > 30)
                                                                         temperateWoodlandTrees = temperateWoodlandTreesAtElevation12B;
@@ -949,6 +979,8 @@ namespace WildernessOverhaul
                                                                         temperateWoodlandTrees = temperateWoodlandTreesAtElevation12E;
                                                                     if (rnd > 55)
                                                                         temperateWoodlandTrees = temperateWoodlandTreesAtElevation12F;
+                                                                    if (rnd > 60)
+                                                                        temperateWoodlandTrees = temperateWoodlandTreesAtElevation12A;
                                                                     temperateWoodlandDeadTrees = temperateWoodlandDeadTreesAtElevation12;
                                                                     temperateWoodlandFlowers = temperateWoodlandFlowersAtElevation12;
                                                                     temperateWoodlandMushroom = temperateWoodlandMushroomAtElevation12;
@@ -970,8 +1002,10 @@ namespace WildernessOverhaul
                                                                     woodlandHillsDirtPlants = new List<int>(new int[] { 26, 29, 23, 7 });
                                                                 } else {
                                                                     if (elevation > elevationLevels[13]) {
-                                                                        rnd = mapStyle + Random.Range(-15f,15f);
-                                                                        if (rnd <= 30)
+                                                                        rnd = mapStyle + Random.Range(-10f,10f);
+                                                                        if (rnd <= 25)
+                                                                            temperateWoodlandTrees = temperateWoodlandTreesAtElevation13F;
+                                                                        if (rnd > 25)
                                                                             temperateWoodlandTrees = temperateWoodlandTreesAtElevation13A;
                                                                         if (rnd > 30)
                                                                             temperateWoodlandTrees = temperateWoodlandTreesAtElevation13B;
@@ -983,6 +1017,8 @@ namespace WildernessOverhaul
                                                                             temperateWoodlandTrees = temperateWoodlandTreesAtElevation13E;
                                                                         if (rnd > 55)
                                                                             temperateWoodlandTrees = temperateWoodlandTreesAtElevation13F;
+                                                                        if (rnd > 60)
+                                                                            temperateWoodlandTrees = temperateWoodlandTreesAtElevation13A;
                                                                         temperateWoodlandDeadTrees = temperateWoodlandDeadTreesAtElevation13;
                                                                         temperateWoodlandFlowers = temperateWoodlandFlowersAtElevation13;
                                                                         temperateWoodlandMushroom = temperateWoodlandMushroomAtElevation13;
@@ -1003,8 +1039,10 @@ namespace WildernessOverhaul
                                                                         woodlandHillsNeedleTrees = new List<int>(new int[] { 5, 11, 11 });
                                                                         woodlandHillsDirtPlants = new List<int>(new int[] { 26, 29, 23, 7 });
                                                                     } else {
-                                                                        rnd = mapStyle + Random.Range(-20f,20f);
-                                                                        if (rnd <= 30)
+                                                                        rnd = mapStyle + Random.Range(-15f,15f);
+                                                                        if (rnd <= 18)
+                                                                            temperateWoodlandTrees = temperateWoodlandTreesAtElevation14D;
+                                                                        if (rnd > 18)
                                                                             temperateWoodlandTrees = temperateWoodlandTreesAtElevation14A;
                                                                         if (rnd > 30)
                                                                             temperateWoodlandTrees = temperateWoodlandTreesAtElevation14B;
@@ -1012,6 +1050,8 @@ namespace WildernessOverhaul
                                                                             temperateWoodlandTrees = temperateWoodlandTreesAtElevation14C;
                                                                         if (rnd > 55)
                                                                             temperateWoodlandTrees = temperateWoodlandTreesAtElevation14D;
+                                                                        if (rnd > 67)
+                                                                            temperateWoodlandTrees = temperateWoodlandTreesAtElevation14A;
                                                                         temperateWoodlandDeadTrees = temperateWoodlandDeadTreesAtElevation14;
                                                                         temperateWoodlandFlowers = temperateWoodlandFlowersAtElevation14;
                                                                         temperateWoodlandMushroom = temperateWoodlandMushroomAtElevation14;

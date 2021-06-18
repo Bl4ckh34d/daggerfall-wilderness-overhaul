@@ -55,7 +55,7 @@ namespace WildernessOverhaul
                 Debug.Log("Wilderness Overhaul: DREAM Mod is active");
             }
 
-            InterestingErodedTerrainMod = ModManager.Instance.GetModFromGUID("d08bb628-ff2e-4e2f-ae57-1d4981e61843");
+            InterestingErodedTerrainMod = ModManager.Instance.GetModFromGUID("45339f97-bcef-437c-a270-363a70993dc5");
             if (InterestingErodedTerrainMod != null && InterestingErodedTerrainMod.Enabled)
             {
                 InterestingErodedTerrainModEnabled = true;
