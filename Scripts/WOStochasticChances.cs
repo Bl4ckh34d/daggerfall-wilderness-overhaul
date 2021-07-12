@@ -84,10 +84,10 @@ public class WOStochasticChances
         temperateMushroomRingChance = 0.025f;
         tempForestLimit[0] = Random.Range(0.35f, 0.45f);
         tempForestLimit[1] = tempForestLimit[0] + Random.Range(0.25f, 0.35f);
-        tempForestFrequency = 0.01f;//Random.Range(0.01f, 0.015f);
+        tempForestFrequency = 0.01f;
         tempForestAmplitude = 0.9f;
-        tempForestPersistence = Random.Range(0.35f, 0.45f);
-        tempForestOctaves = 3;//Random.Range(2, 3);
+        tempForestPersistence = 0.4f; //Random.Range(0.375f, 0.425f);
+        tempForestOctaves = 3;
 
         // ------------------------------------
         // MOUNTAIN Climate Vegetation Chances

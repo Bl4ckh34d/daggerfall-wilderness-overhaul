@@ -71,8 +71,8 @@ namespace WildernessOverhaul
                 Random.Range(0.66f,0.64f), Random.Range(0.61f,0.59f), Random.Range(0.56f,0.54f),
                 Random.Range(0.51f,0.49f), Random.Range(0.46f,0.44f), Random.Range(0.41f,0.39f),
                 Random.Range(0.36f, 0.34f), Random.Range(0.31f,0.29f), Random.Range(0.26f,0.24f),
-                Random.Range(0.21f,0.19f), Random.Range(0.11f,0.09f), Random.Range(0.076f,0.74f),
-                Random.Range(0.051f,0.049f), Random.Range(0.021f,0.019f)});
+                Random.Range(0.21f,0.19f), Random.Range(0.11f,0.09f), Random.Range(0.096f,0.84f),
+                Random.Range(0.071f,0.069f), Random.Range(0.041f,0.039f)});
 
         //TEMPERATE WOODLAND
         //ELEVATION 0
@@ -157,7 +157,12 @@ namespace WildernessOverhaul
         public List<int> temperateWoodlandRocksAtElevation8 = new List<int>(new int[] { 3, 4, 5, 6, 8, 10, 26 });
 
         //ELEVATION 9
-        public List<int> temperateWoodlandTreesAtElevation9 = new List<int>(new int[] { 13, 14, 15, 17, 18, 25, 25, 25 });
+        public List<int> temperateWoodlandTreesAtElevation9A = new List<int>(new int[] { 25, 25, 25, 25, 25, 20, 19, 26, 26, 30, 1, 1, 1}); // Conifere Forest 1
+        public List<int> temperateWoodlandTreesAtElevation9B = new List<int>(new int[] { 11, 13, 13, 14, 15, 16, 17, 1}); // Mixed Forest 1
+        public List<int> temperateWoodlandTreesAtElevation9C = new List<int>(new int[] { 11, 13, 14, 15, 16, 17, 17, 18, 18, 18, 1}); // Oak forest
+        public List<int> temperateWoodlandTreesAtElevation9D = new List<int>(new int[] { 13, 13, 25, 25, 25, 1, 1, 1}); // Conifere forest 2
+        public List<int> temperateWoodlandTreesAtElevation9E = new List<int>(new int[] { 11, 14, 14, 14, 15, 15, 24, 1}); // Birch Forest
+        public List<int> temperateWoodlandTreesAtElevation9F = new List<int>(new int[] { 11, 13, 13, 13, 14, 15, 25, 25, 1}); // Conifere forest 2
         public List<int> temperateWoodlandDeadTreesAtElevation9 = new List<int>(new int[] { 19, 20, 24, 25, 25, 25, 29, 30, 31 });
         public List<int> temperateWoodlandFlowersAtElevation9 = new List<int>(new int[] { 21, 22 });
         public List<int> temperateWoodlandMushroomAtElevation9 = new List<int>(new int[] { 7, 23 });
@@ -166,13 +171,13 @@ namespace WildernessOverhaul
         public List<int> temperateWoodlandRocksAtElevation9 = new List<int>(new int[] { 3, 4, 5, 6, 8, 10, 26 });
 
         //ELEVATION 10
-        public List<int> temperateWoodlandTreesAtElevation10A = new List<int>(new int[] { 13, 13, 25, 25, 25}); // Conifere Forest 1
-        public List<int> temperateWoodlandTreesAtElevation10B = new List<int>(new int[] { 13, 13, 13, 25, 25}); // Conifere forest 2
-        public List<int> temperateWoodlandTreesAtElevation10C = new List<int>(new int[] { 13, 25}); // Mixed Forest 1
-        public List<int> temperateWoodlandTreesAtElevation10D = new List<int>(new int[] { 17, 18}); // Deciduous Forest
-        public List<int> temperateWoodlandTreesAtElevation10E = new List<int>(new int[] { 11, 14, 14, 14, 15, 15}); // Birch Forest
-        public List<int> temperateWoodlandTreesAtElevation10F = new List<int>(new int[] { 13, 17, 18, 18, 18}); // Oak forest
-        public List<int> temperateWoodlandDeadTreesAtElevation10 = new List<int>(new int[] { 19, 20, 24, 25, 25, 25, 29, 30, 31 });
+        public List<int> temperateWoodlandTreesAtElevation10A = new List<int>(new int[] { 25, 25, 25, 25, 25, 20, 19, 26, 26, 30, 1, 1, 1}); // Conifere Forest 1
+        public List<int> temperateWoodlandTreesAtElevation10B = new List<int>(new int[] { 11, 13, 13, 14, 15, 16, 17, 1}); // Mixed Forest 1
+        public List<int> temperateWoodlandTreesAtElevation10C = new List<int>(new int[] { 11, 13, 14, 15, 16, 17, 17, 18, 18, 18, 1}); // Oak forest
+        public List<int> temperateWoodlandTreesAtElevation10D = new List<int>(new int[] { 11, 13, 14, 15, 16, 16, 17, 17, 18, 18, 1}); // Deciduous Forest
+        public List<int> temperateWoodlandTreesAtElevation10E = new List<int>(new int[] { 11, 14, 14, 14, 15, 15, 24, 1}); // Birch Forest
+        public List<int> temperateWoodlandTreesAtElevation10F = new List<int>(new int[] { 11, 13, 13, 13, 14, 15, 25, 25, 1}); // Conifere forest 2
+        public List<int> temperateWoodlandDeadTreesAtElevation10 = new List<int>(new int[] { 19, 20, 24, 25, 25, 25, 25, 29, 30, 31 });
         public List<int> temperateWoodlandFlowersAtElevation10 = new List<int>(new int[] { 21, 22 });
         public List<int> temperateWoodlandMushroomAtElevation10 = new List<int>(new int[] { 7, 23 });
         public List<int> temperateWoodlandBushesAtElevation10 = new List<int>(new int[] { 1, 1, 27, 28 });
@@ -180,12 +185,12 @@ namespace WildernessOverhaul
         public List<int> temperateWoodlandRocksAtElevation10 = new List<int>(new int[] { 3, 4, 5, 6, 8, 10, 26 });
 
         //ELEVATION 11
-        public List<int> temperateWoodlandTreesAtElevation11A = new List<int>(new int[] { 13, 13, 25, 25, 25}); // Conifere forest
-        public List<int> temperateWoodlandTreesAtElevation11B = new List<int>(new int[] { 13, 14, 16, 17}); // Mixed Forest 1
-        public List<int> temperateWoodlandTreesAtElevation11C = new List<int>(new int[] { 16, 17, 18}); // Deciduous Forest
-        public List<int> temperateWoodlandTreesAtElevation11D = new List<int>(new int[] { 13, 15, 18}); // Mixed Forest 2
-        public List<int> temperateWoodlandTreesAtElevation11E = new List<int>(new int[] { 11, 14, 14, 14, 15, 15}); // Birch Forest
-        public List<int> temperateWoodlandTreesAtElevation11F = new List<int>(new int[] { 13, 17, 17, 18, 18, 18}); // Oak forest
+        public List<int> temperateWoodlandTreesAtElevation11A = new List<int>(new int[] { 11, 13, 14, 15, 25, 25, 25, 25, 25, 20, 19, 26, 26, 1}); // Conifere forest
+        public List<int> temperateWoodlandTreesAtElevation11B = new List<int>(new int[] { 11, 12, 13, 13, 14, 15, 16, 17, 18, 26, 26, 1}); // Mixed Forest 1
+        public List<int> temperateWoodlandTreesAtElevation11C = new List<int>(new int[] { 11, 13, 14, 15, 16, 16, 17, 17, 18, 18, 26, 26, 1}); // Deciduous Forest
+        public List<int> temperateWoodlandTreesAtElevation11D = new List<int>(new int[] { 11, 12, 13, 14, 15, 16, 17, 18, 18, 26, 26, 1}); // Mixed Forest 2
+        public List<int> temperateWoodlandTreesAtElevation11E = new List<int>(new int[] { 11, 13, 14, 14, 14, 15, 15, 15, 16, 17, 18, 24, 26, 26, 1}); // Birch Forest
+        public List<int> temperateWoodlandTreesAtElevation11F = new List<int>(new int[] { 11, 13, 13, 14, 15, 16, 17, 17, 18, 18, 18, 18, 26, 26, 1}); // Oak forest
         public List<int> temperateWoodlandDeadTreesAtElevation11 = new List<int>(new int[] { 19, 20, 24, 25, 25, 29, 30, 31 });
         public List<int> temperateWoodlandFlowersAtElevation11 = new List<int>(new int[] { 21, 22 });
         public List<int> temperateWoodlandMushroomAtElevation11 = new List<int>(new int[] { 7, 23 });
@@ -195,11 +200,11 @@ namespace WildernessOverhaul
 
         //ELEVATION 12
         public List<int> temperateWoodlandTreesAtElevation12A = new List<int>(new int[] { 11, 12, 13, 14, 15, 16, 17, 18}); // Mixed Forest
-        public List<int> temperateWoodlandTreesAtElevation12B = new List<int>(new int[] { 12, 12, 12, 16, 16, 17}); // Beach forest 1
-        public List<int> temperateWoodlandTreesAtElevation12C = new List<int>(new int[] { 12, 16, 16, 16, 17, 17}); // Beach forest 2
-        public List<int> temperateWoodlandTreesAtElevation12D = new List<int>(new int[] { 14, 14, 14, 15, 15}); // Birch Forest 1
-        public List<int> temperateWoodlandTreesAtElevation12E = new List<int>(new int[] { 14, 14, 15, 15, 15}); // Birch Forest 2
-        public List<int> temperateWoodlandTreesAtElevation12F = new List<int>(new int[] { 16, 17, 18}); // Deciduous Forest
+        public List<int> temperateWoodlandTreesAtElevation12B = new List<int>(new int[] { 11, 12, 12, 12, 13, 16, 16, 16, 17, 17, 17, 18}); // Beach forest 1
+        public List<int> temperateWoodlandTreesAtElevation12C = new List<int>(new int[] { 11, 12, 12, 12, 13, 16, 16, 16, 17, 18, 18, 18}); // Beach forest 2
+        public List<int> temperateWoodlandTreesAtElevation12D = new List<int>(new int[] { 11, 13, 14, 14, 14, 14, 15, 15, 15, 16, 17, 18, 24}); // Birch Forest 1
+        public List<int> temperateWoodlandTreesAtElevation12E = new List<int>(new int[] { 11, 13, 14, 14, 14, 15, 15, 15, 15, 16, 17, 18, 24}); // Birch Forest 2
+        public List<int> temperateWoodlandTreesAtElevation12F = new List<int>(new int[] { 11, 12, 13, 14, 15, 16, 16, 17, 17, 18, 18}); // Deciduous Forest
         public List<int> temperateWoodlandDeadTreesAtElevation12 = new List<int>(new int[] { 19, 20, 24, 25, 29, 30, 31 });
         public List<int> temperateWoodlandFlowersAtElevation12 = new List<int>(new int[] { 2, 21, 21, 21, 22, 22 });
         public List<int> temperateWoodlandMushroomAtElevation12 = new List<int>(new int[] { 7, 7, 7, 9, 23, 23 });
@@ -209,12 +214,12 @@ namespace WildernessOverhaul
 
 
         //ELEVATION 13
-        public List<int> temperateWoodlandTreesAtElevation13A = new List<int>(new int[] { 14, 14, 14, 15, 15}); // Birch Forest
-        public List<int> temperateWoodlandTreesAtElevation13B = new List<int>(new int[] { 13, 17, 17, 18, 18, 18}); // Oak forest
-        public List<int> temperateWoodlandTreesAtElevation13C = new List<int>(new int[] { 16, 17, 18}); // Deciduous Forest
-        public List<int> temperateWoodlandTreesAtElevation13D = new List<int>(new int[] { 12, 12, 12, 16, 17}); // Beach forest 1
-        public List<int> temperateWoodlandTreesAtElevation13E = new List<int>(new int[] { 12, 16, 17, 17, 17}); // Beach forest 2
-        public List<int> temperateWoodlandTreesAtElevation13F = new List<int>(new int[] { 12, 16, 16, 16, 17}); // Beach forest 3
+        public List<int> temperateWoodlandTreesAtElevation13A = new List<int>(new int[] { 11, 11, 14, 14, 15, 15, 15, 24}); // Birch Forest
+        public List<int> temperateWoodlandTreesAtElevation13B = new List<int>(new int[] { 13, 13, 18, 18, 18, 27, 28}); // Oak forest
+        public List<int> temperateWoodlandTreesAtElevation13C = new List<int>(new int[] { 11, 12, 13, 14, 15, 16, 18}); // Deciduous Forest
+        public List<int> temperateWoodlandTreesAtElevation13D = new List<int>(new int[] { 12, 12, 12, 16, 17, 27, 27, 28, 28}); // Beach forest 1
+        public List<int> temperateWoodlandTreesAtElevation13E = new List<int>(new int[] { 12, 12, 16, 16, 18, 27, 27, 28, 28}); // Beach forest 2
+        public List<int> temperateWoodlandTreesAtElevation13F = new List<int>(new int[] { 12, 12, 17, 17, 18, 27, 27, 28, 28}); // Beach forest 3
         public List<int> temperateWoodlandDeadTreesAtElevation13 = new List<int>(new int[] { 19, 20, 24, 29, 30, 31 });
         public List<int> temperateWoodlandFlowersAtElevation13 = new List<int>(new int[] { 2, 21, 22 });
         public List<int> temperateWoodlandMushroomAtElevation13 = new List<int>(new int[] { 7, 9, 23 });
@@ -223,10 +228,10 @@ namespace WildernessOverhaul
         public List<int> temperateWoodlandRocksAtElevation13 = new List<int>(new int[] { 3, 4, 5, 6, 8, 10, 26 });
 
         //ELEVATION 14
-        public List<int> temperateWoodlandTreesAtElevation14A = new List<int>(new int[] { 16, 17, 18}); // Deciduous Forest
-        public List<int> temperateWoodlandTreesAtElevation14B = new List<int>(new int[] { 12, 12, 16, 17}); // Beach forest 3
-        public List<int> temperateWoodlandTreesAtElevation14C = new List<int>(new int[] { 12, 16, 17, 17}); // Beach forest 1
-        public List<int> temperateWoodlandTreesAtElevation14D = new List<int>(new int[] { 12, 16, 16, 17}); // Beach forest 2
+        public List<int> temperateWoodlandTreesAtElevation14A = new List<int>(new int[] { 12, 16, 17, 18, 27, 27, 28, 28}); // Deciduous Forest
+        public List<int> temperateWoodlandTreesAtElevation14B = new List<int>(new int[] { 12, 12, 12, 16, 17, 27, 27, 27, 28, 28, 28}); // Beach forest 1
+        public List<int> temperateWoodlandTreesAtElevation14C = new List<int>(new int[] { 12, 12, 16, 16, 18, 27, 27, 27, 28, 28, 28}); // Beach forest 2
+        public List<int> temperateWoodlandTreesAtElevation14D = new List<int>(new int[] { 12, 12, 17, 17, 18, 27, 27, 27, 28, 28, 28}); // Beach forest 3
         public List<int> temperateWoodlandDeadTreesAtElevation14 = new List<int>(new int[] { 19, 19, 20, 20, 24, 24, 29, 29, 30, 31, 31 });
         public List<int> temperateWoodlandFlowersAtElevation14 = new List<int>(new int[] { 2, 2, 2, 21, 22, 22 });
         public List<int> temperateWoodlandMushroomAtElevation14 = new List<int>(new int[] { 7, 7, 9, 9, 9, 23 });
@@ -243,8 +248,8 @@ namespace WildernessOverhaul
                 Random.Range(0.66f,0.64f), Random.Range(0.61f,0.59f), Random.Range(0.56f,0.54f),
                 Random.Range(0.51f,0.49f), Random.Range(0.46f,0.44f), Random.Range(0.41f,0.39f),
                 Random.Range(0.36f, 0.34f), Random.Range(0.31f,0.29f), Random.Range(0.26f,0.24f),
-                Random.Range(0.21f,0.19f), Random.Range(0.11f,0.09f), Random.Range(0.076f,0.74f),
-                Random.Range(0.051f,0.049f), Random.Range(0.021f,0.019f)});
+                Random.Range(0.21f,0.19f), Random.Range(0.11f,0.09f), Random.Range(0.096f,0.84f),
+                Random.Range(0.071f,0.069f), Random.Range(0.041f,0.039f)});
 
             if (season == DaggerfallDateTime.Seasons.Winter) {
                 if (elevation > elevationLevels[0]) {
@@ -446,7 +451,23 @@ namespace WildernessOverhaul
                                                     woodlandHillsDirtPlants = new List<int>(new int[] { 22, 29, 26, 9, 31 });
                                                 } else {
                                                     if (elevation > elevationLevels[9]) {
-                                                        temperateWoodlandTrees = temperateWoodlandTreesAtElevation9;
+                                                        rnd = mapStyle + Random.Range(-10f,10f);
+                                                        if (rnd <= 25)
+                                                            temperateWoodlandTrees = temperateWoodlandTreesAtElevation9F;
+                                                        if (rnd > 25)
+                                                            temperateWoodlandTrees = temperateWoodlandTreesAtElevation9A;
+                                                        if (rnd > 30)
+                                                            temperateWoodlandTrees = temperateWoodlandTreesAtElevation9B;
+                                                        if (rnd > 35)
+                                                            temperateWoodlandTrees = temperateWoodlandTreesAtElevation9C;
+                                                        if (rnd > 41)
+                                                            temperateWoodlandTrees = temperateWoodlandTreesAtElevation9D;
+                                                        if (rnd > 47)
+                                                            temperateWoodlandTrees = temperateWoodlandTreesAtElevation9E;
+                                                        if (rnd > 55)
+                                                            temperateWoodlandTrees = temperateWoodlandTreesAtElevation9F;
+                                                        if (rnd > 60)
+                                                            temperateWoodlandTrees = temperateWoodlandTreesAtElevation10A;
                                                         temperateWoodlandDeadTrees = temperateWoodlandDeadTreesAtElevation9;
                                                         temperateWoodlandFlowers = temperateWoodlandFlowersAtElevation9;
                                                         temperateWoodlandMushroom = temperateWoodlandMushroomAtElevation9;
@@ -866,7 +887,23 @@ namespace WildernessOverhaul
                                                     woodlandHillsDirtPlants = new List<int>(new int[] { 26, 29, 23, 7, 31 });
                                                 } else {
                                                     if (elevation > elevationLevels[9]) {
-                                                        temperateWoodlandTrees = temperateWoodlandTreesAtElevation9;
+                                                        rnd = mapStyle + Random.Range(-10f,10f);
+                                                        if (rnd <= 25)
+                                                            temperateWoodlandTrees = temperateWoodlandTreesAtElevation9F;
+                                                        if (rnd > 25)
+                                                            temperateWoodlandTrees = temperateWoodlandTreesAtElevation9A;
+                                                        if (rnd > 30)
+                                                            temperateWoodlandTrees = temperateWoodlandTreesAtElevation9B;
+                                                        if (rnd > 35)
+                                                            temperateWoodlandTrees = temperateWoodlandTreesAtElevation9C;
+                                                        if (rnd > 41)
+                                                            temperateWoodlandTrees = temperateWoodlandTreesAtElevation9D;
+                                                        if (rnd > 47)
+                                                            temperateWoodlandTrees = temperateWoodlandTreesAtElevation9E;
+                                                        if (rnd > 55)
+                                                            temperateWoodlandTrees = temperateWoodlandTreesAtElevation9F;
+                                                        if (rnd > 60)
+                                                            temperateWoodlandTrees = temperateWoodlandTreesAtElevation10A;
                                                         temperateWoodlandDeadTrees = temperateWoodlandDeadTreesAtElevation9;
                                                         temperateWoodlandFlowers = temperateWoodlandFlowersAtElevation9;
                                                         temperateWoodlandMushroom = temperateWoodlandMushroomAtElevation9;

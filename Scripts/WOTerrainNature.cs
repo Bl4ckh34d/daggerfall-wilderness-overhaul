@@ -281,7 +281,7 @@ namespace WildernessOverhaul
                         #region Temperate Spawns
                         case (int)MapsFile.Climates.Woodlands:
 
-                            weight += GetNoise(latitude,
+                            weight = GetNoise(latitude,
                                 longitude,
                                 stochastics.tempForestFrequency,
                                 stochastics.tempForestAmplitude,
@@ -343,7 +343,7 @@ namespace WildernessOverhaul
                                         AddBillboardToBatch(baseData, vegetationList.temperateWoodlandMushroom, 0.00f, true); // Mushroom
                                     }
 
-                                    for (int i = 0; i < Random.Range(5, 8); i++)
+                                    for (int i = 0; i < Random.Range(4, 7); i++)
                                     {
                                         AddBillboardToBatch(baseData, vegetationList.temperateWoodlandFlowers, Random.Range(0.45f, 0.75f), true); // Flowers
                                     }
@@ -351,7 +351,7 @@ namespace WildernessOverhaul
                                     float rnd = Random.Range(0, 100);
                                     if (rnd < stochastics.mapStyleChance[1])
                                     {
-                                        for (int i = 0; i < Random.Range(2, 5); i++)
+                                        for (int i = 0; i < Random.Range(2, 4); i++)
                                         {
                                             AddBillboardToBatch(baseData, vegetationList.temperateWoodlandFlowers, Random.Range(0.60f, 1.00f), true); // Flowers
                                         }
@@ -3222,10 +3222,12 @@ namespace WildernessOverhaul
         {
             if (weight < limit1)
                 return "flower";
-            else if (weight >= limit1 && weight < limit2)
-                return "grass";
-            else
-                return "forest";
+            else {
+                if (weight >= limit1 && weight < limit2)
+                    return "grass";
+                else
+                    return "forest";
+            }
         }
     }
 }

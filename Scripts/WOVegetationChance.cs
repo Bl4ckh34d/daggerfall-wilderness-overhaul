@@ -17,17 +17,17 @@ namespace WildernessOverhaul
 			{
 				if (elevation > 0.125f) {
 					chanceOnGrass = Mathf.Clamp(Random.Range(0.225f, 0.300f), 0f, 1f);
-					chanceOnDirt = Mathf.Clamp(Random.Range(0.450f, 0.475f), 0f, 1f);
+					chanceOnDirt = Mathf.Clamp(Random.Range(0.350f, 0.375f), 0f, 1f);
 					chanceOnStone = Mathf.Clamp(Random.Range(0.500f, 0.525f), 0f, 1f);
 				} else {
                     if (elevation > 0.075f) {
                         chanceOnGrass = Mathf.Clamp(Random.Range(0.225f, 0.300f), 0f, 1f);
-                        chanceOnDirt = Mathf.Clamp(Random.Range(0.425f, 0.450f), 0f, 1f);
+                        chanceOnDirt = Mathf.Clamp(Random.Range(0.325f, 0.350f), 0f, 1f);
                         chanceOnStone = Mathf.Clamp(Random.Range(0.675f, 0.700f), 0f, 1f);
                     } else {
                         if (elevation > 0.025f)	{
                             chanceOnGrass = Mathf.Clamp(Random.Range(0.250f, 0.300f), 0f, 1f);
-                            chanceOnDirt = Mathf.Clamp(Random.Range(0.300f, 0.325f), 0f, 1f);
+                            chanceOnDirt = Mathf.Clamp(Random.Range(0.200f, 0.225f), 0f, 1f);
                             chanceOnStone = Mathf.Clamp(Random.Range(0.650f, 0.675f), 0f, 1f);
                         } else {
                             chanceOnGrass = Mathf.Clamp(Random.Range(0.275f, 0.300f), 0f, 1f);
