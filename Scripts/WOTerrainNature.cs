@@ -1196,7 +1196,7 @@ namespace WildernessOverhaul
                 {
                    AddBillboardToBatch(dfTerrain, dfBillboardBatch, desertStones, scale, steepness, terrain, x, y, 2f); // Stones
                 }
-               }*/
+               }
                             if (
                                tile == 0 || tile == 4 || tile == 5 || tile == 6 || tile == 7 || tile == 8 || tile == 19 || tile == 20 || tile == 21 || tile == 22 ||
                                tile == 23 || tile == 29 || tile == 30 || tile == 31 || tile == 32 || tile == 33 || tile == 34 || tile == 35 || tile == 36 || tile == 37 ||
@@ -2945,7 +2945,8 @@ namespace WildernessOverhaul
            int minNumber,
            int maxNumber)
         {
-            if (rndFirefly >= Random.Range(0.0f, 100.0f) && DaggerfallUnity.Instance.WorldTime.Now.SeasonValue != DaggerfallDateTime.Seasons.Winter && firefliesExist) {
+            if (rndFirefly >= Random.Range(0.0f, 100.0f) && DaggerfallUnity.Instance.WorldTime.Now.SeasonValue != DaggerfallDateTime.Seasons.Winter && firefliesExist)
+            {
                 GameObject fireflyContainer = new GameObject();
                 fireflyContainer.name = "fireflyContainer";
                 fireflyContainer.transform.parent = baseData.dfBillboardBatch.transform;
@@ -3222,7 +3223,8 @@ namespace WildernessOverhaul
         {
             if (weight < limit1)
                 return "flower";
-            else {
+            else
+            {
                 if (weight >= limit1 && weight < limit2)
                     return "grass";
                 else
