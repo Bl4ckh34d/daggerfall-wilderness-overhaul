@@ -9,7 +9,7 @@ public class WOStochasticChances
     // ------------------------------------
     // Chance for different terrain layouts
     public float mapStyle = 0;
-    public float[] mapStyleChance = {30f, 35f, 40f, 45f, 50f, 55f};
+    public float[] mapStyleChance = { 30f, 35f, 40f, 45f, 50f, 55f };
 
     // ------------------------------------
     // TEMPERATE Climate Vegetation Chances
@@ -58,7 +58,8 @@ public class WOStochasticChances
     // Chance for Stone Circle
     public float woodlandHillsStoneCircleChance;
 
-    public WOStochasticChances() {
+    public WOStochasticChances()
+    {
         SetupMapStyle();
     }
 
@@ -100,7 +101,7 @@ public class WOStochasticChances
         mountForestPersistence = Random.Range(0.35f, 0.45f);
         mountForestOctaves = Random.Range(2, 3);
 
-        // ------------------------------------
+        // ------------------------------------ 
         // DESERT Climate Vegetation Chances
         // ------------------------------------
         desert2DirtChance = Random.Range(0, 1);
