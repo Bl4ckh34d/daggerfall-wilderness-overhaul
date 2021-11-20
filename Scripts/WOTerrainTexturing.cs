@@ -143,8 +143,8 @@ namespace WildernessOverhaul
                 if (tilemapData[index] != 0)
                 {
                     // Convert 0xFF to water now rather than let DFU do it
-                    if (tilemapData[index] == byte.MaxValue)
-                        tilemapData[index] = 0;
+                    // if (tilemapData[index] == byte.MaxValue)
+                    //     tilemapData[index] = 0;
                     return;
                 }
 

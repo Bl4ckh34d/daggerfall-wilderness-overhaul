@@ -1676,7 +1676,7 @@ namespace WildernessOverhaul
                 {
                    AddBillboardToBatch(dfTerrain, dfBillboardBatch, desertStones, scale, steepness, terrain, x, y, 2.5f); // Stones
                 }
-               }*/
+               }
                             if (
                                tile == 0 || tile == 4 || tile == 5 || tile == 6 || tile == 7 || tile == 8 || tile == 19 || tile == 20 || tile == 21 || tile == 22 ||
                                tile == 23 || tile == 29 || tile == 30 || tile == 31 || tile == 32 || tile == 33 || tile == 34 || tile == 35 || tile == 36 || tile == 37 ||
@@ -1779,7 +1779,7 @@ namespace WildernessOverhaul
                                         AddBillboardToBatch(baseData, vegetationList.desertWaterFlowers, Random.Range(0.2f, 1.5f), false); // Flowers
                                     }
                                 }
-                            }
+                            }*/
                             break;
                         #endregion
 
