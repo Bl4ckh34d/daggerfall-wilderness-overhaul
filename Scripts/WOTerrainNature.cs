@@ -500,7 +500,7 @@ namespace WildernessOverhaul
                                                 AddBillboardToBatch(baseData, vegetationList.mountainsNeedleTrees, 1.00f, true); // Needle Tree
 
                                             for (int i = 0; i < (int)Mathf.Round(Random.Range(1, 3)); i++)
-                                                AddBillboardToBatch(baseData, vegetationList.mountainsNeedleTrees, 1.50f, true); // Needle Tree                                        
+                                                AddBillboardToBatch(baseData, vegetationList.mountainsNeedleTrees, 2.00f, true); // Needle Tree                                        
                                         }
                                         else
                                         {
@@ -565,9 +565,9 @@ namespace WildernessOverhaul
                                         if (rndMinor < stochastics.mapStyle)
                                         {
                                             for (int i = 0; i < (int)Mathf.Round(Random.Range(1, 4)); i++)
-                                                AddBillboardToBatch(baseData, vegetationList.mountainsTrees, 0.50f, true); // Trees
+                                                AddBillboardToBatch(baseData, vegetationList.mountainsTrees, 0.75f, true); // Trees
 
-                                            for (int i = 0; i < (int)Mathf.Round(Random.Range(4, 12)); i++)
+                                            for (int i = 0; i < (int)Mathf.Round(Random.Range(2, 8)); i++)
                                                 AddBillboardToBatch(baseData, vegetationList.mountainsTrees, 2.00f, true); // Trees
 
                                             for (int i = 0; i < (int)Mathf.Round(Random.Range(2, 4)); i++)
@@ -575,21 +575,21 @@ namespace WildernessOverhaul
 
                                             if (rndMinor < 40)
                                             {
-                                                for (int i = 0; i < (int)Mathf.Round(Random.Range(1, 6)); i++)
+                                                for (int i = 0; i < (int)Mathf.Round(Random.Range(1, 12)); i++)
                                                     AddBillboardToBatch(baseData, vegetationList.mountainsTrees, 1.50f, true); // Trees
 
-                                                for (int i = 0; i < (int)Mathf.Round(Random.Range(4, 8)); i++)
+                                                for (int i = 0; i < (int)Mathf.Round(Random.Range(2, 4)); i++)
                                                     AddBillboardToBatch(baseData, vegetationList.mountainsFlowers, 0.75f, true); // Trees
 
-                                                for (int i = 0; i < (int)Mathf.Round(Random.Range(1, 3)); i++)
+                                                for (int i = 0; i < (int)Mathf.Round(Random.Range(1, 8)); i++)
                                                     AddBillboardToBatch(baseData, vegetationList.mountainsGrass, 1.00f, true); // Grass
                                             }
                                             if (rndMinor < 30)
                                             {
-                                                for (int i = 0; i < (int)Mathf.Round(Random.Range(1, 2)); i++)
-                                                    AddBillboardToBatch(baseData, vegetationList.mountainsNeedleTrees, 1.75f, true); // Trees
-
                                                 for (int i = 0; i < (int)Mathf.Round(Random.Range(2, 6)); i++)
+                                                    AddBillboardToBatch(baseData, vegetationList.mountainsNeedleTrees, 2.50f, true); // Trees
+
+                                                for (int i = 0; i < (int)Mathf.Round(Random.Range(4, 12)); i++)
                                                     AddBillboardToBatch(baseData, vegetationList.mountainsFlowers, 1.75f, true); // Trees
 
                                                 if ((int)Mathf.Round(Random.Range(0.00f, 1.00f)) > 0.98f)
@@ -603,18 +603,18 @@ namespace WildernessOverhaul
                                         if ((int)Mathf.Round(Random.Range(0.00f, 1.00f)) > 0.98f)
                                             AddBillboardToBatch(baseData, vegetationList.mountainsRocks, 0.00f, true); // Rock
 
-                                        for (int i = 0; i < (int)Mathf.Round(Random.Range(1, 4)); i++)
-                                            AddBillboardToBatch(baseData, vegetationList.mountainsTrees, 0.50f, true); // Trees
+                                        for (int i = 0; i < (int)Mathf.Round(Random.Range(1, 6)); i++)
+                                            AddBillboardToBatch(baseData, vegetationList.mountainsTrees, 0.75f, true); // Trees
 
-                                        for (int i = 0; i < (int)Mathf.Round(Random.Range(12, 24)); i++)
-                                            AddBillboardToBatch(baseData, vegetationList.mountainsTrees, 2.00f, true); // Trees
+                                        for (int i = 0; i < (int)Mathf.Round(Random.Range(12, 36)); i++)
+                                            AddBillboardToBatch(baseData, vegetationList.mountainsTrees, 5.00f, true); // Trees
 
-                                        for (int i = 0; i < (int)Mathf.Round(Random.Range(1, 3)); i++)
-                                            AddBillboardToBatch(baseData, vegetationList.mountainsFlowers, 0.20f, true); // Flowers
+                                        for (int i = 0; i < (int)Mathf.Round(Random.Range(1, 6)); i++)
+                                            AddBillboardToBatch(baseData, vegetationList.mountainsFlowers, 0.30f, true); // Flowers
 
                                         float rndMinor = Random.Range(0, 100);
                                         if (rndMinor < 40)
-                                            for (int i = 0; i < (int)Mathf.Round(Random.Range(1, 3)); i++)
+                                            for (int i = 0; i < (int)Mathf.Round(Random.Range(1, 4)); i++)
                                                 AddBillboardToBatch(baseData, vegetationList.mountainsFlowers, 0.50f, true); // Flowers
                                     }
                                 }
@@ -626,23 +626,23 @@ namespace WildernessOverhaul
                                         float rndMinor = Random.Range(0, 100);
                                         if (rndMinor < stochastics.mapStyle)
                                         {
-                                            for (int i = 0; i < (int)Mathf.Round(Random.Range(4, 6)); i++)
-                                                AddBillboardToBatch(baseData, vegetationList.mountainsTrees, 0.75f, true); // Trees
+                                            for (int i = 0; i < (int)Mathf.Round(Random.Range(4, 12)); i++)
+                                                AddBillboardToBatch(baseData, vegetationList.mountainsTrees, 2.00f, true); // Trees
 
-                                            for (int i = 0; i < (int)Mathf.Round(Random.Range(1, 3)); i++)
+                                            for (int i = 0; i < (int)Mathf.Round(Random.Range(1, 5)); i++)
                                                 AddBillboardToBatch(baseData, vegetationList.mountainsGrass, 0.50f, true); // Grass
 
                                             if (rndMinor < 40)
-                                                for (int i = 0; i < (int)Mathf.Round(Random.Range(1, 3)); i++)
+                                                for (int i = 0; i < (int)Mathf.Round(Random.Range(1, 4)); i++)
                                                     AddBillboardToBatch(baseData, vegetationList.mountainsFlowers, 1.00f, true); // Flowers
 
                                             if (rndMinor < 30)
                                             {
-                                                for (int i = 0; i < (int)Mathf.Round(Random.Range(1, 3)); i++)
+                                                for (int i = 0; i < (int)Mathf.Round(Random.Range(1, 4)); i++)
                                                     AddBillboardToBatch(baseData, vegetationList.mountainsFlowers, 1.75f, true); // Flowers
 
                                                 if ((int)Mathf.Round(Random.Range(0.00f, 1.00f)) > 0.95f)
-                                                    for (int i = 0; i < (int)Mathf.Round(Random.Range(0, 2)); i++)
+                                                    for (int i = 0; i < (int)Mathf.Round(Random.Range(0, 3)); i++)
                                                         AddBillboardToBatch(baseData, vegetationList.mountainsRocks, 1.00f, true); // Rocks
                                             }
                                         }
@@ -666,8 +666,8 @@ namespace WildernessOverhaul
                                     float rndMinor = Random.Range(0, 100);
                                     if (GetWeightedRecord(weight, stochastics.mountForestLimit[0], stochastics.mountForestLimit[1]) == "forest")
                                     {
-                                        for (int i = 0; i < (int)Mathf.Round(Random.Range(2, 6)); i++)
-                                            AddBillboardToBatch(baseData, vegetationList.mountainsTrees, 0.75f, true); // Trees
+                                        for (int i = 0; i < (int)Mathf.Round(Random.Range(4, 8)); i++)
+                                            AddBillboardToBatch(baseData, vegetationList.mountainsTrees, 3.00f, true); // Trees
 
                                         for (int i = 0; i < (int)Mathf.Round(Random.Range(1, 3)); i++)
                                             AddBillboardToBatch(baseData, vegetationList.mountainsGrass, 0.50f, true); // Grass
@@ -694,15 +694,21 @@ namespace WildernessOverhaul
                                 if (GetWeightedRecord(weight, stochastics.mountForestLimit[0], stochastics.mountForestLimit[1]) == "forest")
                                 {
                                     AddBillboardToBatch(baseData, vegetationList.mountainsRocks, 0.00f, true); // Stones
-                                    for (int i = 0; i < (int)Mathf.Round(Random.Range(0, 2)); i++)
-                                        AddBillboardToBatch(baseData, vegetationList.mountainsRocks, 0.25f, true); // Stones
 
-                                    for (int i = 0; i < (int)Mathf.Round(Random.Range(2, 3)); i++)
-                                        AddBillboardToBatch(baseData, vegetationList.mountainsFlowers, 0.50f, true); // Flowers                                        
+                                    for (int i = 0; i < (int)Mathf.Round(Random.Range(4, 12)); i++)
+                                        AddBillboardToBatch(baseData, vegetationList.mountainsRocks, 2.00f, true); // Stones
+
+                                    for (int i = 0; i < (int)Mathf.Round(Random.Range(2, 8)); i++)
+                                        AddBillboardToBatch(baseData, vegetationList.mountainsFlowers, 1.50f, true); // Flowers
+
+                                    for (int i = 0; i < (int)Mathf.Round(Random.Range(0, 1)); i++)
+                                        AddBillboardToBatch(baseData, vegetationList.mountainsGrass, 1.0f, true); // Flowers                                  
                                 }
                                 if (GetWeightedRecord(weight, stochastics.mountForestLimit[0], stochastics.mountForestLimit[1]) == "flower")
+                                {
                                     for (int i = 0; i < (int)Mathf.Round(Random.Range(2, 4)); i++)
                                         AddBillboardToBatch(baseData, vegetationList.mountainsFlowers, 0.75f, true); // Flowers
+                                }
                             }
                             break;
 
