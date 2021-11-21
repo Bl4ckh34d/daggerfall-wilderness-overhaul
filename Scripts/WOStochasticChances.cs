@@ -96,7 +96,7 @@ public class WOStochasticChances
         mountainStoneCircleChance = 0.025f;
         mountForestLimit[0] = Random.Range(0.30f, 0.40f);
         mountForestLimit[1] = tempForestLimit[0] + Random.Range(0.2f, 0.25f);
-        mountForestFrequency = Random.Range(0.045f, 0.055f);
+        mountForestFrequency = Random.Range(0.04f, 0.06f);
         mountForestAmplitude = 0.9f;
         mountForestPersistence = Random.Range(0.35f, 0.45f);
         mountForestOctaves = Random.Range(2, 3);
