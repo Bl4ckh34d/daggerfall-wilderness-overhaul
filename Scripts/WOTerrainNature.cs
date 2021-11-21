@@ -528,6 +528,12 @@ namespace WildernessOverhaul
                                 if (Random.Range(0.0f, 100.0f) < stochastics.mountainStoneCircleChance)
                                     AddStoneCircleToBatch(baseData, vegetationList.mountainsRocks, 5, 0);
 
+
+                                if (rndMajor <= 20)
+                                    AddBillboardToBatch(baseData, vegetationList.mountainsTrees, 0.50f, true); // Trees
+                                else if (rndMajor >= 20 && rndMajor <= 30)
+                                    AddBillboardToBatch(baseData, vegetationList.mountainsNeedleTrees, 0.50f, true); // Trees
+
                                 if (dfTerrain.MapData.heightmapSamples[hy, hx] > treeLine)
                                 {
                                     float rndMinor = Random.Range(0, 100);
