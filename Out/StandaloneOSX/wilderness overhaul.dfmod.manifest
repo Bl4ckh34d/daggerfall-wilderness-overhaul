@@ -1,0 +1,66 @@
+ManifestFileVersion: 0
+CRC: 3148823391
+Hashes:
+  AssetFileHash:
+    serializedVersion: 2
+    Hash: bcd768256c32403db6b4843be30ec3e1
+  TypeTreeHash:
+    serializedVersion: 2
+    Hash: 7eb6db621cfc7d171eed358b7c5a253b
+HashAppended: 0
+ClassTypes:
+- Class: 1
+  Script: {instanceID: 0}
+- Class: 4
+  Script: {instanceID: 0}
+- Class: 21
+  Script: {instanceID: 0}
+- Class: 28
+  Script: {instanceID: 0}
+- Class: 43
+  Script: {instanceID: 0}
+- Class: 48
+  Script: {instanceID: 0}
+- Class: 49
+  Script: {instanceID: 0}
+- Class: 54
+  Script: {instanceID: 0}
+- Class: 114
+  Script: {fileID: 11500000, guid: 30720f567396393b99e909468c2dff16, type: 3}
+- Class: 115
+  Script: {instanceID: 0}
+- Class: 187
+  Script: {instanceID: 0}
+- Class: 198
+  Script: {instanceID: 0}
+- Class: 199
+  Script: {instanceID: 0}
+- Class: 212
+  Script: {instanceID: 0}
+- Class: 213
+  Script: {instanceID: 0}
+SerializeReferenceClassIdentifiers: []
+Assets:
+- Assets/Game/Mods/WildernessOverhaul/Textures/103-TexArray.asset
+- Assets/Game/Mods/WildernessOverhaul/modsettings.json
+- Assets/Game/Mods/WildernessOverhaul/Firefly.prefab
+- Assets/Game/Mods/WildernessOverhaul/WildernessOverhaul.dfmod.json
+- Assets/Game/Mods/WildernessOverhaul/Shaders/WOTilemapTextureArray.shader
+- Assets/Game/Mods/WildernessOverhaul/Textures/002-TexArray.asset
+- Assets/Game/Mods/WildernessOverhaul/Textures/104-TexArray.asset
+- Assets/Game/Mods/WildernessOverhaul/Textures/402-TexArray.asset
+- Assets/Game/Mods/WildernessOverhaul/Materials/ShootingStarTrail.mat
+- Assets/Game/Mods/WildernessOverhaul/Images/firefly.png
+- Assets/Game/Mods/WildernessOverhaul/Textures/303-TexArray.asset
+- Assets/Game/Mods/WildernessOverhaul/Textures/404-TexArray.asset
+- Assets/Game/Mods/WildernessOverhaul/Assets/Presets/RealGrass.json
+- Assets/Game/Mods/WildernessOverhaul/Textures/102-TexArray.asset
+- Assets/Game/Mods/WildernessOverhaul/Textures/403-TexArray.asset
+- Assets/Game/Mods/WildernessOverhaul/Textures/302-TexArray.asset
+- Assets/Game/Mods/WildernessOverhaul/ShootingStars.prefab
+- Assets/Game/Mods/WildernessOverhaul/Textures/304-TexArray.asset
+- Assets/Game/Mods/WildernessOverhaul/Textures/003-TexArray.asset
+- Assets/Game/Mods/WildernessOverhaul/Textures/004-TexArray.asset
+- Assets/Untracked/ModBuilder/Wilderness Overhaul.dll.bytes
+- Assets/Game/Mods/WildernessOverhaul/Materials/Firefly.mat
+Dependencies: []

@@ -2,11 +2,9 @@
 using System.Collections.Generic;
 using DaggerfallWorkshop;
 
-namespace WildernessOverhaul
-{
+namespace WildernessOverhaul {
 
-    public class BaseDataObject
-    {
+    public class BaseDataObject {
         public DaggerfallTerrain dfTerrain;
         public DaggerfallBillboardBatch dfBillboardBatch;
         public Terrain terrain;

@@ -18,7 +18,7 @@ namespace WildernessOverhaul
             }
             return true;
         }
- 
+
         public static bool InArrayBounds(this float[] array, int x)
         {
             if (

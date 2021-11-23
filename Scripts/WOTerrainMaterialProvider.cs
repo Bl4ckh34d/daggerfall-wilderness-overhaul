@@ -17,14 +17,13 @@ using DaggerfallWorkshop.Utility;
 using DaggerfallWorkshop.Game.Utility.ModSupport;
 
 namespace DaggerfallWorkshop
-{ 
+{
     public class WOTerrainMaterialProvider : TerrainMaterialProvider
     {
         Mod mod;
         TextureReader textureReader;
 
-        public WOTerrainMaterialProvider(Mod injectedMod)
-        {
+        public WOTerrainMaterialProvider(Mod injectedMod) {
             mod = injectedMod;
             textureReader = new TextureReader(DaggerfallUnity.Instance.Arena2Path);
         }
@@ -97,8 +96,7 @@ namespace DaggerfallWorkshop
                 textureArrayTerrainTiles = mod.GetAsset<Texture2DArray>("103-TexArray.asset");
             if (archive == 104)
                 textureArrayTerrainTiles = mod.GetAsset<Texture2DArray>("104-TexArray.asset");
-            if (archive == 302)
-            {
+            if (archive == 302) {
                 textureArrayTerrainTiles = mod.GetAsset<Texture2DArray>("302-TexArray.asset");
             }
             if (archive == 303)
@@ -113,7 +111,7 @@ namespace DaggerfallWorkshop
                 textureArrayTerrainTiles = mod.GetAsset<Texture2DArray>("404-TexArray.asset");
             Texture2DArray textureArrayTerrainTilesNormalMap = null; // = GetTerrainNormalMapTextureArray(archive);
             Texture2DArray textureArrayTerrainTilesMetallicGloss = null; // = GetTerrainMetallicGlossMapTextureArray(archive);
-            textureArrayTerrainTiles.filterMode = FilterMode.Point;
+            textureArrayTerrainTiles.filterMode =  FilterMode.Point;
 
             material = new Material(shader);
             material.name = string.Format("TEXTURE.{0:000} [TilemapTextureArray]", archive);

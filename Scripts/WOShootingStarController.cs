@@ -35,17 +35,12 @@ public class WOShootingStarController : MonoBehaviour
              weatherManager.PlayerWeather.WeatherType != WeatherType.Thunder &&
              weatherManager.PlayerWeather.WeatherType != WeatherType.Overcast &&
              weatherManager.PlayerWeather.WeatherType != WeatherType.Cloudy &&
-             weatherManager.PlayerWeather.WeatherType != WeatherType.Fog)
-        {
-            if (!ps.isPlaying)
-            {
+             weatherManager.PlayerWeather.WeatherType != WeatherType.Fog) {
+            if (!ps.isPlaying) {
                 ps.Play();
             }
-        }
-        else if (dfUnity.WorldTime.Now.MinuteOfDay <= my_StartTime || dfUnity.WorldTime.Now.MinuteOfDay >= my_EndTime)
-        {
-            if (ps.isPlaying)
-            {
+        } else if (dfUnity.WorldTime.Now.MinuteOfDay <= my_StartTime || dfUnity.WorldTime.Now.MinuteOfDay >= my_EndTime) {
+            if (ps.isPlaying) {
                 ps.Stop();
             }
         }

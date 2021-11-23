@@ -33,13 +33,13 @@ namespace WildernessOverhaul
 
         // Order: Deser1, Desert2, Mountains, Rainforest, Swamp,
         // Subtropics, Mountain Woods, Woodland, Haunted Woods, Ocean
-        static float[] frequency = { 0.02f, 0.02f, 0.025f, 0.035f, 0.02f, 0.02f, 0.035f, 0.035f, 0.035f, 0.1f };
-        static float[] amplitude = { 0.3f, 0.3f, 0.3f, 0.4f, 0.3f, 0.3f, 0.4f, 0.4f, 0.4f, 0.95f };
-        static float[] persistance = { 0.5f, 0.55f, 0.95f, 0.8f, 0.5f, 0.5f, 0.8f, 0.5f, 0.8f, 0.3f };
+        static float[] frequency = {0.02f, 0.02f, 0.025f, 0.035f, 0.02f, 0.02f, 0.035f, 0.035f, 0.035f, 0.1f};
+        static float[] amplitude = {0.3f, 0.3f, 0.3f, 0.4f, 0.3f, 0.3f, 0.4f, 0.4f, 0.4f, 0.95f};
+        static float[] persistance = {0.5f, 0.55f, 0.95f, 0.8f, 0.5f, 0.5f, 0.8f, 0.5f, 0.8f, 0.3f};
         static int octaves = 5;
-        static float[] upperWaterSpread = { -1.0f, -1.0f, 0.0f, 0.0f, -1.0f, -1.0f, 0.0f, 0.0f, 0.0f, 0.0f };
-        static float[] lowerGrassSpread = { 0.4f, 0.35f, 0.35f, 0.35f, 0.4f, 0.4f, 0.35f, 0.35f, 0.35f, 0.35f };
-        static float[] upperGrassSpread = { 0.5f, 0.5f, 0.95f, 0.95f, 0.5f, 0.5f, 0.95f, 0.95f, 0.95f, 0.95f };
+        static float[] upperWaterSpread = {-1.0f, -1.0f, 0.0f, 0.0f, -1.0f, -1.0f, 0.0f, 0.0f, 0.0f, 0.0f};
+        static float[] lowerGrassSpread = {0.4f, 0.35f, 0.35f, 0.35f, 0.4f, 0.4f, 0.35f, 0.35f, 0.35f, 0.35f};
+        static float[] upperGrassSpread = {0.5f, 0.5f, 0.95f, 0.95f, 0.5f, 0.5f, 0.95f, 0.95f, 0.95f, 0.95f};
 
         public static float treeLine = UnityEngine.Random.Range(0.675f, 0.69f);
 
@@ -143,8 +143,8 @@ namespace WildernessOverhaul
                 if (tilemapData[index] != 0)
                 {
                     // Convert 0xFF to water now rather than let DFU do it
-                    // if (tilemapData[index] == byte.MaxValue)
-                    //     tilemapData[index] = 0;
+                    if (tilemapData[index] == byte.MaxValue)
+                        tilemapData[index] = 0;
                     return;
                 }
 
@@ -187,8 +187,7 @@ namespace WildernessOverhaul
             {
                 float persistanceRnd = 0.95f;
                 int climateNum = 9;
-                switch (worldClimate)
-                {
+                switch (worldClimate) {
                     case (int)MapsFile.Climates.Desert:
                         climateNum = 0;
                         persistanceRnd = persistance[climateNum] + ((height / maxTerrainHeight) * 2) - 0.25f;
@@ -284,31 +283,27 @@ namespace WildernessOverhaul
                 float height = heightmapData[JobA.Idx(hy, hx, hDim)] * maxTerrainHeight;
 
                 // Ocean and Beach texture
-                if (height < oceanElevation - 0.001f)
-                {
+                if (height < oceanElevation - 0.001f) {
                     tileData[index] = water;
                     return;
                 }
 
                 // Adds a little +/- randomness to threshold so beach line isn't too regular
                 // Thinner beach where a rock face is diving down steep into water
-                if (height < beachElevation - 3)
-                {
+                if (height < beachElevation - 3) {
                     tileData[index] = dirt;
                     return;
                 }
 
                 // Rock Mountain Face
-                int rnd = JobRand.Next(75, 90);
-                if (SteepnessWithinLimits(true, Mathf.Clamp(rnd - ((height / maxTerrainHeight) / rnd), 40f, 90f), heightmapData, maxTerrainHeight, hx, hy, hDim, uB, index, tdDim, tileData))
-                {
+                int rnd = JobRand.Next(75,90);
+                if (SteepnessWithinLimits(true, Mathf.Clamp(rnd - ((height / maxTerrainHeight) / rnd),40f,90f), heightmapData, maxTerrainHeight, hx, hy, hDim, uB, index, tdDim, tileData)) {
                     tileData[index] = stone;
                     return;
                 }
 
                 // Adds a little +/- randomness to threshold so beach line isn't too regular
-                if (height <= beachElevation + (JobRand.Next(100000000, 250000000) / 10000000f))
-                {
+                if (height <= beachElevation + (JobRand.Next(100000000, 250000000) / 10000000f)) {
                     tileData[index] = dirt;
                     return;
                 }
@@ -359,14 +354,12 @@ namespace WildernessOverhaul
                 tileData[index] = GetWeightedRecord(weight, upperWaterSpread[climateNum], lowerGrassSpread[climateNum], upperGrassSpread[climateNum]);
 
                 // Check for lowest local point in desert to place oasis
-                if (worldClimate == (int)MapsFile.Climates.Desert2 && LowestPointFound(30, heightmapData, maxTerrainHeight, hx, hy, hDim, uB, index, tdDim, tileData))
-                {
+                if (worldClimate == (int)MapsFile.Climates.Desert2 && LowestPointFound(30, heightmapData, maxTerrainHeight, hx, hy, hDim, uB, index, tdDim, tileData)) {
                     tileData[index] = water;
                     return;
                 }
 
-                if (worldClimate == (int)MapsFile.Climates.Desert && LowestPointFound(80, heightmapData, maxTerrainHeight, hx, hy, hDim, uB, index, tdDim, tileData))
-                {
+                if (worldClimate == (int)MapsFile.Climates.Desert && LowestPointFound(80, heightmapData, maxTerrainHeight, hx, hy, hDim, uB, index, tdDim, tileData)) {
                     tileData[index] = water;
                     return;
                 }
@@ -380,15 +373,13 @@ namespace WildernessOverhaul
                 } */
 
                 // Max angle for dirt patches
-                rnd = JobRand.Next(20, 25);
-                if (tileData[index] == dirt && SteepnessWithinLimits(false, rnd, heightmapData, maxTerrainHeight, hx, hy, hDim, uB, index, tdDim, tileData))
-                {
+                rnd = JobRand.Next(20,25);
+                if (tileData[index] == dirt && SteepnessWithinLimits(false, rnd, heightmapData, maxTerrainHeight, hx, hy, hDim, uB, index, tdDim, tileData)) {
                     tileData[index] = dirt;
                     return;
                 }
 
-                if (tileData[index] == dirt && !SteepnessWithinLimits(false, rnd, heightmapData, maxTerrainHeight, hx, hy, hDim, uB, index, tdDim, tileData))
-                {
+                if (tileData[index] == dirt && !SteepnessWithinLimits(false, rnd, heightmapData, maxTerrainHeight, hx, hy, hDim, uB, index, tdDim, tileData)) {
                     tileData[index] = grass;
                     return;
                 }
@@ -433,7 +424,6 @@ namespace WildernessOverhaul
                             }
                         }
                     }
-                    Debug.Log("Oasis was created!");
                     return (JobRand.Next(0, 100) <= newChance);
                 }
             }
@@ -474,12 +464,9 @@ namespace WildernessOverhaul
 
             float diff = (maxSmpl - minSmpl) * 10f;
 
-            if (bigger)
-            {
+            if (bigger) {
                 return (diff >= steepness);
-            }
-            else
-            {
+            } else {
                 return (diff <= steepness);
             }
         }
@@ -487,11 +474,9 @@ namespace WildernessOverhaul
         // Encodes a byte with Daggerfall tile neighbours
         static int FindTileIndex(int[][] array, int bl, int br, int tr, int tl)
         {
-            int[] testArray = new int[4] { bl, br, tr, tl };
-            for (int i = 0; i < array.Length; ++i)
-            {
-                if (array[i][0] == testArray[0] && array[i][1] == testArray[1] && array[i][2] == testArray[2] && array[i][3] == testArray[3])
-                {
+            int[] testArray = new int[4]{bl,br,tr,tl};
+            for (int i = 0; i < array.Length; ++i) {
+                if(array[i][0] == testArray[0] && array[i][1] == testArray[1] && array[i][2] == testArray[2] && array[i][3] == testArray[3]) {
                     return i;
                 }
             }
@@ -510,282 +495,281 @@ namespace WildernessOverhaul
             return (byte)index;
         }
 
-        void CreateLookupTable()
-        {
+        void CreateLookupTable() {
             lookupTable = new byte[113];
             lookupRegistry = new int[113][];
 
             // Water
             lookupTable[0] = MakeLookup(0, false, false);
-            lookupRegistry[0] = new int[4] { 0, 0, 0, 0 };
+            lookupRegistry[0] = new int[4]{0,0,0,0};
 
             // Water - Dirt
             lookupTable[1] = MakeLookup(5, true, false);
             lookupTable[2] = MakeLookup(5, false, true);
             lookupTable[3] = MakeLookup(5, true, true);
             lookupTable[4] = MakeLookup(5, false, false);
-            lookupRegistry[1] = new int[4] { 1, 0, 0, 0 };
-            lookupRegistry[2] = new int[4] { 0, 1, 0, 0 };
-            lookupRegistry[3] = new int[4] { 0, 0, 1, 0 };
-            lookupRegistry[4] = new int[4] { 0, 0, 0, 1 };
+            lookupRegistry[1] = new int[4]{1,0,0,0};
+            lookupRegistry[2] = new int[4]{0,1,0,0};
+            lookupRegistry[3] = new int[4]{0,0,1,0};
+            lookupRegistry[4] = new int[4]{0,0,0,1};
 
             lookupTable[5] = MakeLookup(6, true, false);
             lookupTable[6] = MakeLookup(6, false, true);
             lookupTable[7] = MakeLookup(6, true, true);
             lookupTable[8] = MakeLookup(6, false, false);
-            lookupRegistry[5] = new int[4] { 1, 1, 0, 0 };
-            lookupRegistry[6] = new int[4] { 0, 1, 1, 0 };
-            lookupRegistry[7] = new int[4] { 0, 0, 1, 1 };
-            lookupRegistry[8] = new int[4] { 1, 0, 0, 1 };
+            lookupRegistry[5] = new int[4]{1,1,0,0};
+            lookupRegistry[6] = new int[4]{0,1,1,0};
+            lookupRegistry[7] = new int[4]{0,0,1,1};
+            lookupRegistry[8] = new int[4]{1,0,0,1};
 
             lookupTable[9] = MakeLookup(7, false, true);
             lookupTable[10] = MakeLookup(7, true, true);
             lookupTable[11] = MakeLookup(7, false, false);
             lookupTable[12] = MakeLookup(7, true, false);
-            lookupRegistry[9] = new int[4] { 1, 1, 1, 0 };
-            lookupRegistry[10] = new int[4] { 0, 1, 1, 1 };
-            lookupRegistry[11] = new int[4] { 1, 0, 1, 1 };
-            lookupRegistry[12] = new int[4] { 1, 1, 0, 1 };
+            lookupRegistry[9] = new int[4]{1,1,1,0};
+            lookupRegistry[10] = new int[4]{0,1,1,1};
+            lookupRegistry[11] = new int[4]{1,0,1,1};
+            lookupRegistry[12] = new int[4]{1,1,0,1};
 
             lookupTable[13] = MakeLookup(48, false, false);
             lookupTable[14] = MakeLookup(48, true, false);
-            lookupRegistry[13] = new int[4] { 0, 1, 0, 1 };
-            lookupRegistry[14] = new int[4] { 1, 0, 1, 0 };
+            lookupRegistry[13] = new int[4]{0,1,0,1};
+            lookupRegistry[14] = new int[4]{1,0,1,0};
 
             lookupTable[15] = MakeLookup(1, false, false);
-            lookupRegistry[15] = new int[4] { 1, 1, 1, 1 };
+            lookupRegistry[15] = new int[4]{1,1,1,1};
 
             // Dirt - Grass
             lookupTable[16] = MakeLookup(10, true, false);
             lookupTable[17] = MakeLookup(10, false, true);
             lookupTable[18] = MakeLookup(10, true, true);
             lookupTable[19] = MakeLookup(10, false, false);
-            lookupRegistry[16] = new int[4] { 2, 1, 1, 1 };
-            lookupRegistry[17] = new int[4] { 1, 2, 1, 1 };
-            lookupRegistry[18] = new int[4] { 1, 1, 2, 1 };
-            lookupRegistry[19] = new int[4] { 1, 1, 1, 2 };
+            lookupRegistry[16] = new int[4]{2,1,1,1};
+            lookupRegistry[17] = new int[4]{1,2,1,1};
+            lookupRegistry[18] = new int[4]{1,1,2,1};
+            lookupRegistry[19] = new int[4]{1,1,1,2};
 
             lookupTable[20] = MakeLookup(11, true, false);
             lookupTable[21] = MakeLookup(11, false, true);
             lookupTable[22] = MakeLookup(11, true, true);
             lookupTable[23] = MakeLookup(11, false, false);
-            lookupRegistry[20] = new int[4] { 2, 2, 1, 1 };
-            lookupRegistry[21] = new int[4] { 1, 2, 2, 1 };
-            lookupRegistry[22] = new int[4] { 1, 1, 2, 2 };
-            lookupRegistry[23] = new int[4] { 2, 1, 1, 2 };
+            lookupRegistry[20] = new int[4]{2,2,1,1};
+            lookupRegistry[21] = new int[4]{1,2,2,1};
+            lookupRegistry[22] = new int[4]{1,1,2,2};
+            lookupRegistry[23] = new int[4]{2,1,1,2};
 
             lookupTable[24] = MakeLookup(12, false, true);
             lookupTable[25] = MakeLookup(12, true, true);
             lookupTable[26] = MakeLookup(12, false, false);
             lookupTable[27] = MakeLookup(12, true, false);
-            lookupRegistry[24] = new int[4] { 2, 2, 2, 1 };
-            lookupRegistry[25] = new int[4] { 1, 2, 2, 2 };
-            lookupRegistry[26] = new int[4] { 2, 1, 2, 2 };
-            lookupRegistry[27] = new int[4] { 2, 2, 1, 2 };
+            lookupRegistry[24] = new int[4]{2,2,2,1};
+            lookupRegistry[25] = new int[4]{1,2,2,2};
+            lookupRegistry[26] = new int[4]{2,1,2,2};
+            lookupRegistry[27] = new int[4]{2,2,1,2};
 
             lookupTable[28] = MakeLookup(51, true, false);
             lookupTable[29] = MakeLookup(51, false, false);
-            lookupRegistry[28] = new int[4] { 2, 1, 2, 1 };
-            lookupRegistry[29] = new int[4] { 1, 2, 1, 2 };
+            lookupRegistry[28] = new int[4]{2,1,2,1};
+            lookupRegistry[29] = new int[4]{1,2,1,2};
 
             lookupTable[30] = MakeLookup(2, false, false);
-            lookupRegistry[30] = new int[4] { 2, 2, 2, 2 };
+            lookupRegistry[30] = new int[4]{2,2,2,2};
 
             // Grass - Stone
             lookupTable[31] = MakeLookup(15, true, false);
             lookupTable[32] = MakeLookup(15, false, true);
             lookupTable[33] = MakeLookup(15, true, true);
             lookupTable[34] = MakeLookup(15, false, false);
-            lookupRegistry[31] = new int[4] { 3, 2, 2, 2 };
-            lookupRegistry[32] = new int[4] { 2, 3, 2, 2 };
-            lookupRegistry[33] = new int[4] { 2, 2, 3, 2 };
-            lookupRegistry[34] = new int[4] { 2, 2, 2, 3 };
+            lookupRegistry[31] = new int[4]{3,2,2,2};
+            lookupRegistry[32] = new int[4]{2,3,2,2};
+            lookupRegistry[33] = new int[4]{2,2,3,2};
+            lookupRegistry[34] = new int[4]{2,2,2,3};
 
             lookupTable[35] = MakeLookup(16, true, false);
             lookupTable[36] = MakeLookup(16, false, true);
             lookupTable[37] = MakeLookup(16, true, true);
             lookupTable[38] = MakeLookup(16, false, false);
-            lookupRegistry[35] = new int[4] { 3, 3, 2, 2 };
-            lookupRegistry[36] = new int[4] { 2, 3, 3, 2 };
-            lookupRegistry[37] = new int[4] { 2, 2, 3, 3 };
-            lookupRegistry[38] = new int[4] { 3, 2, 2, 3 };
+            lookupRegistry[35] = new int[4]{3,3,2,2};
+            lookupRegistry[36] = new int[4]{2,3,3,2};
+            lookupRegistry[37] = new int[4]{2,2,3,3};
+            lookupRegistry[38] = new int[4]{3,2,2,3};
 
             lookupTable[39] = MakeLookup(17, false, true);
             lookupTable[40] = MakeLookup(17, true, true);
             lookupTable[41] = MakeLookup(17, false, false);
             lookupTable[42] = MakeLookup(17, true, false);
-            lookupRegistry[39] = new int[4] { 3, 3, 3, 2 };
-            lookupRegistry[40] = new int[4] { 2, 3, 3, 3 };
-            lookupRegistry[41] = new int[4] { 3, 2, 3, 3 };
-            lookupRegistry[42] = new int[4] { 3, 3, 2, 3 };
+            lookupRegistry[39] = new int[4]{3,3,3,2};
+            lookupRegistry[40] = new int[4]{2,3,3,3};
+            lookupRegistry[41] = new int[4]{3,2,3,3};
+            lookupRegistry[42] = new int[4]{3,3,2,3};
 
             lookupTable[43] = MakeLookup(53, true, false);
             lookupTable[44] = MakeLookup(53, false, false);
-            lookupRegistry[43] = new int[4] { 3, 2, 3, 2 };
-            lookupRegistry[44] = new int[4] { 2, 3, 2, 3 };
+            lookupRegistry[43] = new int[4]{3,2,3,2};
+            lookupRegistry[44] = new int[4]{2,3,2,3};
 
             lookupTable[45] = MakeLookup(3, false, false);
-            lookupRegistry[45] = new int[4] { 3, 3, 3, 3 };
+            lookupRegistry[45] = new int[4]{3,3,3,3};
 
             // Dirt - Stone
             lookupTable[46] = MakeLookup(25, true, false);
             lookupTable[47] = MakeLookup(25, false, true);
             lookupTable[48] = MakeLookup(25, true, true);
             lookupTable[49] = MakeLookup(25, false, false);
-            lookupRegistry[46] = new int[4] { 3, 1, 1, 1 };
-            lookupRegistry[47] = new int[4] { 1, 3, 1, 1 };
-            lookupRegistry[48] = new int[4] { 1, 1, 3, 1 };
-            lookupRegistry[49] = new int[4] { 1, 1, 1, 3 };
+            lookupRegistry[46] = new int[4]{3,1,1,1};
+            lookupRegistry[47] = new int[4]{1,3,1,1};
+            lookupRegistry[48] = new int[4]{1,1,3,1};
+            lookupRegistry[49] = new int[4]{1,1,1,3};
 
             lookupTable[50] = MakeLookup(26, true, false);
             lookupTable[51] = MakeLookup(26, false, true);
             lookupTable[52] = MakeLookup(26, true, true);
             lookupTable[53] = MakeLookup(26, false, false);
-            lookupRegistry[50] = new int[4] { 3, 3, 1, 1 };
-            lookupRegistry[51] = new int[4] { 1, 3, 3, 1 };
-            lookupRegistry[52] = new int[4] { 1, 1, 3, 3 };
-            lookupRegistry[53] = new int[4] { 3, 1, 1, 3 };
+            lookupRegistry[50] = new int[4]{3,3,1,1};
+            lookupRegistry[51] = new int[4]{1,3,3,1};
+            lookupRegistry[52] = new int[4]{1,1,3,3};
+            lookupRegistry[53] = new int[4]{3,1,1,3};
 
             lookupTable[54] = MakeLookup(27, false, true);
             lookupTable[55] = MakeLookup(27, true, true);
             lookupTable[56] = MakeLookup(27, false, false);
             lookupTable[57] = MakeLookup(27, true, false);
-            lookupRegistry[54] = new int[4] { 3, 3, 3, 1 };
-            lookupRegistry[55] = new int[4] { 1, 3, 3, 3 };
-            lookupRegistry[56] = new int[4] { 3, 1, 3, 3 };
-            lookupRegistry[57] = new int[4] { 3, 3, 1, 3 };
+            lookupRegistry[54] = new int[4]{3,3,3,1};
+            lookupRegistry[55] = new int[4]{1,3,3,3};
+            lookupRegistry[56] = new int[4]{3,1,3,3};
+            lookupRegistry[57] = new int[4]{3,3,1,3};
 
             lookupTable[58] = MakeLookup(52, true, false);
             lookupTable[59] = MakeLookup(52, false, false);
-            lookupRegistry[58] = new int[4] { 3, 1, 3, 1 };
-            lookupRegistry[59] = new int[4] { 1, 3, 1, 3 };
+            lookupRegistry[58] = new int[4]{3,1,3,1};
+            lookupRegistry[59] = new int[4]{1,3,1,3};
 
             //Dirt - Grass - Stone
             lookupTable[60] = MakeLookup(39, true, false);
             lookupTable[61] = MakeLookup(39, false, true);
             lookupTable[62] = MakeLookup(39, true, true);
             lookupTable[63] = MakeLookup(39, false, false);
-            lookupRegistry[60] = new int[4] { 1, 1, 2, 3 };
-            lookupRegistry[61] = new int[4] { 3, 1, 1, 2 };
-            lookupRegistry[62] = new int[4] { 2, 3, 1, 1 };
-            lookupRegistry[63] = new int[4] { 1, 2, 3, 1 };
+            lookupRegistry[60] = new int[4]{1,1,2,3};
+            lookupRegistry[61] = new int[4]{3,1,1,2};
+            lookupRegistry[62] = new int[4]{2,3,1,1};
+            lookupRegistry[63] = new int[4]{1,2,3,1};
 
             lookupTable[64] = MakeLookup(56, true, false);
             lookupTable[65] = MakeLookup(56, false, true);
             lookupTable[66] = MakeLookup(56, true, true);
             lookupTable[67] = MakeLookup(56, false, false);
-            lookupRegistry[64] = new int[4] { 1, 1, 3, 2 };
-            lookupRegistry[65] = new int[4] { 2, 1, 1, 3 };
-            lookupRegistry[66] = new int[4] { 3, 2, 1, 1 };
-            lookupRegistry[67] = new int[4] { 1, 3, 2, 1 };
+            lookupRegistry[64] = new int[4]{1,1,3,2};
+            lookupRegistry[65] = new int[4]{2,1,1,3};
+            lookupRegistry[66] = new int[4]{3,2,1,1};
+            lookupRegistry[67] = new int[4]{1,3,2,1};
 
             lookupTable[68] = MakeLookup(42, true, false);
             lookupTable[69] = MakeLookup(42, false, true);
             lookupTable[70] = MakeLookup(42, true, true);
             lookupTable[71] = MakeLookup(42, false, false);
-            lookupRegistry[68] = new int[4] { 2, 2, 1, 3 };
-            lookupRegistry[69] = new int[4] { 3, 2, 2, 1 };
-            lookupRegistry[70] = new int[4] { 1, 3, 2, 2 };
-            lookupRegistry[71] = new int[4] { 2, 1, 3, 2 };
+            lookupRegistry[68] = new int[4]{2,2,1,3};
+            lookupRegistry[69] = new int[4]{3,2,2,1};
+            lookupRegistry[70] = new int[4]{1,3,2,2};
+            lookupRegistry[71] = new int[4]{2,1,3,2};
 
             lookupTable[72] = MakeLookup(57, true, false);
             lookupTable[73] = MakeLookup(57, false, true);
             lookupTable[74] = MakeLookup(57, true, true);
             lookupTable[75] = MakeLookup(57, false, false);
-            lookupRegistry[72] = new int[4] { 2, 2, 3, 1 };
-            lookupRegistry[73] = new int[4] { 1, 2, 2, 3 };
-            lookupRegistry[74] = new int[4] { 3, 1, 2, 2 };
-            lookupRegistry[75] = new int[4] { 2, 3, 1, 2 };
+            lookupRegistry[72] = new int[4]{2,2,3,1};
+            lookupRegistry[73] = new int[4]{1,2,2,3};
+            lookupRegistry[74] = new int[4]{3,1,2,2};
+            lookupRegistry[75] = new int[4]{2,3,1,2};
 
             lookupTable[76] = MakeLookup(45, true, false);
             lookupTable[77] = MakeLookup(45, false, true);
             lookupTable[78] = MakeLookup(45, true, true);
             lookupTable[79] = MakeLookup(45, false, false);
-            lookupRegistry[76] = new int[4] { 3, 3, 1, 2 };
-            lookupRegistry[77] = new int[4] { 2, 3, 3, 1 };
-            lookupRegistry[78] = new int[4] { 1, 2, 3, 3 };
-            lookupRegistry[79] = new int[4] { 3, 1, 2, 3 };
+            lookupRegistry[76] = new int[4]{3,3,1,2};
+            lookupRegistry[77] = new int[4]{2,3,3,1};
+            lookupRegistry[78] = new int[4]{1,2,3,3};
+            lookupRegistry[79] = new int[4]{3,1,2,3};
 
             lookupTable[80] = MakeLookup(58, true, false);
             lookupTable[81] = MakeLookup(58, false, true);
             lookupTable[82] = MakeLookup(58, true, true);
             lookupTable[83] = MakeLookup(58, false, false);
-            lookupRegistry[80] = new int[4] { 3, 3, 2, 1 };
-            lookupRegistry[81] = new int[4] { 1, 3, 3, 2 };
-            lookupRegistry[82] = new int[4] { 2, 1, 3, 3 };
-            lookupRegistry[83] = new int[4] { 3, 2, 1, 3 };
+            lookupRegistry[80] = new int[4]{3,3,2,1};
+            lookupRegistry[81] = new int[4]{1,3,3,2};
+            lookupRegistry[82] = new int[4]{2,1,3,3};
+            lookupRegistry[83] = new int[4]{3,2,1,3};
 
             //Dirt - Stone & Grass
             lookupTable[84] = MakeLookup(59, true, false);
             lookupTable[85] = MakeLookup(59, false, true);
             lookupTable[86] = MakeLookup(59, true, true);
             lookupTable[87] = MakeLookup(59, false, false);
-            lookupRegistry[84] = new int[4] { 3, 1, 2, 1 };
-            lookupRegistry[85] = new int[4] { 1, 3, 1, 2 };
-            lookupRegistry[86] = new int[4] { 2, 1, 3, 1 };
-            lookupRegistry[87] = new int[4] { 1, 2, 1, 3 };
+            lookupRegistry[84] = new int[4]{3,1,2,1};
+            lookupRegistry[85] = new int[4]{1,3,1,2};
+            lookupRegistry[86] = new int[4]{2,1,3,1};
+            lookupRegistry[87] = new int[4]{1,2,1,3};
 
             //Dirt - Water & Grass
             lookupTable[88] = MakeLookup(60, true, false);
             lookupTable[89] = MakeLookup(60, false, true);
             lookupTable[90] = MakeLookup(60, true, true);
             lookupTable[91] = MakeLookup(60, false, false);
-            lookupRegistry[88] = new int[4] { 2, 1, 0, 1 };
-            lookupRegistry[89] = new int[4] { 1, 2, 1, 0 };
-            lookupRegistry[90] = new int[4] { 0, 1, 2, 1 };
-            lookupRegistry[91] = new int[4] { 1, 0, 1, 2 };
+            lookupRegistry[88] = new int[4]{2,1,0,1};
+            lookupRegistry[89] = new int[4]{1,2,1,0};
+            lookupRegistry[90] = new int[4]{0,1,2,1};
+            lookupRegistry[91] = new int[4]{1,0,1,2};
 
             //Dirt - Water & Stone
             lookupTable[92] = MakeLookup(61, true, false);
             lookupTable[93] = MakeLookup(61, false, true);
             lookupTable[94] = MakeLookup(61, true, true);
             lookupTable[95] = MakeLookup(61, false, false);
-            lookupRegistry[92] = new int[4] { 3, 1, 0, 1 };
-            lookupRegistry[93] = new int[4] { 1, 3, 1, 0 };
-            lookupRegistry[94] = new int[4] { 0, 1, 3, 1 };
-            lookupRegistry[95] = new int[4] { 1, 0, 1, 3 };
+            lookupRegistry[92] = new int[4]{3,1,0,1};
+            lookupRegistry[93] = new int[4]{1,3,1,0};
+            lookupRegistry[94] = new int[4]{0,1,3,1};
+            lookupRegistry[95] = new int[4]{1,0,1,3};
 
             //Grass - Dirt & Stone
             lookupTable[96] = MakeLookup(62, true, false);
             lookupTable[97] = MakeLookup(62, false, true);
             lookupTable[98] = MakeLookup(62, true, true);
             lookupTable[99] = MakeLookup(62, false, false);
-            lookupRegistry[96] = new int[4] { 3, 2, 1, 2 };
-            lookupRegistry[97] = new int[4] { 2, 3, 2, 1 };
-            lookupRegistry[98] = new int[4] { 1, 2, 3, 2 };
-            lookupRegistry[99] = new int[4] { 2, 1, 2, 3 };
+            lookupRegistry[96] = new int[4]{3,2,1,2};
+            lookupRegistry[97] = new int[4]{2,3,2,1};
+            lookupRegistry[98] = new int[4]{1,2,3,2};
+            lookupRegistry[99] = new int[4]{2,1,2,3};
 
             //Stone - Dirt & Grass
             lookupTable[100] = MakeLookup(63, true, false);
             lookupTable[101] = MakeLookup(63, false, true);
             lookupTable[102] = MakeLookup(63, true, true);
             lookupTable[103] = MakeLookup(63, false, false);
-            lookupRegistry[100] = new int[4] { 2, 3, 1, 3 };
-            lookupRegistry[101] = new int[4] { 3, 2, 3, 1 };
-            lookupRegistry[102] = new int[4] { 1, 3, 2, 3 };
-            lookupRegistry[103] = new int[4] { 3, 1, 3, 2 };
+            lookupRegistry[100] = new int[4]{2,3,1,3};
+            lookupRegistry[101] = new int[4]{3,2,3,1};
+            lookupRegistry[102] = new int[4]{1,3,2,3};
+            lookupRegistry[103] = new int[4]{3,1,3,2};
 
             //Road - Dirt & Grass
             lookupTable[104] = MakeLookup(46, false, false);
-            lookupRegistry[104] = new int[4] { 46, 46, 46, 46 };
+            lookupRegistry[104] = new int[4]{46,46,46,46};
 
             lookupTable[105] = MakeLookup(47, true, false);
             lookupTable[106] = MakeLookup(47, false, true);
             lookupTable[107] = MakeLookup(47, true, true);
             lookupTable[108] = MakeLookup(47, false, false);
-            lookupRegistry[105] = new int[4] { 1, 47, 46, 47 };
-            lookupRegistry[106] = new int[4] { 47, 1, 47, 46 };
-            lookupRegistry[107] = new int[4] { 46, 47, 1, 47 };
-            lookupRegistry[108] = new int[4] { 47, 46, 47, 1 };
+            lookupRegistry[105] = new int[4]{1,47,46,47};
+            lookupRegistry[106] = new int[4]{47,1,47,46};
+            lookupRegistry[107] = new int[4]{46,47,1,47};
+            lookupRegistry[108] = new int[4]{47,46,47,1};
 
             lookupTable[109] = MakeLookup(55, true, false);
             lookupTable[110] = MakeLookup(55, false, true);
             lookupTable[111] = MakeLookup(55, true, true);
             lookupTable[112] = MakeLookup(55, false, false);
-            lookupRegistry[109] = new int[4] { 2, 55, 46, 55 };
-            lookupRegistry[110] = new int[4] { 55, 2, 55, 46 };
-            lookupRegistry[111] = new int[4] { 46, 55, 2, 55 };
-            lookupRegistry[112] = new int[4] { 55, 46, 55, 2 };
+            lookupRegistry[109] = new int[4]{2,55,46,55};
+            lookupRegistry[110] = new int[4]{55,2,55,46};
+            lookupRegistry[111] = new int[4]{46,55,2,55};
+            lookupRegistry[112] = new int[4]{55,46,55,2};
         }
     }
 }
