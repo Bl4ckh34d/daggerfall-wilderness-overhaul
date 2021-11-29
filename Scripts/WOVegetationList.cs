@@ -239,6 +239,9 @@ namespace WildernessOverhaul
         public List<int> temperateWoodlandBeachAtElevation14 = new List<int>(new int[] { 31, 3, 3, 4, 4, 5, 5, 6, 29 });
         public List<int> temperateWoodlandRocksAtElevation14 = new List<int>(new int[] { 3, 4, 5, 6, 8, 10, 26 });
 
+        public WOVegetationList(int rndSeed) {
+            Random.seed = rndSeed;
+        }
 
         public void ChangeVegetationLists(float elevation, DaggerfallDateTime.Seasons season, float mapStyle) {
 

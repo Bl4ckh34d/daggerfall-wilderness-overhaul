@@ -11,6 +11,10 @@ namespace WildernessOverhaul
 		public float chanceOnGrass;
 		public float chanceOnStone;
 
+        public WOVegetationChance(int rndSeed) {
+            Random.seed = rndSeed;
+        }
+
 		public void ChangeVegetationChances(float elevation, int climate) {
 
 			if (climate == (int)MapsFile.Climates.Woodlands)
