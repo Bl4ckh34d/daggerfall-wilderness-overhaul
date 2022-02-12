@@ -4,7 +4,7 @@ using DaggerfallWorkshop;
 
 namespace WildernessOverhaul {
 
-    public class BaseDataObject {
+    public class ContainerObject {
         public DaggerfallTerrain dfTerrain;
         public DaggerfallBillboardBatch dfBillboardBatch;
         public Terrain terrain;
@@ -14,7 +14,7 @@ namespace WildernessOverhaul {
         public int y;
         public float maxTerrainHeight;
 
-        public BaseDataObject(
+        public ContainerObject(
           DaggerfallTerrain DFTerrain,
           DaggerfallBillboardBatch DFBillboardBatch,
           Terrain Terrain,

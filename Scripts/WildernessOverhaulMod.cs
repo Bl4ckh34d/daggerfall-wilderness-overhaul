@@ -27,6 +27,7 @@ namespace WildernessOverhaul
         static Material terrainMaterial;
 
 
+        int rngSeed;
         bool dynamicVegetationClearance;
         bool vegetationInLocations;
         bool fireflies;
@@ -74,6 +75,7 @@ namespace WildernessOverhaul
         {
             Debug.Log("Wilderness Overhaul: Initiating Mod");
             settings = mod.GetSettings();
+            rngSeed = settings.GetValue<int>("General", "RandomSeed");
             dynamicVegetationClearance = settings.GetValue<bool>("TerrainNature", "DynamicVegetationClearance");
             vegetationInLocations = settings.GetValue<bool>("TerrainNature", "VegetationInsideJungleLocations");
             fireflies = settings.GetValue<bool>("Nature", "Fireflies");
@@ -92,6 +94,7 @@ namespace WildernessOverhaul
                 mod,
                 DREAMModEnabled,
                 InterestingErodedTerrainModEnabled,
+                rngSeed,
                 dynamicVegetationClearance,
                 vegetationInLocations,
                 fireflies,

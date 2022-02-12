@@ -2,6 +2,23 @@
     "Version": "0.1",
     "Sections": [
         {
+            "Name": "General",
+            "Description": "General mod settings",
+            "IsAdvanced": false,
+            "Keys": [
+                {
+                    "Min": 0,
+                    "Max": 999,
+                    "Value": 420,
+                    "Name": "RandomSeed",
+                    "Description": "Seed for TerrainNature random generation",
+                    "$version": "v1",
+                    "$type": "DaggerfallWorkshop.Game.Utility.ModSupport.ModSettings.SliderIntKey"
+                }
+            ],
+            "$version": "v1"
+        },
+        {
             "Name": "TerrainNature",
             "Description": "Variables changing the vegetation distribution",
             "IsAdvanced": false,

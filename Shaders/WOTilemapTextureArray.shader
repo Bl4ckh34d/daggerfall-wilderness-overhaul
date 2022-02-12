@@ -20,31 +20,40 @@ Shader "WildernessOverhaul/TilemapTextureArray" {
 		[HideInInspector] _SplatTex0("Layer 0 (R)", 2D) = "white" {}
 
 		// These params are used for our shader
-		_TileTexArr("Tile Texture Array", 2DArray) = "" {}
-		_TileNormalMapTexArr("Tileset NormalMap Texture Array (RGBA)", 2DArray) = "" {}
-		_TileMetallicGlossMapTexArr ("Tileset MetallicGlossMap Texture Array (RGBA)", 2DArray) = "" {}
-		_TilemapTex("Tilemap (R)", 2D) = "red" {}
-		_TilemapDim("Tilemap Dimension (in tiles)", Int) = 128
-		_MaxIndex("Max Tileset Index", Int) = 255
+        _TileTexArr("Tile Texture Array", 2DArray) = "white" {}
+        _TileNormalMapTexArr("Tileset NormalMap Texture Array (RGBA)", 2DArray) = "bump" {}
+        _TileParallaxMapTexArr("Tileset ParallaxMap Texture Array (R)", 2DArray) = "black" {}
+        _Parallax("Parallax Scale", Range (0.005, 0.08)) = 0.01
+        _TileMetallicGlossMapTexArr("Tileset MetallicGlossMap Texture Array (R)", 2DArray) = "black" {}
+        _Smoothness("Smoothness", Range (0, 1)) = 0
+        _TilemapTex("Tilemap (R)", 2D) = "red" {}
+        _TilemapDim("Tilemap Dimension (in tiles)", Int) = 128
+        _MaxIndex("Max Tileset Index", Int) = 255
 	}
 	SubShader {
 		Tags { "RenderType"="Opaque" }
 		LOD 200
 
-		CGPROGRAM
-
-		#pragma target 3.5
-		#pragma surface surf Standard
-		#pragma glsl
-
-		//#pragma shader_feature _NORMALMAP
-		#pragma multi_compile __ _NORMALMAP
+		 CGPROGRAM
+        #pragma target 3.5
+        #pragma surface surf BlinnPhong
+        #pragma glsl
+        #pragma multi_compile_local __ _NORMALMAP
+        #pragma multi_compile_local __ _PARALLAXMAP
+        #pragma multi_compile_local __ _METALLICGLOSSMAP
 
 		UNITY_DECLARE_TEX2DARRAY(_TileTexArr);
-
-		#ifdef _NORMALMAP
-			UNITY_DECLARE_TEX2DARRAY(_TileNormalMapTexArr);
-		#endif
+        #ifdef _NORMALMAP
+            UNITY_DECLARE_TEX2DARRAY(_TileNormalMapTexArr);
+        #endif
+        #ifdef _PARALLAXMAP
+            UNITY_DECLARE_TEX2DARRAY(_TileParallaxMapTexArr);
+            float _Parallax;
+        #endif
+        #ifdef _METALLICGLOSSMAP
+            UNITY_DECLARE_TEX2DARRAY(_TileMetallicGlossMapTexArr);
+            float _Smoothness;
+        #endif
 
 		sampler2D _TilemapTex;
 		float4 _TileTexArr_TexelSize;
@@ -52,10 +61,12 @@ Shader "WildernessOverhaul/TilemapTextureArray" {
 		int _TilemapDim;
 
 		struct Input
-		{
-			float2 uv_MainTex : TEXCOORD0;
-			//float2 uv_BumpMap : TEXCOORD1;
-		};
+        {
+            float2 uv_MainTex;
+            #ifdef _PARALLAXMAP
+                float3 viewDir;
+            #endif
+        };
 
 		// compute all 4 posible configurations of terrain tiles (normal, rotated, flipped, rotated and flipped)
 		// rotations and translations not conflated together, because OpenGL ES 2.0 only supports square matrices
@@ -82,29 +93,45 @@ Shader "WildernessOverhaul/TilemapTextureArray" {
 			return 0.5 * log2(d) + MIPMAP_BIAS;
 		}
 
-		void surf (Input IN, inout SurfaceOutputStandard o)
-		{
-			// Get offset to tile in atlas
-			uint index = tex2D(_TilemapTex, IN.uv_MainTex).a * _MaxIndex + 0.5;
+		void surf (Input IN, inout SurfaceOutput o)
+        {
+            // Get offset to tile in atlas
+            uint index = tex2D(_TilemapTex, IN.uv_MainTex).a * _MaxIndex + 0.5;
 
-			// Offset to fragment position inside tile
-			float2 unwrappedUV = IN.uv_MainTex * _TilemapDim;
-			float2 uv = mul(rotations[index % 4], frac(unwrappedUV)) + translations[index % 4];
+            // Offset to fragment position inside tile
+            float2 unwrappedUV = IN.uv_MainTex * _TilemapDim;
+            float2 uv = mul(rotations[index % 4], frac(unwrappedUV)) + translations[index % 4];
 
-			// Sample based on gradient and set output
-			float3 uv3 = float3(uv, index / 4); // compute correct texture array index from index
+            // Sample based on gradient and set output
+            float3 uv3 = float3(uv, index / 4); // compute correct texture array index from index
 
-			float mipMapLevel = GetMipLevel(unwrappedUV, _TileTexArr_TexelSize);
-			half4 c = UNITY_SAMPLE_TEX2DARRAY_SAMPLER_LOD(_TileTexArr, _TileTexArr, uv3, mipMapLevel);
+            // Get mipmap level
+            float mipMapLevel = GetMipLevel(unwrappedUV, _TileTexArr_TexelSize);
 
-			o.Albedo = c.rgb;
-			o.Alpha = c.a;
+            // Get parallax offset
+            #ifdef _PARALLAXMAP
+                half height = UNITY_SAMPLE_TEX2DARRAY_SAMPLER_LOD(_TileParallaxMapTexArr, _TileParallaxMapTexArr, uv3, mipMapLevel).r;
+                uv3.xy += ParallaxOffset(height, _Parallax, IN.viewDir);
+            #endif
 
-			#ifdef _NORMALMAP
-				o.Normal = UnpackNormal(UNITY_SAMPLE_TEX2DARRAY_SAMPLER_LOD(_TileNormalMapTexArr, _TileTexArr, uv3, mipMapLevel));
-			#endif
-		}
-		ENDCG
+            // Albedo (colour) map
+            half4 albedo = UNITY_SAMPLE_TEX2DARRAY_SAMPLER_LOD(_TileTexArr, _TileTexArr, uv3, mipMapLevel);
+            o.Albedo = albedo.rgb;
+            o.Alpha = albedo.a;
+
+            // Normal map
+            #ifdef _NORMALMAP
+                o.Normal = UnpackNormal(UNITY_SAMPLE_TEX2DARRAY_SAMPLER_LOD(_TileNormalMapTexArr, _TileNormalMapTexArr, uv3, mipMapLevel));
+            #endif
+
+            // Very rough approximation of metallic map using gloss and specular
+            #ifdef _METALLICGLOSSMAP
+                half4 metallicMap = UNITY_SAMPLE_TEX2DARRAY_SAMPLER_LOD(_TileMetallicGlossMapTexArr, _TileMetallicGlossMapTexArr, uv3, mipMapLevel);
+                o.Gloss = 1 - metallicMap.r;
+                o.Specular = _Smoothness;
+            #endif
+        }
+        ENDCG
 	}
-	FallBack "Standard"
+	FallBack "Diffuse"
 }
