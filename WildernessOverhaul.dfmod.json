@@ -1,9 +1,9 @@
 {
     "ModTitle": "Wilderness Overhaul",
-    "ModVersion": "0.1",
+    "ModVersion": "0.2",
     "ModAuthor": "Daniel Schmidt",
     "ContactInfo": "https://forums.dfworkshop.net/memberlist.php?mode=viewprofile&u=2094",
-    "DFUnity_Version": "0.11.3",
+    "DFUnity_Version": "0.13.3",
     "ModDescription": "Overhaul of the nature billboard distribution in Daggerfalls Wilderness",
     "GUID": "153a082a-c594-4d5d-8093-5376a17c22b9",
     "Files": [

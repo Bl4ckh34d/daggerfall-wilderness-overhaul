@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -9,7 +9,7 @@ public class WOStochasticChances
     // ------------------------------------
     // Chance for different terrain layouts
     public float mapStyle = 0;
-    public float[] mapStyleChance = {30f, 35f, 40f, 45f, 50f, 55f};
+    public float[] mapStyleChance = { 30f, 35f, 40f, 45f, 50f, 55f };
 
     // ------------------------------------
     // TEMPERATE Climate Vegetation Chances
@@ -94,14 +94,14 @@ public class WOStochasticChances
         // MOUNTAIN Climate Vegetation Chances
         // ------------------------------------
         mountainStoneCircleChance = 0.025f;
-        mountForestLimit[0] = Random.Range(0.30f, 0.40f);
-        mountForestLimit[1] = tempForestLimit[0] + Random.Range(0.2f, 0.25f);
-        mountForestFrequency = Random.Range(0.045f, 0.055f);
+        mountForestLimit[0] = Random.Range(0.25f, 0.30f);
+        mountForestLimit[1] = tempForestLimit[0] + Random.Range(0.25f, 0.30f);
+        mountForestFrequency = Random.Range(0.1f, 0.06f);
         mountForestAmplitude = 0.9f;
         mountForestPersistence = Random.Range(0.35f, 0.45f);
         mountForestOctaves = Random.Range(2, 3);
 
-        // ------------------------------------
+        // ------------------------------------ 
         // DESERT Climate Vegetation Chances
         // ------------------------------------
         desert2DirtChance = Random.Range(0, 1);
