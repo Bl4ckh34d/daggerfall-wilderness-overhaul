@@ -36,8 +36,14 @@ namespace WildernessOverhaul
         // TERRAIN SETTINGS
         private const float maxSteepness = 50f; // 50 - Max steepness to still place nature billboards
         private const float slopeSinkRatio = 70f; // 70 - Sink flats slightly into ground as slope increases to prevent floaty trees.
+        private const int billboardSoftLimit = 15000;
         private float treeLine = WOTerrainTexturing.treeLine; // Tree border
         public bool NatureMeshUsed { get; protected set; } // Flag to signal use of meshes
+
+        private static int currentBillboardCount;
+        private static int currentBillboardDrops;
+        private static int currentTileIndex;
+        private static int currentTileCount;
 
         // Important data classes holding values and lists
         public WOVegetationList vegetationList;
@@ -201,8 +207,11 @@ namespace WildernessOverhaul
             if (shootingStarsExist)
                 AddShootingStar(dfTerrain, dfBillboardBatch, 90f, 1200f, shootingStarsMinimum, shootingStarsMaximum); // Shooting Stars
 
+            ResetBillboardBudget(tDim * tDim);
+
             for (int y = 0; y < tDim; y++) {
                 for (int x = 0; x < tDim; x++) {
+                    UpdateBillboardBudgetProgress((y * tDim) + x + 1);
                     // Get latitude and longitude of this tile
                     int latitude = (int)(dfTerrain.MapPixelX * MapsFile.WorldMapTileDim + x);
                     int longitude = (int)(MapsFile.MaxWorldTileCoordZ - dfTerrain.MapPixelY * MapsFile.WorldMapTileDim + y);
@@ -682,6 +691,56 @@ namespace WildernessOverhaul
 
             // Apply new batch
             dfBillboardBatch.Apply();
+        }
+
+        private static void ResetBillboardBudget(int tileCount)
+        {
+            currentBillboardCount = 0;
+            currentBillboardDrops = 0;
+            currentTileIndex = 0;
+            currentTileCount = Mathf.Max(1, tileCount);
+        }
+
+        private static void UpdateBillboardBudgetProgress(int tileIndex)
+        {
+            currentTileIndex = Mathf.Clamp(tileIndex, 0, currentTileCount);
+        }
+
+        private static bool CanQueueBillboard()
+        {
+            if (currentBillboardCount >= billboardSoftLimit)
+            {
+                currentBillboardDrops++;
+                return false;
+            }
+
+            float progress = Mathf.Clamp01((float)currentTileIndex / currentTileCount);
+            float targetBillboardsAtProgress = Mathf.Lerp(billboardSoftLimit * 0.65f, billboardSoftLimit, progress);
+            if (currentBillboardCount > targetBillboardsAtProgress)
+            {
+                float overflow = currentBillboardCount - targetBillboardsAtProgress;
+                float headroom = Mathf.Max(1f, billboardSoftLimit - targetBillboardsAtProgress);
+                float keepChance = Mathf.Clamp01(1f - (overflow / headroom));
+                keepChance = Mathf.Lerp(0.08f, 1f, keepChance);
+
+                if (Random.value > keepChance)
+                {
+                    currentBillboardDrops++;
+                    return false;
+                }
+            }
+
+            currentBillboardCount++;
+            return true;
+        }
+
+        private static bool TryQueueBillboard(ContainerObject baseData, int record, Vector3 pos)
+        {
+            if (!CanQueueBillboard())
+                return false;
+
+            baseData.dfBillboardBatch.AddItem(record, pos);
+            return true;
         }
 
         private bool Roll(float chance)

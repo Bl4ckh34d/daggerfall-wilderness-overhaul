@@ -1,4 +1,0 @@
-source=Assets/Game/Mods/daggerfall-wilderness-overhaul/Textures/002-TexArray.asset
-width=64
-height=64
-depth=64

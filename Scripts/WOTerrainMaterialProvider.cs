@@ -14,6 +14,7 @@ using UnityEngine;
 using DaggerfallConnect.Arena2;
 using DaggerfallConnect;
 using DaggerfallWorkshop.Utility;
+using DaggerfallWorkshop.Utility.AssetInjection;
 using DaggerfallWorkshop.Game.Utility.ModSupport;
 
 namespace DaggerfallWorkshop
@@ -21,9 +22,11 @@ namespace DaggerfallWorkshop
     public class WOTerrainMaterialProvider : TerrainMaterialProvider
     {
         Mod mod;
+        TextureReader textureReader;
 
         public WOTerrainMaterialProvider(Mod injectedMod) {
             mod = injectedMod;
+            textureReader = new TextureReader(DaggerfallUnity.Instance.Arena2Path);
         }
 
 
@@ -42,22 +45,37 @@ namespace DaggerfallWorkshop
         public override void PromoteMaterial(DaggerfallTerrain daggerfallTerrain, TerrainMaterialData terrainMaterialData)
         {
             int archive = GetGroundArchive(terrainMaterialData.WorldClimate);
-            Material vanillaTileMaterial = DaggerfallUnity.Instance.MaterialReader.GetTerrainTextureArrayMaterial(archive);
             Texture2DArray modAlbedoArray = GetModTerrainTextureArray(archive);
+            Texture2DArray normalArray = textureReader.GetTerrainTextureArray(archive, TextureMap.Normal);
+            Texture2DArray parallaxArray = textureReader.GetTerrainTextureArray(archive, TextureMap.Height);
+            Texture2DArray metallicGlossArray = textureReader.GetTerrainTextureArray(archive, TextureMap.MetallicGloss);
 
             // Keep the mod's custom albedo, but reuse DFU's current terrain lighting stack.
             terrainMaterialData.Material.SetTexture(TileTexArrUniforms.TileTexArr, modAlbedoArray);
-            terrainMaterialData.Material.SetTexture(TileTexArrUniforms.TileNormalMapTexArr, vanillaTileMaterial.GetTexture(TileTexArrUniforms.TileNormalMapTexArr));
-            terrainMaterialData.Material.SetTexture(TileTexArrUniforms.TileParallaxMapTexArr, vanillaTileMaterial.GetTexture(TileTexArrUniforms.TileParallaxMapTexArr));
-            terrainMaterialData.Material.SetTexture(TileTexArrUniforms.TileMetallicGlossMapTexArr, vanillaTileMaterial.GetTexture(TileTexArrUniforms.TileMetallicGlossMapTexArr));
+            terrainMaterialData.Material.SetTexture(TileTexArrUniforms.TileNormalMapTexArr, normalArray);
+            terrainMaterialData.Material.SetTexture(TileTexArrUniforms.TileParallaxMapTexArr, parallaxArray);
+            terrainMaterialData.Material.SetTexture(TileTexArrUniforms.TileMetallicGlossMapTexArr, metallicGlossArray);
             terrainMaterialData.Material.SetTexture(TileTexArrUniforms.TilemapTex, terrainMaterialData.TileMapTexture);
 
-            AssignKeyWord(KeyWords.NormalMap, vanillaTileMaterial, terrainMaterialData.Material);
-            AssignKeyWord(KeyWords.HeightMap, vanillaTileMaterial, terrainMaterialData.Material);
-            AssignKeyWord(KeyWords.MetallicGlossMap, vanillaTileMaterial, terrainMaterialData.Material);
+            if (normalArray != null)
+                terrainMaterialData.Material.EnableKeyword(KeyWords.NormalMap);
+            else
+                terrainMaterialData.Material.DisableKeyword(KeyWords.NormalMap);
 
-            if (vanillaTileMaterial.HasProperty(Uniforms.Smoothness))
-                terrainMaterialData.Material.SetFloat(Uniforms.Smoothness, vanillaTileMaterial.GetFloat(Uniforms.Smoothness));
+            if (parallaxArray != null)
+                terrainMaterialData.Material.EnableKeyword(KeyWords.HeightMap);
+            else
+                terrainMaterialData.Material.DisableKeyword(KeyWords.HeightMap);
+
+            if (metallicGlossArray != null)
+            {
+                terrainMaterialData.Material.EnableKeyword(KeyWords.MetallicGlossMap);
+                terrainMaterialData.Material.SetFloat(Uniforms.Smoothness, 0.35f);
+            }
+            else
+            {
+                terrainMaterialData.Material.DisableKeyword(KeyWords.MetallicGlossMap);
+            }
         }
 
         private Texture2DArray GetModTerrainTextureArray(int archive)
@@ -90,14 +108,6 @@ namespace DaggerfallWorkshop
                 textureArrayTerrainTiles = mod.GetAsset<Texture2DArray>("404-TexArray.asset");
             textureArrayTerrainTiles.filterMode = DaggerfallUnity.Instance.MaterialReader.MainFilterMode;
             return textureArrayTerrainTiles;
-        }
-
-        void AssignKeyWord(string keyword, Material src, Material dst)
-        {
-            if (src.IsKeywordEnabled(keyword))
-                dst.EnableKeyword(keyword);
-            else
-                dst.DisableKeyword(keyword);
         }
 
         private TextureFormat ParseTextureFormat(SupportedAlphaTextureFormats format)

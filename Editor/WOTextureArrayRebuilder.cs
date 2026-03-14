@@ -11,6 +11,8 @@ namespace WildernessOverhaul.Editor
     {
         private const string SourceRoot = "Assets/Game/Mods/daggerfall-wilderness-overhaul/Textures/TextureFiles";
         private const string TargetRoot = "Assets/Game/Mods/daggerfall-wilderness-overhaul/Textures";
+        private const string VanillaRoot = "Assets/Game/Mods/daggerfall-wilderness-overhaul/Textures/VanillaTextureFiles";
+        private const int TerrainSliceCount = 56;
 
         [MenuItem("Tools/Wilderness Overhaul/Rebuild All Mod Texture Arrays From TextureFiles")]
         private static void RebuildAllTextureArrays()
@@ -35,14 +37,7 @@ namespace WildernessOverhaul.Editor
         private static void RebuildTextureArrayFromFolder(string folderPath)
         {
             string folderName = Path.GetFileName(folderPath);
-            string[] textureGuids = AssetDatabase.FindAssets("t:Texture2D", new[] { folderPath });
-            Texture2D[] textures = textureGuids
-                .Select(AssetDatabase.GUIDToAssetPath)
-                .Where(x => x.EndsWith(".png", StringComparison.OrdinalIgnoreCase))
-                .OrderBy(x => x, StringComparer.OrdinalIgnoreCase)
-                .Select(AssetDatabase.LoadAssetAtPath<Texture2D>)
-                .Where(x => x != null)
-                .ToArray();
+            Texture2D[] textures = BuildTextureList(folderPath, folderName);
 
             if (textures.Length == 0)
             {
@@ -87,6 +82,44 @@ namespace WildernessOverhaul.Editor
                 AssetDatabase.CreateAsset(generated, $"{TargetRoot}/{folderName}.asset");
                 Debug.Log($"Wilderness Overhaul: Created texture array {folderName}.asset from {folderPath}");
             }
+        }
+
+        private static Texture2D[] BuildTextureList(string folderPath, string folderName)
+        {
+            string archiveId = folderName.Substring(0, 3);
+            string vanillaFolder = $"{VanillaRoot}/{archiveId}-Vanilla";
+
+            // Terrain arrays in current DFU expect 56 slices.
+            if (AssetDatabase.IsValidFolder(vanillaFolder))
+            {
+                Texture2D[] textures = new Texture2D[TerrainSliceCount];
+                for (int i = 0; i < TerrainSliceCount; i++)
+                {
+                    string fileName = $"-{i:D3}.png";
+                    string modPath = $"{folderPath}/{fileName}";
+                    string vanillaPath = $"{vanillaFolder}/{fileName}";
+
+                    Texture2D modTexture = AssetDatabase.LoadAssetAtPath<Texture2D>(modPath);
+                    string chosenPath = modTexture != null ? modPath : vanillaPath;
+                    Texture2D texture = AssetDatabase.LoadAssetAtPath<Texture2D>(chosenPath);
+                    if (texture == null)
+                        throw new InvalidOperationException($"Missing slice {fileName} for {folderName}. Checked {modPath} and {vanillaPath}.");
+
+                    textures[i] = texture;
+                }
+
+                return textures;
+            }
+
+            // Fallback for non-standard folders.
+            string[] textureGuids = AssetDatabase.FindAssets("t:Texture2D", new[] { folderPath });
+            return textureGuids
+                .Select(AssetDatabase.GUIDToAssetPath)
+                .Where(x => x.EndsWith(".png", StringComparison.OrdinalIgnoreCase))
+                .OrderBy(x => x, StringComparer.OrdinalIgnoreCase)
+                .Select(AssetDatabase.LoadAssetAtPath<Texture2D>)
+                .Where(x => x != null)
+                .ToArray();
         }
     }
 }
