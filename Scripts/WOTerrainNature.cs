@@ -1851,14 +1851,14 @@ namespace WildernessOverhaul
                 TileTypeCheck(pos, baseData, false, true, false, false, false) &&
                 baseData.steepness < Mathf.Clamp(90f - ((sampledHeight / baseData.maxTerrainHeight) / 0.85f * 100f), 40f, 90f))
             {
-                baseData.dfBillboardBatch.AddItem(billboardCollection[record], pos);
+                TryQueueBillboard(baseData, billboardCollection[record], pos);
             }
             else if (!checkOnLand &&
                 TileTypeCheck(pos, baseData, true, false, false, false, false) &&
                 !TileTypeCheck(pos, baseData, false, false, false, true, true) &&
                 baseData.steepness < Mathf.Clamp(90f - ((sampledHeight / baseData.maxTerrainHeight) / 0.85f * 100f), 40f, 90f))
             {
-                baseData.dfBillboardBatch.AddItem(billboardCollection[record], pos);
+                TryQueueBillboard(baseData, billboardCollection[record], pos);
             }
         }
 
@@ -3105,14 +3105,14 @@ namespace WildernessOverhaul
              TileTypeCheck(pos, baseData, false, true, false, false, false) &&
              baseData.steepness < Mathf.Clamp(90f - ((height / baseData.maxTerrainHeight) / 0.85f * 100f), 40f, 90f))
             {
-                baseData.dfBillboardBatch.AddItem(billboardCollection[rnd], pos);
+                TryQueueBillboard(baseData, billboardCollection[rnd], pos);
             }
             if (!checkOnLand &&
              TileTypeCheck(pos, baseData, true, false, false, false, false) &&
              !TileTypeCheck(pos, baseData, false, false, false, true, true) &&
              baseData.steepness < Mathf.Clamp(90f - ((height / baseData.maxTerrainHeight) / 0.85f * 100f), 40f, 90f))
             {
-                baseData.dfBillboardBatch.AddItem(billboardCollection[rnd], pos);
+                TryQueueBillboard(baseData, billboardCollection[rnd], pos);
             }
         }
 
@@ -3131,14 +3131,14 @@ namespace WildernessOverhaul
              TileTypeCheck(pos, baseData, false, true, false, false, false) &&
              baseData.steepness < Mathf.Clamp(100f - ((height / baseData.maxTerrainHeight) * 100f), 40f, 100f))
             {
-                baseData.dfBillboardBatch.AddItem(billboardCollection[record], pos);
+                TryQueueBillboard(baseData, billboardCollection[record], pos);
             }
             if (!checkOnLand &&
              TileTypeCheck(pos, baseData, true, false, false, false, false) &&
              !TileTypeCheck(pos, baseData, false, false, false, true, true) &&
              baseData.steepness < Mathf.Clamp(100f - ((height / baseData.maxTerrainHeight) * 100f), 40f, 100f))
             {
-                baseData.dfBillboardBatch.AddItem(billboardCollection[record], pos);
+                TryQueueBillboard(baseData, billboardCollection[record], pos);
             }
         }
 
@@ -3148,27 +3148,27 @@ namespace WildernessOverhaul
             Vector3 pos = new Vector3(baseData.x * baseData.scale, 0, (baseData.y + 0.5f) * baseData.scale);
             float height2 = baseData.terrain.SampleHeight(pos + baseData.terrain.transform.position);
             pos.y = height2 - (baseData.steepness / slopeSinkRatio);
-            baseData.dfBillboardBatch.AddItem(record, pos);
+            TryQueueBillboard(baseData, record, pos);
 
             pos = new Vector3((baseData.x + 0.272f) * baseData.scale, 0, (baseData.y - 0.404f) * baseData.scale);
             height2 = baseData.terrain.SampleHeight(pos + baseData.terrain.transform.position);
             pos.y = height2 - (baseData.steepness / slopeSinkRatio);
-            baseData.dfBillboardBatch.AddItem(record, pos);
+            TryQueueBillboard(baseData, record, pos);
 
             pos = new Vector3((baseData.x - 0.272f) * baseData.scale, 0, (baseData.y - 0.404f) * baseData.scale);
             height2 = baseData.terrain.SampleHeight(pos + baseData.terrain.transform.position);
             pos.y = height2 - (baseData.steepness / slopeSinkRatio);
-            baseData.dfBillboardBatch.AddItem(record, pos);
+            TryQueueBillboard(baseData, record, pos);
 
             pos = new Vector3((baseData.x - 0.475f) * baseData.scale, 0, (baseData.y + 0.154f) * baseData.scale);
             height2 = baseData.terrain.SampleHeight(pos + baseData.terrain.transform.position);
             pos.y = height2 - (baseData.steepness / slopeSinkRatio);
-            baseData.dfBillboardBatch.AddItem(record, pos);
+            TryQueueBillboard(baseData, record, pos);
 
             pos = new Vector3((baseData.x + 0.475f) * baseData.scale, 0, (baseData.y + 0.154f) * baseData.scale);
             height2 = baseData.terrain.SampleHeight(pos + baseData.terrain.transform.position);
             pos.y = height2 - (baseData.steepness / slopeSinkRatio);
-            baseData.dfBillboardBatch.AddItem(record, pos);
+            TryQueueBillboard(baseData, record, pos);
         }
 
         public static void AddStoneCircleToBatch(
@@ -3179,47 +3179,47 @@ namespace WildernessOverhaul
             Vector3 pos = new Vector3(baseData.x * baseData.scale, 0, baseData.y * baseData.scale);
             float height2 = baseData.terrain.SampleHeight(pos + baseData.terrain.transform.position);
             pos.y = height2 - (baseData.steepness / slopeSinkRatio);
-            baseData.dfBillboardBatch.AddItem(billboardCollection[record1], pos);
+            TryQueueBillboard(baseData, billboardCollection[record1], pos);
 
             pos = new Vector3((baseData.x + 0.4f) * baseData.scale, 0, baseData.y * baseData.scale);
             height2 = baseData.terrain.SampleHeight(pos + baseData.terrain.transform.position);
             pos.y = height2 - (baseData.steepness / slopeSinkRatio);
-            baseData.dfBillboardBatch.AddItem(billboardCollection[record2], pos);
+            TryQueueBillboard(baseData, billboardCollection[record2], pos);
 
             pos = new Vector3((baseData.x - 0.4f) * baseData.scale, 0, baseData.y * baseData.scale);
             height2 = baseData.terrain.SampleHeight(pos + baseData.terrain.transform.position);
             pos.y = height2 - (baseData.steepness / slopeSinkRatio);
-            baseData.dfBillboardBatch.AddItem(billboardCollection[record2], pos);
+            TryQueueBillboard(baseData, billboardCollection[record2], pos);
 
             pos = new Vector3(baseData.x * baseData.scale, 0, (baseData.y + 0.4f) * baseData.scale);
             height2 = baseData.terrain.SampleHeight(pos + baseData.terrain.transform.position);
             pos.y = height2 - (baseData.steepness / slopeSinkRatio);
-            baseData.dfBillboardBatch.AddItem(billboardCollection[record2], pos);
+            TryQueueBillboard(baseData, billboardCollection[record2], pos);
 
             pos = new Vector3(baseData.x * baseData.scale, 0, (baseData.y - 0.4f) * baseData.scale);
             height2 = baseData.terrain.SampleHeight(pos + baseData.terrain.transform.position);
             pos.y = height2 - (baseData.steepness / slopeSinkRatio);
-            baseData.dfBillboardBatch.AddItem(billboardCollection[record2], pos);
+            TryQueueBillboard(baseData, billboardCollection[record2], pos);
 
             pos = new Vector3((baseData.x + 0.3f) * baseData.scale, 0, (baseData.y + 0.3f) * baseData.scale);
             height2 = baseData.terrain.SampleHeight(pos + baseData.terrain.transform.position);
             pos.y = height2 - (baseData.steepness / slopeSinkRatio);
-            baseData.dfBillboardBatch.AddItem(billboardCollection[record2], pos);
+            TryQueueBillboard(baseData, billboardCollection[record2], pos);
 
             pos = new Vector3((baseData.x - 0.3f) * baseData.scale, 0, (baseData.y + 0.3f) * baseData.scale);
             height2 = baseData.terrain.SampleHeight(pos + baseData.terrain.transform.position);
             pos.y = height2 - (baseData.steepness / slopeSinkRatio);
-            baseData.dfBillboardBatch.AddItem(billboardCollection[record2], pos);
+            TryQueueBillboard(baseData, billboardCollection[record2], pos);
 
             pos = new Vector3((baseData.x + 0.3f) * baseData.scale, 0, (baseData.y - 0.3f) * baseData.scale);
             height2 = baseData.terrain.SampleHeight(pos + baseData.terrain.transform.position);
             pos.y = height2 - (baseData.steepness / slopeSinkRatio);
-            baseData.dfBillboardBatch.AddItem(billboardCollection[record2], pos);
+            TryQueueBillboard(baseData, billboardCollection[record2], pos);
 
             pos = new Vector3((baseData.x - 0.3f) * baseData.scale, 0, (baseData.y - 0.3f) * baseData.scale);
             height2 = baseData.terrain.SampleHeight(pos + baseData.terrain.transform.position);
             pos.y = height2 - (baseData.steepness / slopeSinkRatio);
-            baseData.dfBillboardBatch.AddItem(billboardCollection[record2], pos);
+            TryQueueBillboard(baseData, billboardCollection[record2], pos);
         }
 
         public static void AddFirefly(
