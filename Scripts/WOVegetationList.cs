@@ -13,6 +13,8 @@ namespace WildernessOverhaul
         public List<int> desertFlowers, desertWaterFlowers, desertPlants, desertWaterPlants, desertStones, desertTrees, desertCactus, desertDeadTrees;
         public List<int> hauntedWoodlandFlowers, hauntedWoodlandMushroom, hauntedWoodlandBones, hauntedWoodlandPlants, hauntedWoodlandBushes, hauntedWoodlandRocks, hauntedWoodlandTrees, hauntedWoodlandDirtTrees, hauntedWoodlandDeadTrees, hauntedWoodlandBeach;
         public List<int> rainforestFlowers, rainforestEggs, rainforestPlants, rainforestBushes, rainforestRocks, rainforestTrees, rainforestBeach;
+        public List<int> subtropicalFlowers, subtropicalPlants, subtropicalBushes, subtropicalTrees, subtropicalSucculents, subtropicalRocks, subtropicalDeadTrees;
+        public List<int> swampFlowers, swampWaterFlowers, swampPlants, swampWaterPlants, swampBushes, swampTrees, swampDeadTrees, swampRocks, swampBones;
 
         public List<int> collectionTemperateWoodlandFlowers = new List<int>(new int[] {2, 21, 22});
         public List<int> collectionTemperateWoodlandMushroom = new List<int>(new int[] { 7, 9, 23 });
@@ -241,6 +243,426 @@ namespace WildernessOverhaul
 
         public WOVegetationList(int rndSeed) {
             Random.seed = rndSeed;
+
+            woodlandHillsRocks = collectionWoodlandHillsRocks;
+            woodlandHillsDeadTrees = collectionWoodlandHillsDeadTrees;
+            woodlandHillsBeach = collectionWoodlandHillsBeach;
+
+            desertFlowers = collectionDesertFlowers;
+            desertWaterFlowers = collectionDesertWaterFlowers;
+            desertPlants = collectionDesertPlants;
+            desertWaterPlants = collectionDesertWaterPlants;
+            desertStones = collectionDesertStones;
+            desertTrees = collectionDesertTrees;
+            desertCactus = collectionDesertCactus;
+            desertDeadTrees = collectionDesertDeadTrees;
+
+            hauntedWoodlandFlowers = collectionHauntedWoodlandFlowers;
+            hauntedWoodlandMushroom = collectionHauntedWoodlandMushroom;
+            hauntedWoodlandBones = collectionHauntedWoodlandBones;
+            hauntedWoodlandPlants = collectionHauntedWoodlandPlants;
+            hauntedWoodlandBushes = collectionHauntedWoodlandBushes;
+            hauntedWoodlandRocks = collectionHauntedWoodlandRocks;
+            hauntedWoodlandTrees = collectionHauntedWoodlandTrees;
+            hauntedWoodlandDirtTrees = collectionHauntedWoodlandDirtTrees;
+            hauntedWoodlandDeadTrees = collectionHauntedWoodlandDeadTrees;
+            hauntedWoodlandBeach = collectionHauntedWoodlandBeach;
+
+            rainforestFlowers = collectionRainforestFlowers;
+            rainforestEggs = collectionRainforestEggs;
+            rainforestPlants = collectionRainforestPlants;
+            rainforestBushes = collectionRainforestBushes;
+            rainforestRocks = collectionRainforestRocks;
+            rainforestTrees = collectionRainforestTrees;
+            rainforestBeach = collectionRainforestBeach;
+
+            subtropicalFlowers = Weighted(2, 7, 21, 22, 24, 26);
+            subtropicalPlants = Weighted(7, 23, 25, 27, 29, 31);
+            subtropicalBushes = Weighted(9, 26, 27, 28);
+            subtropicalTrees = Weighted(5, 11, 13, 14, 15, 24, 30);
+            subtropicalSucculents = Weighted(1, 14, 15, 16, 25);
+            subtropicalRocks = Weighted(1, 3, 4, 6, 8, 10, 17, 18, 28);
+            subtropicalDeadTrees = Weighted(10, 11, 12, 19, 20, 23, 28);
+
+            swampFlowers = Weighted(7, 21, 22, 24, 29);
+            swampWaterFlowers = Weighted(7, 17, 24, 24, 29, 29);
+            swampPlants = Weighted(2, 5, 7, 10, 11, 23, 24, 27);
+            swampWaterPlants = Weighted(7, 7, 25, 27, 27, 29);
+            swampBushes = Weighted(3, 9, 16, 18, 26, 27, 28);
+            swampTrees = Weighted(12, 13, 14, 15, 18, 30);
+            swampDeadTrees = Weighted(16, 18, 19, 20, 24, 25, 29, 30, 31);
+            swampRocks = Weighted(1, 4, 17, 19, 25, 31);
+            swampBones = Weighted(11, 31);
+        }
+
+        private List<int> Weighted(params int[] entries)
+        {
+            return new List<int>(entries);
+        }
+
+        private int GetElevationBand(float elevation)
+        {
+            for (int i = 0; i < elevationLevels.Count; i++)
+            {
+                if (elevation > elevationLevels[i])
+                    return i;
+            }
+
+            return elevationLevels.Count;
+        }
+
+        private int GetElevationTier(int elevationBand)
+        {
+            if (elevationBand <= 2)
+                return 0;
+            if (elevationBand <= 5)
+                return 1;
+            if (elevationBand <= 8)
+                return 2;
+            if (elevationBand <= 11)
+                return 3;
+
+            return 4;
+        }
+
+        private void ConfigureAdditionalBiomeLists(float elevation, DaggerfallDateTime.Seasons season, float mapStyle)
+        {
+            int elevationBand = GetElevationBand(elevation);
+            int tier = GetElevationTier(elevationBand);
+            bool spring = season == DaggerfallDateTime.Seasons.Spring;
+            bool summer = season == DaggerfallDateTime.Seasons.Summer;
+            bool winter = season == DaggerfallDateTime.Seasons.Winter;
+            bool lushStyle = mapStyle >= 50f;
+            bool sparseStyle = mapStyle <= 35f;
+
+            ConfigureWoodlandHillsSupportLists(tier, winter);
+            ConfigureDesertLists(tier, spring, summer, winter, lushStyle, sparseStyle);
+            ConfigureHauntedWoodlandLists(tier, spring, summer, winter, lushStyle, sparseStyle);
+            ConfigureRainforestLists(tier, spring, summer, winter, lushStyle, sparseStyle);
+            ConfigureSubtropicalLists(tier, spring, summer, winter, lushStyle, sparseStyle);
+            ConfigureSwampLists(tier, spring, summer, winter, lushStyle, sparseStyle);
+        }
+
+        private void ConfigureWoodlandHillsSupportLists(int tier, bool winter)
+        {
+            switch (tier)
+            {
+                case 0:
+                    woodlandHillsRocks = Weighted(1, 3, 4, 6, 8, 10, 17, 18, 18, 28, 28);
+                    woodlandHillsDeadTrees = Weighted(19, 20, 24, 24, 29, 30);
+                    woodlandHillsBeach = Weighted(26, 26, 29, 31);
+                    break;
+                case 1:
+                    woodlandHillsRocks = Weighted(1, 3, 4, 6, 8, 10, 17, 18, 28);
+                    woodlandHillsDeadTrees = Weighted(19, 20, 24, 24, 29, 30);
+                    woodlandHillsBeach = Weighted(26, 29, 31);
+                    break;
+                case 2:
+                    woodlandHillsRocks = Weighted(1, 3, 4, 6, 8, 10, 17, 18, 28);
+                    woodlandHillsDeadTrees = Weighted(19, 20, 24, 29, 30);
+                    woodlandHillsBeach = Weighted(23, 26, 29, 31);
+                    break;
+                case 3:
+                    woodlandHillsRocks = Weighted(1, 3, 4, 6, 8, 10, 17, 18);
+                    woodlandHillsDeadTrees = Weighted(19, 20, 24, 29, 30);
+                    woodlandHillsBeach = Weighted(23, 26, 29, 31, 31);
+                    break;
+                default:
+                    woodlandHillsRocks = Weighted(1, 3, 4, 6, 8, 10, 17);
+                    woodlandHillsDeadTrees = Weighted(19, 20, 24, 29, 30);
+                    woodlandHillsBeach = Weighted(23, 26, 29, 31, 31);
+                    break;
+            }
+        }
+
+        private void ConfigureDesertLists(int tier, bool spring, bool summer, bool winter, bool lushStyle, bool sparseStyle)
+        {
+            switch (tier)
+            {
+                case 0:
+                    desertTrees = lushStyle ? Weighted(5, 13, 13, 30) : Weighted(5, 13, 13);
+                    desertCactus = Weighted(1, 14, 15, 16, 16, 16);
+                    desertDeadTrees = Weighted(10, 11, 12, 23, 23, 28, 28);
+                    desertPlants = Weighted(7, 25, 25, 27);
+                    desertWaterPlants = Weighted(7, 7, 25, 27, 27, 27);
+                    desertStones = Weighted(2, 3, 4, 6, 8, 18, 19, 20, 21, 22, 22);
+                    desertFlowers = Weighted(9, 17, 24, 26, 31);
+                    desertWaterFlowers = Weighted(7, 17, 24, 24, 29, 29);
+                    break;
+                case 1:
+                    desertTrees = lushStyle ? Weighted(5, 13, 13, 30, 30) : Weighted(5, 13, 13, 30);
+                    desertCactus = Weighted(1, 14, 15, 16, 16);
+                    desertDeadTrees = Weighted(10, 11, 12, 23, 28, 28);
+                    desertPlants = Weighted(7, 25, 27, 27);
+                    desertWaterPlants = Weighted(7, 7, 25, 27, 27, 27, 27);
+                    desertStones = Weighted(2, 3, 4, 6, 8, 18, 19, 20, 21, 22);
+                    desertFlowers = Weighted(9, 17, 24, 24, 26, 31);
+                    desertWaterFlowers = Weighted(7, 17, 24, 24, 24, 29, 29);
+                    break;
+                case 2:
+                    desertTrees = lushStyle ? Weighted(5, 13, 13, 30, 30) : Weighted(5, 13, 13, 30);
+                    desertCactus = sparseStyle ? Weighted(1, 14, 15, 16, 16, 16) : Weighted(1, 14, 15, 16, 16);
+                    desertDeadTrees = Weighted(10, 11, 12, 23, 28);
+                    desertPlants = Weighted(7, 25, 27, 27, 27);
+                    desertWaterPlants = Weighted(7, 7, 7, 25, 27, 27, 27, 27);
+                    desertStones = Weighted(2, 3, 4, 6, 8, 18, 19, 20, 21);
+                    desertFlowers = Weighted(9, 17, 24, 24, 26, 26, 31);
+                    desertWaterFlowers = Weighted(7, 17, 24, 24, 24, 29, 29, 29);
+                    break;
+                case 3:
+                    desertTrees = lushStyle ? Weighted(5, 13, 13, 30, 30, 30) : Weighted(5, 13, 13, 30, 30);
+                    desertCactus = sparseStyle ? Weighted(1, 14, 15, 16, 16) : Weighted(1, 14, 15, 16);
+                    desertDeadTrees = Weighted(10, 11, 12, 23, 28);
+                    desertPlants = Weighted(7, 25, 27, 27, 27, 27);
+                    desertWaterPlants = Weighted(7, 7, 7, 7, 25, 27, 27, 27, 27);
+                    desertStones = Weighted(2, 3, 4, 6, 8, 18, 19, 20);
+                    desertFlowers = Weighted(9, 17, 24, 24, 26, 26, 31, 31);
+                    desertWaterFlowers = Weighted(7, 17, 24, 24, 24, 29, 29, 29);
+                    break;
+                default:
+                    desertTrees = lushStyle ? Weighted(5, 13, 13, 30, 30, 30, 30) : Weighted(5, 13, 13, 30, 30, 30);
+                    desertCactus = Weighted(1, 14, 15, 16);
+                    desertDeadTrees = Weighted(10, 11, 12, 23, 28);
+                    desertPlants = Weighted(7, 25, 27, 27, 27, 27, 27);
+                    desertWaterPlants = Weighted(7, 7, 7, 7, 7, 25, 27, 27, 27, 27, 27);
+                    desertStones = Weighted(2, 3, 4, 6, 8, 18, 19);
+                    desertFlowers = Weighted(9, 17, 24, 24, 26, 26, 31, 31, 31);
+                    desertWaterFlowers = Weighted(7, 17, 24, 24, 24, 29, 29, 29);
+                    break;
+            }
+        }
+
+        private void ConfigureHauntedWoodlandLists(int tier, bool spring, bool summer, bool winter, bool lushStyle, bool sparseStyle)
+        {
+            switch (tier)
+            {
+                case 0:
+                    hauntedWoodlandTrees = sparseStyle ? Weighted(13, 15, 31) : Weighted(13, 13, 15, 18, 31);
+                    hauntedWoodlandDirtTrees = Weighted(18, 19, 20, 31, 31);
+                    hauntedWoodlandDeadTrees = Weighted(16, 18, 24, 25, 30, 31, 31, 31);
+                    hauntedWoodlandBushes = Weighted(2, 26, 27);
+                    hauntedWoodlandPlants = Weighted(7, 14, 17, 29, 31);
+                    hauntedWoodlandRocks = Weighted(1, 3, 4, 5, 6, 8, 10, 12, 12);
+                    hauntedWoodlandBones = Weighted(11, 11, 11, 31);
+                    hauntedWoodlandFlowers = Weighted(21, 21);
+                    hauntedWoodlandMushroom = Weighted(22, 22, 23);
+                    hauntedWoodlandBeach = Weighted(31, 8, 9, 14, 29, 31, 31);
+                    break;
+                case 1:
+                    hauntedWoodlandTrees = sparseStyle ? Weighted(13, 15, 31) : Weighted(13, 13, 15, 15, 18, 31);
+                    hauntedWoodlandDirtTrees = Weighted(18, 19, 20, 31);
+                    hauntedWoodlandDeadTrees = Weighted(16, 18, 24, 25, 30, 31, 31);
+                    hauntedWoodlandBushes = Weighted(2, 26, 27, 28);
+                    hauntedWoodlandPlants = Weighted(7, 14, 17, 29, 31, 31);
+                    hauntedWoodlandRocks = Weighted(1, 3, 4, 5, 6, 8, 10, 12);
+                    hauntedWoodlandBones = Weighted(11, 11, 31);
+                    hauntedWoodlandFlowers = Weighted(21, 21);
+                    hauntedWoodlandMushroom = Weighted(22, 22, 23);
+                    hauntedWoodlandBeach = Weighted(31, 8, 9, 14, 29, 31);
+                    break;
+                case 2:
+                    hauntedWoodlandTrees = lushStyle ? Weighted(13, 13, 15, 15, 18, 18, 31) : Weighted(13, 13, 15, 18, 31);
+                    hauntedWoodlandDirtTrees = Weighted(18, 19, 20, 31);
+                    hauntedWoodlandDeadTrees = Weighted(16, 18, 24, 25, 30, 31, 31);
+                    hauntedWoodlandBushes = Weighted(2, 26, 27, 28, 28);
+                    hauntedWoodlandPlants = Weighted(7, 14, 17, 17, 29, 31);
+                    hauntedWoodlandRocks = Weighted(1, 3, 4, 5, 6, 8, 10, 12);
+                    hauntedWoodlandBones = Weighted(11, 31);
+                    hauntedWoodlandFlowers = Weighted(21, 21, 21);
+                    hauntedWoodlandMushroom = Weighted(22, 22, 23, 23);
+                    hauntedWoodlandBeach = Weighted(31, 8, 9, 14, 29, 31);
+                    break;
+                case 3:
+                    hauntedWoodlandTrees = lushStyle ? Weighted(13, 13, 13, 15, 15, 18, 18, 31) : Weighted(13, 13, 15, 18, 18, 31);
+                    hauntedWoodlandDirtTrees = Weighted(18, 19, 20, 31, 31);
+                    hauntedWoodlandDeadTrees = Weighted(16, 18, 24, 25, 30, 31, 31);
+                    hauntedWoodlandBushes = Weighted(2, 26, 27, 27, 28, 28);
+                    hauntedWoodlandPlants = Weighted(7, 14, 17, 17, 29, 31, 31);
+                    hauntedWoodlandRocks = Weighted(1, 3, 4, 5, 6, 8, 10);
+                    hauntedWoodlandBones = Weighted(11, 31);
+                    hauntedWoodlandFlowers = Weighted(21, 21, 21);
+                    hauntedWoodlandMushroom = Weighted(22, 22, 23, 23);
+                    hauntedWoodlandBeach = Weighted(31, 8, 9, 14, 29, 31);
+                    break;
+                default:
+                    hauntedWoodlandTrees = lushStyle ? Weighted(13, 13, 13, 15, 15, 18, 18, 18, 31) : Weighted(13, 13, 15, 18, 18, 31);
+                    hauntedWoodlandDirtTrees = Weighted(18, 19, 20, 31);
+                    hauntedWoodlandDeadTrees = Weighted(16, 18, 24, 25, 30, 31, 31);
+                    hauntedWoodlandBushes = Weighted(2, 26, 27, 27, 28, 28);
+                    hauntedWoodlandPlants = Weighted(7, 14, 17, 17, 29, 31, 31);
+                    hauntedWoodlandRocks = Weighted(1, 3, 4, 5, 6, 8, 10);
+                    hauntedWoodlandBones = Weighted(11, 31);
+                    hauntedWoodlandFlowers = Weighted(21, 21, 21);
+                    hauntedWoodlandMushroom = Weighted(22, 22, 23, 23);
+                    hauntedWoodlandBeach = Weighted(31, 8, 9, 14, 29, 31);
+                    break;
+            }
+        }
+
+        private void ConfigureRainforestLists(int tier, bool spring, bool summer, bool winter, bool lushStyle, bool sparseStyle)
+        {
+            switch (tier)
+            {
+                case 0:
+                    rainforestTrees = lushStyle ? Weighted(12, 12, 13, 13, 14, 15, 30, 30, 30) : Weighted(12, 12, 13, 13, 14, 15, 30, 30);
+                    rainforestBushes = Weighted(3, 9, 16, 18);
+                    rainforestPlants = Weighted(2, 5, 10, 11, 23, 24);
+                    rainforestRocks = Weighted(1, 4, 17, 19, 25, 25);
+                    rainforestFlowers = Weighted(6, 20, 21, 22, 26, 27);
+                    rainforestEggs = Weighted(28, 29, 31);
+                    rainforestBeach = Weighted();
+                    break;
+                case 1:
+                    rainforestTrees = lushStyle ? Weighted(12, 13, 13, 14, 15, 15, 30, 30, 30) : Weighted(12, 13, 13, 14, 15, 30, 30);
+                    rainforestBushes = Weighted(3, 9, 16, 18, 18);
+                    rainforestPlants = Weighted(2, 5, 10, 11, 23, 24, 24);
+                    rainforestRocks = Weighted(1, 4, 17, 19, 25);
+                    rainforestFlowers = Weighted(6, 20, 21, 22, 26, 27);
+                    rainforestEggs = Weighted(28, 29, 29, 31);
+                    rainforestBeach = Weighted();
+                    break;
+                case 2:
+                    rainforestTrees = lushStyle ? Weighted(12, 13, 13, 14, 14, 15, 15, 30, 30) : Weighted(12, 13, 14, 14, 15, 15, 30);
+                    rainforestBushes = Weighted(3, 9, 16, 18, 18);
+                    rainforestPlants = Weighted(2, 5, 10, 11, 23, 24, 24, 24);
+                    rainforestRocks = Weighted(1, 4, 17, 19, 25);
+                    rainforestFlowers = Weighted(6, 20, 21, 22, 26, 27, 27);
+                    rainforestEggs = Weighted(28, 29, 29, 31, 31);
+                    rainforestBeach = Weighted();
+                    break;
+                case 3:
+                    rainforestTrees = lushStyle ? Weighted(12, 13, 14, 14, 15, 15, 30, 30) : Weighted(12, 13, 14, 15, 15, 30);
+                    rainforestBushes = Weighted(3, 9, 16, 18, 18, 18);
+                    rainforestPlants = Weighted(2, 5, 10, 11, 23, 24, 24, 24);
+                    rainforestRocks = Weighted(1, 4, 17, 19);
+                    rainforestFlowers = Weighted(6, 20, 21, 22, 26, 27, 27);
+                    rainforestEggs = Weighted(28, 29, 29, 31, 31);
+                    rainforestBeach = Weighted();
+                    break;
+                default:
+                    rainforestTrees = sparseStyle ? Weighted(12, 13, 14, 15, 30, 30) : Weighted(12, 13, 14, 14, 15, 15, 30, 30);
+                    rainforestBushes = Weighted(3, 9, 16, 18, 18, 18);
+                    rainforestPlants = Weighted(2, 5, 10, 11, 23, 24, 24, 24, 24);
+                    rainforestRocks = Weighted(1, 4, 17, 19);
+                    rainforestFlowers = Weighted(6, 20, 21, 22, 26, 27, 27, 27);
+                    rainforestEggs = Weighted(28, 29, 29, 31, 31, 31);
+                    rainforestBeach = Weighted();
+                    break;
+            }
+        }
+
+        private void ConfigureSubtropicalLists(int tier, bool spring, bool summer, bool winter, bool lushStyle, bool sparseStyle)
+        {
+            switch (tier)
+            {
+                case 0:
+                    subtropicalTrees = Weighted(5, 11, 12, 13, 25, 30);
+                    subtropicalBushes = Weighted(9, 26, 27);
+                    subtropicalPlants = Weighted(7, 23, 25, 27, 29);
+                    subtropicalFlowers = Weighted(2, 7, 21, 22, 24, 26);
+                    subtropicalSucculents = Weighted(1, 14, 15, 16, 16, 25);
+                    subtropicalRocks = Weighted(1, 3, 4, 6, 8, 10, 17, 18, 28, 28);
+                    subtropicalDeadTrees = Weighted(10, 11, 12, 19, 20, 23, 28, 28);
+                    break;
+                case 1:
+                    subtropicalTrees = Weighted(5, 11, 13, 14, 15, 24, 30);
+                    subtropicalBushes = Weighted(9, 26, 27, 28);
+                    subtropicalPlants = Weighted(7, 23, 25, 27, 29, 31);
+                    subtropicalFlowers = Weighted(2, 7, 21, 22, 24, 26);
+                    subtropicalSucculents = Weighted(1, 14, 15, 16, 25);
+                    subtropicalRocks = Weighted(1, 3, 4, 6, 8, 10, 17, 18, 28);
+                    subtropicalDeadTrees = Weighted(10, 11, 12, 19, 20, 23, 28);
+                    break;
+                case 2:
+                    subtropicalTrees = lushStyle ? Weighted(11, 13, 14, 15, 15, 24, 30, 30) : Weighted(11, 13, 14, 15, 24, 30);
+                    subtropicalBushes = Weighted(9, 26, 27, 27, 28);
+                    subtropicalPlants = Weighted(7, 23, 25, 27, 29, 31);
+                    subtropicalFlowers = Weighted(2, 7, 21, 22, 24, 26, 26);
+                    subtropicalSucculents = sparseStyle ? Weighted(1, 14, 15, 16, 25, 25) : Weighted(1, 14, 15, 16, 25);
+                    subtropicalRocks = Weighted(1, 3, 4, 6, 8, 10, 17, 18);
+                    subtropicalDeadTrees = Weighted(10, 11, 12, 19, 20, 23, 28);
+                    break;
+                case 3:
+                    subtropicalTrees = lushStyle ? Weighted(11, 12, 13, 14, 15, 15, 24, 30, 30) : Weighted(11, 12, 13, 14, 15, 24, 30);
+                    subtropicalBushes = Weighted(9, 26, 27, 27, 28, 28);
+                    subtropicalPlants = Weighted(7, 23, 25, 27, 29, 31, 31);
+                    subtropicalFlowers = Weighted(2, 7, 21, 22, 24, 26, 26);
+                    subtropicalSucculents = sparseStyle ? Weighted(1, 14, 15, 16, 25) : Weighted(1, 14, 15, 16);
+                    subtropicalRocks = Weighted(1, 3, 4, 6, 8, 10, 17);
+                    subtropicalDeadTrees = Weighted(10, 11, 12, 19, 20, 23, 28);
+                    break;
+                default:
+                    subtropicalTrees = lushStyle ? Weighted(12, 13, 14, 14, 15, 15, 24, 30, 30) : Weighted(12, 13, 14, 15, 24, 30);
+                    subtropicalBushes = Weighted(9, 26, 27, 27, 28, 28);
+                    subtropicalPlants = Weighted(7, 23, 25, 27, 29, 31, 31);
+                    subtropicalFlowers = Weighted(2, 7, 21, 22, 24, 26, 26, 26);
+                    subtropicalSucculents = Weighted(1, 14, 15, 16);
+                    subtropicalRocks = Weighted(1, 3, 4, 6, 8, 10, 17);
+                    subtropicalDeadTrees = Weighted(10, 11, 12, 19, 20, 23, 28);
+                    break;
+            }
+        }
+
+        private void ConfigureSwampLists(int tier, bool spring, bool summer, bool winter, bool lushStyle, bool sparseStyle)
+        {
+            switch (tier)
+            {
+                case 0:
+                    swampTrees = Weighted(12, 13, 14, 15, 30);
+                    swampDeadTrees = Weighted(16, 18, 19, 20, 24, 25, 29, 30, 31, 31);
+                    swampBushes = Weighted(3, 9, 16, 18, 26, 27);
+                    swampPlants = Weighted(2, 5, 7, 10, 11, 23, 24, 27);
+                    swampWaterPlants = Weighted(7, 7, 25, 27, 29);
+                    swampFlowers = Weighted(7, 21, 22, 24, 29, 29);
+                    swampWaterFlowers = Weighted(7, 17, 24, 24, 29, 29, 29);
+                    swampRocks = Weighted(1, 4, 17, 19, 25, 31, 31);
+                    swampBones = Weighted(11, 31);
+                    break;
+                case 1:
+                    swampTrees = Weighted(12, 13, 14, 15, 18, 30);
+                    swampDeadTrees = Weighted(16, 18, 19, 20, 24, 25, 29, 30, 31, 31);
+                    swampBushes = Weighted(3, 9, 16, 18, 26, 27, 28);
+                    swampPlants = Weighted(2, 5, 7, 10, 11, 23, 24, 27, 27);
+                    swampWaterPlants = Weighted(7, 7, 25, 27, 27, 29);
+                    swampFlowers = Weighted(7, 21, 22, 24, 29, 29);
+                    swampWaterFlowers = Weighted(7, 17, 24, 24, 29, 29, 29);
+                    swampRocks = Weighted(1, 4, 17, 19, 25, 31);
+                    swampBones = Weighted(11, 31);
+                    break;
+                case 2:
+                    swampTrees = lushStyle ? Weighted(12, 13, 14, 15, 18, 30, 30) : Weighted(12, 13, 14, 15, 18, 30);
+                    swampDeadTrees = Weighted(16, 18, 19, 20, 24, 25, 29, 30, 31);
+                    swampBushes = Weighted(3, 9, 16, 18, 18, 26, 27, 28);
+                    swampPlants = Weighted(2, 5, 7, 10, 11, 23, 24, 24, 27);
+                    swampWaterPlants = Weighted(7, 7, 25, 27, 27, 29, 29);
+                    swampFlowers = Weighted(7, 21, 22, 24, 24, 29, 29);
+                    swampWaterFlowers = Weighted(7, 17, 24, 24, 24, 29, 29, 29);
+                    swampRocks = Weighted(1, 4, 17, 19, 25, 31);
+                    swampBones = Weighted(11, 31);
+                    break;
+                case 3:
+                    swampTrees = lushStyle ? Weighted(12, 13, 14, 15, 15, 18, 30, 30) : Weighted(12, 13, 14, 15, 18, 30);
+                    swampDeadTrees = Weighted(16, 18, 19, 20, 24, 25, 29, 30, 31);
+                    swampBushes = Weighted(3, 9, 16, 18, 18, 26, 27, 28);
+                    swampPlants = Weighted(2, 5, 7, 10, 11, 23, 24, 24, 27, 27);
+                    swampWaterPlants = Weighted(7, 7, 25, 27, 27, 29, 29, 29);
+                    swampFlowers = Weighted(7, 21, 22, 24, 24, 29, 29);
+                    swampWaterFlowers = Weighted(7, 17, 24, 24, 24, 29, 29, 29);
+                    swampRocks = Weighted(1, 4, 17, 19, 25);
+                    swampBones = Weighted(11, 31);
+                    break;
+                default:
+                    swampTrees = lushStyle ? Weighted(12, 13, 14, 15, 15, 18, 30, 30, 30) : Weighted(12, 13, 14, 15, 18, 30, 30);
+                    swampDeadTrees = Weighted(16, 18, 19, 20, 24, 25, 29, 30, 31);
+                    swampBushes = Weighted(3, 9, 16, 18, 18, 26, 27, 28, 28);
+                    swampPlants = Weighted(2, 5, 7, 10, 11, 23, 24, 24, 27, 27);
+                    swampWaterPlants = Weighted(7, 7, 7, 25, 27, 27, 29, 29, 29);
+                    swampFlowers = Weighted(7, 21, 22, 24, 24, 29, 29, 29);
+                    swampWaterFlowers = Weighted(7, 17, 24, 24, 24, 29, 29, 29, 29);
+                    swampRocks = Weighted(1, 4, 17, 19, 25);
+                    swampBones = Weighted(11, 31);
+                    break;
+            }
         }
 
         public void ChangeVegetationLists(float elevation, DaggerfallDateTime.Seasons season, float mapStyle) {
@@ -253,6 +675,8 @@ namespace WildernessOverhaul
                 Random.Range(0.36f, 0.34f), Random.Range(0.31f,0.29f), Random.Range(0.26f,0.24f),
                 Random.Range(0.21f,0.19f), Random.Range(0.11f,0.09f), Random.Range(0.096f,0.84f),
                 Random.Range(0.071f,0.069f), Random.Range(0.041f,0.039f)});
+
+            ConfigureAdditionalBiomeLists(elevation, season, mapStyle);
 
             if (season == DaggerfallDateTime.Seasons.Winter) {
                 if (elevation > elevationLevels[0]) {

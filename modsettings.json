@@ -119,7 +119,7 @@
                     "Max": 2000.0,
                     "Value": 800.0,
                     "Name": "FireflyActivationDistance",
-                    "Description": "Distance at which fireflies will be activated/deactivated",
+                    "Description": "Global scaling distance for firefly activation to reduce active fireflies on weaker systems",
                     "$version": "v1",
                     "$type": "DaggerfallWorkshop.Game.Utility.ModSupport.ModSettings.SliderFloatKey"
                 },

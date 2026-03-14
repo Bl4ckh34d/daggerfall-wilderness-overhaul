@@ -29,12 +29,24 @@ public class WORandomMover : MonoBehaviour
   float light_offset;
   float pulseFactor;
   float m_Alpha = 0f;
+  float minPulseFactor = 0.1f;
+  float maxPulseFactor = 0.75f;
+  float minTargetChangeTime = 0.3f;
+  float maxTargetChangeTime = 3f;
+  float haloAlpha = 0.1f;
+  float huePhaseOffset = 0f;
+  float hueShiftSpeed = 0.02f;
+
+  Color bodyColor = Color.white;
+  Color haloColor = Color.white;
+  bool cycleHue = false;
 
   public Vector3 startPos;
   Vector3 targetPos;
 
   bool isOn = false;
   bool init = true;
+  bool profileConfigured = false;
   public bool isPerforming = false;
 
   float t = 0f;
@@ -52,6 +64,30 @@ public class WORandomMover : MonoBehaviour
     }
   }
 
+  public void ApplyProfile(WOFireflyProfile profile)
+  {
+    if (profile == null)
+      return;
+
+    profileConfigured = true;
+    speed = Random.Range(profile.minSpeed, profile.maxSpeed);
+    maxRoamingRangeVertical = Random.Range(profile.minVerticalRange, profile.maxVerticalRange);
+    maxRoamingRangeHorizontal = Random.Range(profile.minHorizontalRange, profile.maxHorizontalRange);
+    minTargetChangeTime = profile.minTargetChangeTime;
+    maxTargetChangeTime = profile.maxTargetChangeTime;
+    minPulseFactor = profile.minPulseFactor;
+    maxPulseFactor = profile.maxPulseFactor;
+    pulseFactor = Random.Range(minPulseFactor, maxPulseFactor);
+    my_StartTime = Random.Range(profile.nightStartMin, profile.nightStartMax);
+    my_EndTime = Random.Range(profile.nightEndMin, profile.nightEndMax);
+    haloAlpha = profile.haloAlpha;
+    cycleHue = profile.cycleHue;
+    hueShiftSpeed = profile.hueShiftSpeed;
+    huePhaseOffset = Random.Range(0f, profile.huePhaseVariance);
+    bodyColor = profile.randomizeHuePerInstance ? WithHueVariance(profile.bodyColor, profile.hueVariance) : profile.bodyColor;
+    haloColor = profile.randomizeHuePerInstance ? WithHueVariance(profile.haloColor, profile.hueVariance) : profile.haloColor;
+  }
+
   void Awake()
   {
     dfUnity = GameObject.Find("DaggerfallUnity").GetComponent<DaggerfallUnity>();
@@ -67,11 +103,14 @@ public class WORandomMover : MonoBehaviour
 
   void Start()
   {
-    my_StartTime = Random.Range(1015, 1100);
-    my_EndTime = Random.Range(320, 375);
+    if (!profileConfigured)
+    {
+      my_StartTime = Random.Range(1015, 1100);
+      my_EndTime = Random.Range(320, 375);
+      pulseFactor = Random.Range(minPulseFactor, maxPulseFactor);
+    }
     light_offset = Random.Range(0f, 1f);
-    pulseFactor = Random.Range(0.1f, 0.75f);
-    h_Material.SetColor("_Color", new Color(1f, 1f, 1f, 0.1f));
+    h_Material.SetColor("_Color", new Color(haloColor.r, haloColor.g, haloColor.b, haloAlpha));
     targetPos = new Vector3(
      startPos.x + Random.Range(-maxRoamingRangeHorizontal, maxRoamingRangeHorizontal),
      startPos.y + Random.Range(-maxRoamingRangeVertical, maxRoamingRangeVertical),
@@ -110,8 +149,7 @@ public class WORandomMover : MonoBehaviour
         if (m_Alpha < 10f)
         {
           m_Alpha += Time.fixedDeltaTime * 5;
-          m_Material.SetColor("_Color", new Color(1f, 1f, 1f, m_Alpha));
-          h_Material.SetColor("_Color", new Color(1f, 1f, 1f, Mathf.Clamp(m_Alpha,0,0.1f)));
+          ApplyCurrentColors();
         }
         else
         {
@@ -124,8 +162,7 @@ public class WORandomMover : MonoBehaviour
         if (m_Alpha > -10f)
         {
           m_Alpha -= Time.fixedDeltaTime * 5;
-          m_Material.SetColor("_Color", new Color(1f, 1f, 1f, m_Alpha));
-          h_Material.SetColor("_Color", new Color(1f, 1f, 1f, Mathf.Clamp(m_Alpha,0,0.1f)));
+          ApplyCurrentColors();
         }
         else
         {
@@ -139,7 +176,7 @@ public class WORandomMover : MonoBehaviour
         t += Time.fixedDeltaTime;
 
         m_Alpha = -10 + (Mathf.PingPong(Time.time * pulseFactor, 1f) * 20);
-        m_Material.SetColor("_Color", new Color(1f, 1f, 1f, m_Alpha));
+        ApplyCurrentColors();
         halo.transform.localScale = new Vector3(m_Alpha, m_Alpha, m_Alpha);
 
         if (m_Alpha > 0) {
@@ -148,7 +185,7 @@ public class WORandomMover : MonoBehaviour
           h_Renderer.enabled = false;
         }
 
-        if (t > Random.Range(0.3f, 3))
+        if (t > Random.Range(minTargetChangeTime, maxTargetChangeTime))
         {
           t = 0f;
           targetPos = new Vector3(
@@ -162,5 +199,40 @@ public class WORandomMover : MonoBehaviour
 
       transform.LookAt(transform.position + mainCam.transform.rotation * Vector3.forward, mainCam.transform.rotation * Vector3.up);
     }
+  }
+
+  void ApplyCurrentColors()
+  {
+    Color currentBody = bodyColor;
+    Color currentHalo = haloColor;
+
+    if (cycleHue)
+    {
+      currentBody = ShiftHue(bodyColor, (Time.time * hueShiftSpeed) + huePhaseOffset);
+      currentHalo = ShiftHue(haloColor, (Time.time * hueShiftSpeed) + huePhaseOffset);
+    }
+
+    m_Material.SetColor("_Color", new Color(currentBody.r, currentBody.g, currentBody.b, m_Alpha));
+    h_Material.SetColor("_Color", new Color(currentHalo.r, currentHalo.g, currentHalo.b, Mathf.Clamp(m_Alpha, 0, haloAlpha)));
+  }
+
+  Color WithHueVariance(Color source, float variance)
+  {
+    float h;
+    float s;
+    float v;
+    Color.RGBToHSV(source, out h, out s, out v);
+    h = Mathf.Repeat(h + Random.Range(-variance, variance), 1f);
+    return Color.HSVToRGB(h, s, v);
+  }
+
+  Color ShiftHue(Color source, float amount)
+  {
+    float h;
+    float s;
+    float v;
+    Color.RGBToHSV(source, out h, out s, out v);
+    h = Mathf.Repeat(h + amount, 1f);
+    return Color.HSVToRGB(h, s, v);
   }
 }

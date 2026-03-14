@@ -123,9 +123,15 @@ namespace WildernessOverhaul
                                 } else {
                                     //Adjustment to swamp climate in respect to world height
                                     if (climate == (int)MapsFile.Climates.Swamp) {
-                                        chanceOnStone = Mathf.Clamp(Random.Range(0.00f, 0.00f), 0f, 1f);
-                                        chanceOnDirt = Mathf.Clamp(Random.Range(0.00f, 0.00f), 0f, 1f);
-                                        chanceOnGrass = Mathf.Clamp(Random.Range(0.00f, 0.00f), 0f, 1f);
+                                        if (elevation > 0.08f) {
+                                            chanceOnGrass = Mathf.Clamp(Random.Range(0.180f, 0.260f), 0f, 1f);
+                                            chanceOnDirt = Mathf.Clamp(Random.Range(0.140f, 0.220f), 0f, 1f);
+                                            chanceOnStone = Mathf.Clamp(Random.Range(0.040f, 0.080f), 0f, 1f);
+                                        } else {
+                                            chanceOnGrass = Mathf.Clamp(Random.Range(0.240f, 0.320f), 0f, 1f);
+                                            chanceOnDirt = Mathf.Clamp(Random.Range(0.200f, 0.280f), 0f, 1f);
+                                            chanceOnStone = Mathf.Clamp(Random.Range(0.030f, 0.060f), 0f, 1f);
+                                        }
                                     } else {
                                         //Adjustment to rainforest climate in respect to world height
                                         if (climate == (int)MapsFile.Climates.Rainforest) {
@@ -135,9 +141,15 @@ namespace WildernessOverhaul
                                         } else {
                                             //Adjustment to subtropical climate in respect to world height
                                             if (climate == (int)MapsFile.Climates.Subtropical) {
-                                                chanceOnStone = Mathf.Clamp(Random.Range(0.00f, 0.00f), 0f, 1f);
-                                                chanceOnDirt = Mathf.Clamp(Random.Range(0.00f, 0.00f), 0f, 1f);
-                                                chanceOnGrass = Mathf.Clamp(Random.Range(0.00f, 0.00f), 0f, 1f);
+                                                if (elevation > 0.25f) {
+                                                    chanceOnGrass = Mathf.Clamp(Random.Range(0.090f, 0.140f), 0f, 1f);
+                                                    chanceOnDirt = Mathf.Clamp(Random.Range(0.110f, 0.160f), 0f, 1f);
+                                                    chanceOnStone = Mathf.Clamp(Random.Range(0.060f, 0.090f), 0f, 1f);
+                                                } else {
+                                                    chanceOnGrass = Mathf.Clamp(Random.Range(0.150f, 0.220f), 0f, 1f);
+                                                    chanceOnDirt = Mathf.Clamp(Random.Range(0.130f, 0.190f), 0f, 1f);
+                                                    chanceOnStone = Mathf.Clamp(Random.Range(0.070f, 0.110f), 0f, 1f);
+                                                }
                                             }
                                         }
                                     }

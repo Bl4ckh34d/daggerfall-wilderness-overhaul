@@ -37,9 +37,11 @@ namespace WildernessOverhaul
         static float[] amplitude = {0.3f, 0.3f, 0.3f, 0.4f, 0.3f, 0.3f, 0.4f, 0.4f, 0.4f, 0.95f};
         static float[] persistance = {0.5f, 0.55f, 0.95f, 0.8f, 0.5f, 0.5f, 0.8f, 0.5f, 0.8f, 0.3f};
         static int octaves = 5;
+        static float[] climateBiasStrength = {0.10f, 0.12f, 0.08f, 0.12f, 0.10f, 0.10f, 0.10f, 0.12f, 0.12f, 0.0f};
+        static float[] edgeDetailStrength = {0.28f, 0.30f, 0.22f, 0.18f, 0.20f, 0.20f, 0.24f, 0.26f, 0.24f, 0.0f};
         static float[] upperWaterSpread = {-1.0f, -1.0f, 0.0f, 0.0f, -1.0f, -1.0f, 0.0f, 0.0f, 0.0f, 0.0f};
-        static float[] lowerGrassSpread = {0.4f, 0.35f, 0.35f, 0.35f, 0.4f, 0.4f, 0.35f, 0.35f, 0.35f, 0.35f};
-        static float[] upperGrassSpread = {0.5f, 0.5f, 0.95f, 0.95f, 0.5f, 0.5f, 0.95f, 0.95f, 0.95f, 0.95f};
+        static float[] lowerGrassSpread = {0.50f, 0.51f, 0.50f, 0.48f, 0.47f, 0.49f, 0.50f, 0.50f, 0.50f, 0.50f};
+        static float[] upperGrassSpread = {0.92f, 0.91f, 0.95f, 0.96f, 0.94f, 0.93f, 0.94f, 0.95f, 0.94f, 0.95f};
 
         public static float treeLine = UnityEngine.Random.Range(0.675f, 0.69f);
 
@@ -68,6 +70,7 @@ namespace WildernessOverhaul
         {
             // Cache tile data to minimise noise sampling during march.
             NativeArray<byte> tileData = new NativeArray<byte>(tileDataDim * tileDataDim, Allocator.TempJob);
+            NativeArray<byte> oasisSeedData = new NativeArray<byte>(tileDataDim * tileDataDim, Allocator.TempJob, NativeArrayOptions.ClearMemory);
             currentMapData = mapData;
 
             GenerateTileDataJob tileDataJob = new GenerateTileDataJob
@@ -85,11 +88,43 @@ namespace WildernessOverhaul
             };
             JobHandle tileDataHandle = tileDataJob.Schedule(tileDataDim * tileDataDim, 64, dependencies);
 
+            JobHandle postTileDataHandle = tileDataHandle;
+            if (mapData.worldClimate == (int)MapsFile.Climates.Desert || mapData.worldClimate == (int)MapsFile.Climates.Desert2)
+            {
+                CaptureOasisSeedsJob captureOasisSeedsJob = new CaptureOasisSeedsJob
+                {
+                    heightmapData = mapData.heightmapData,
+                    tileData = tileData,
+                    oasisSeedData = oasisSeedData,
+                    hDim = terrainSampler.HeightmapDimension,
+                    tdDim = tileDataDim,
+                    maxTerrainHeight = terrainSampler.MaxTerrainHeight,
+                    beachElevation = terrainSampler.BeachElevation,
+                };
+                JobHandle captureOasisSeedsHandle = captureOasisSeedsJob.Schedule(tileDataDim * tileDataDim, 64, tileDataHandle);
+
+                ExpandDesertOasesJob expandDesertOasesJob = new ExpandDesertOasesJob
+                {
+                    heightmapData = mapData.heightmapData,
+                    tileData = tileData,
+                    oasisSeedData = oasisSeedData,
+                    hDim = terrainSampler.HeightmapDimension,
+                    tdDim = tileDataDim,
+                    maxTerrainHeight = terrainSampler.MaxTerrainHeight,
+                    beachElevation = terrainSampler.BeachElevation,
+                    mapPixelX = mapData.mapPixelX,
+                    mapPixelY = mapData.mapPixelY,
+                    worldClimate = mapData.worldClimate,
+                    locationRect = mapData.locationRect,
+                };
+                postTileDataHandle = expandDesertOasesJob.Schedule(captureOasisSeedsHandle);
+            }
+
             // Schedule the paint roads jobs if basic roads mod is enabled
-            JobHandle preAssignTilesHandle = tileDataHandle;
+            JobHandle preAssignTilesHandle = postTileDataHandle;
             if (basicRoadsEnabled)
             {
-                ModManager.Instance.SendModMessage("BasicRoads", "scheduleRoadsJob", new object[] { mapData, tileData, tileDataHandle },
+                ModManager.Instance.SendModMessage("BasicRoads", "scheduleRoadsJob", new object[] { mapData, tileData, postTileDataHandle },
                     (string message, object data) =>
                     {
                         if (message == "error")
@@ -115,6 +150,7 @@ namespace WildernessOverhaul
 
             // Add both working native arrays to disposal list.
             mapData.nativeArrayList.Add(tileData);
+            mapData.nativeArrayList.Add(oasisSeedData);
             mapData.nativeArrayList.Add(lookupData);
 
             return assignTilesHandle;
@@ -182,11 +218,10 @@ namespace WildernessOverhaul
             public int mapPixelY;
             public int worldClimate;
 
-            // Gets noise value
-            private float NoiseWeight(float worldX, float worldY, float height)
+            private void GetClimateNoiseParams(float height, out int climateNum, out float persistanceRnd)
             {
-                float persistanceRnd = 0.95f;
-                int climateNum = 9;
+                persistanceRnd = 0.95f;
+                climateNum = 9;
                 switch (worldClimate) {
                     case (int)MapsFile.Climates.Desert:
                         climateNum = 0;
@@ -235,7 +270,46 @@ namespace WildernessOverhaul
                         persistanceRnd = persistance[climateNum] + ((height / maxTerrainHeight) * 1.5f) - 0.35f;
                         break;
                 }
-                return GetNoise(worldX, worldY, frequency[climateNum], amplitude[climateNum], persistanceRnd, octaves, seed);
+            }
+
+            private float GetExpectedNoiseMean(float startAmplitude, float persistance, int octaves)
+            {
+                float totalAmplitude = 0f;
+                float currentAmplitude = startAmplitude;
+                for (int i = 0; i < octaves; i++)
+                {
+                    totalAmplitude += currentAmplitude;
+                    currentAmplitude *= persistance;
+                }
+
+                return totalAmplitude * 0.5f;
+            }
+
+            // Use a vanilla-like macro distribution, then perturb it with climate bias and edge detail.
+            // This keeps grass/dirt/stone ratios near DFU while breaking up the large smooth blobs.
+            private float NoiseWeight(float worldX, float worldY, float height)
+            {
+                int climateNum;
+                float persistanceRnd;
+                GetClimateNoiseParams(height, out climateNum, out persistanceRnd);
+
+                float macroWeight = GetNoise(worldX, worldY, 0.05f, 0.9f, 0.4f, 3, seed);
+
+                float climateBiasWeight = GetNoise(worldX, worldY, frequency[climateNum], amplitude[climateNum], persistanceRnd, octaves, seed + 73);
+                float climateBiasCentered = climateBiasWeight - GetExpectedNoiseMean(amplitude[climateNum], persistanceRnd, octaves);
+
+                float detailFrequency = Mathf.Max(0.065f, frequency[climateNum] * 3.25f);
+                float detailAmplitude = amplitude[climateNum] * 0.18f;
+                float detailPersistance = Mathf.Clamp(persistanceRnd * 0.8f, 0.25f, 0.8f);
+                float edgeWeight = GetNoise(worldX, worldY, detailFrequency, detailAmplitude, detailPersistance, 2, seed + 211);
+                float edgeCentered = edgeWeight - GetExpectedNoiseMean(detailAmplitude, detailPersistance, 2);
+
+                return Mathf.Clamp(
+                    macroWeight +
+                    (climateBiasCentered * climateBiasStrength[climateNum]) +
+                    (edgeCentered * edgeDetailStrength[climateNum]),
+                    -1f,
+                    1f);
             }
 
             // Sets texture by range
@@ -383,6 +457,142 @@ namespace WildernessOverhaul
                     tileData[index] = grass;
                     return;
                 }
+            }
+        }
+
+        protected struct CaptureOasisSeedsJob : IJobParallelFor
+        {
+            [ReadOnly]
+            public NativeArray<float> heightmapData;
+            [ReadOnly]
+            public NativeArray<byte> tileData;
+
+            public NativeArray<byte> oasisSeedData;
+
+            public int hDim;
+            public int tdDim;
+            public float maxTerrainHeight;
+            public float beachElevation;
+
+            public void Execute(int index)
+            {
+                if (tileData[index] != water)
+                    return;
+
+                int x = JobA.Row(index, tdDim);
+                int y = JobA.Col(index, tdDim);
+                int hx = (int)Mathf.Clamp(Mathf.Round(((float)x / (float)(tdDim - 1)) * (hDim - 1)), 0, hDim - 1);
+                int hy = (int)Mathf.Clamp(Mathf.Round(((float)y / (float)(tdDim - 1)) * (hDim - 1)), 0, hDim - 1);
+                float height = heightmapData[JobA.Idx(hy, hx, hDim)] * maxTerrainHeight;
+
+                if (height > beachElevation + 8f)
+                    oasisSeedData[index] = 1;
+            }
+        }
+
+        protected struct ExpandDesertOasesJob : IJob
+        {
+            public NativeArray<float> heightmapData;
+            public NativeArray<byte> tileData;
+
+            [ReadOnly]
+            public NativeArray<byte> oasisSeedData;
+
+            public int hDim;
+            public int tdDim;
+            public float maxTerrainHeight;
+            public float beachElevation;
+            public int mapPixelX;
+            public int mapPixelY;
+            public int worldClimate;
+            public Rect locationRect;
+
+            public void Execute()
+            {
+                for (int y = 0; y < tdDim; y++)
+                {
+                    for (int x = 0; x < tdDim; x++)
+                    {
+                        int seedIdx = JobA.Idx(x, y, tdDim);
+                        if (oasisSeedData[seedIdx] == 0 || IsInsideLocation(x, y))
+                            continue;
+
+                        int waterRadius = GetWaterRadius(x, y);
+                        int flattenRadius = waterRadius + (worldClimate == (int)MapsFile.Climates.Desert ? 3 : 2);
+                        int hx = ToHeightIndex(x);
+                        int hy = ToHeightIndex(y);
+                        float waterLevel = heightmapData[JobA.Idx(hy, hx, hDim)];
+
+                        for (int offsetY = -flattenRadius; offsetY <= flattenRadius; offsetY++)
+                        {
+                            for (int offsetX = -flattenRadius; offsetX <= flattenRadius; offsetX++)
+                            {
+                                int sampleX = x + offsetX;
+                                int sampleY = y + offsetY;
+                                if (sampleX < 0 || sampleX >= tdDim || sampleY < 0 || sampleY >= tdDim || IsInsideLocation(sampleX, sampleY))
+                                    continue;
+
+                                float distance = Mathf.Sqrt((offsetX * offsetX) + (offsetY * offsetY));
+                                if (distance > flattenRadius + 0.25f)
+                                    continue;
+
+                                int shx = ToHeightIndex(sampleX);
+                                int shy = ToHeightIndex(sampleY);
+                                int heightIdx = JobA.Idx(shy, shx, hDim);
+                                float flattenedHeight = GetFlattenedHeight(heightmapData[heightIdx], waterLevel, distance, waterRadius, flattenRadius);
+                                heightmapData[heightIdx] = flattenedHeight;
+
+                                int tileIdx = JobA.Idx(sampleX, sampleY, tdDim);
+                                if (distance <= waterRadius + 0.15f)
+                                {
+                                    tileData[tileIdx] = water;
+                                }
+                                else if (distance <= waterRadius + 1.10f)
+                                {
+                                    if (tileData[tileIdx] != water)
+                                        tileData[tileIdx] = dirt;
+                                }
+                                else if (distance <= flattenRadius && tileData[tileIdx] == stone)
+                                {
+                                    tileData[tileIdx] = dirt;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            private int ToHeightIndex(int value)
+            {
+                return (int)Mathf.Clamp(Mathf.Round(((float)value / (float)(tdDim - 1)) * (hDim - 1)), 0, hDim - 1);
+            }
+
+            private float GetFlattenedHeight(float originalHeight, float waterLevel, float distance, float waterRadius, float flattenRadius)
+            {
+                if (distance <= waterRadius + 0.35f)
+                    return waterLevel;
+
+                float strength = Mathf.Clamp01(1f - ((distance - (waterRadius + 0.35f)) / Mathf.Max(0.5f, flattenRadius - (waterRadius + 0.35f))));
+                return Mathf.Lerp(originalHeight, waterLevel, strength);
+            }
+
+            private int GetWaterRadius(int x, int y)
+            {
+                int hash = x * 73856093 ^ y * 19349663 ^ mapPixelX * 83492791 ^ mapPixelY * 297121507 ^ worldClimate * 911;
+                int variant = Mathf.Abs(hash) % 2;
+
+                if (worldClimate == (int)MapsFile.Climates.Desert)
+                    return 2 + variant;
+                else
+                    return 1 + variant;
+            }
+
+            private bool IsInsideLocation(int x, int y)
+            {
+                if (locationRect.x <= 0 || locationRect.y <= 0)
+                    return false;
+
+                return x >= locationRect.xMin && x <= locationRect.xMax && y >= locationRect.yMin && y <= locationRect.yMax;
             }
         }
 

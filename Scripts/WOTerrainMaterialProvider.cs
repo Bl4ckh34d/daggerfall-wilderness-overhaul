@@ -21,16 +21,13 @@ namespace DaggerfallWorkshop
     public class WOTerrainMaterialProvider : TerrainMaterialProvider
     {
         Mod mod;
-        TextureReader textureReader;
 
         public WOTerrainMaterialProvider(Mod injectedMod) {
             mod = injectedMod;
-            textureReader = new TextureReader(DaggerfallUnity.Instance.Arena2Path);
         }
 
 
-        private readonly Shader shader = Shader.Find("WildernessOverhaul/TilemapTextureArray");
-        //private readonly Shader shader = Shader.Find("Daggerfall/TilemapTextureArray");
+        private readonly Shader shader = Shader.Find(MaterialReader._DaggerfallTilemapTextureArrayShaderName);
 
         internal static bool IsSupported
         {
@@ -44,45 +41,27 @@ namespace DaggerfallWorkshop
 
         public override void PromoteMaterial(DaggerfallTerrain daggerfallTerrain, TerrainMaterialData terrainMaterialData)
         {
-            Material tileMaterial = GetTerrainTextureArrayMaterial(GetGroundArchive(terrainMaterialData.WorldClimate));
+            int archive = GetGroundArchive(terrainMaterialData.WorldClimate);
+            Material vanillaTileMaterial = DaggerfallUnity.Instance.MaterialReader.GetTerrainTextureArrayMaterial(archive);
+            Texture2DArray modAlbedoArray = GetModTerrainTextureArray(archive);
 
-            // Assign textures (propagate material settings from tileMaterial to terrainMaterial)
-            terrainMaterialData.Material.SetTexture(TileTexArrUniforms.TileTexArr, tileMaterial.GetTexture(TileTexArrUniforms.TileTexArr));
-            terrainMaterialData.Material.SetTexture(TileTexArrUniforms.TileNormalMapTexArr, tileMaterial.GetTexture(TileTexArrUniforms.TileNormalMapTexArr));
-            if (tileMaterial.IsKeywordEnabled(KeyWords.NormalMap))
-                terrainMaterialData.Material.EnableKeyword(KeyWords.NormalMap);
-            else
-                terrainMaterialData.Material.DisableKeyword(KeyWords.NormalMap);
-            terrainMaterialData.Material.SetTexture(TileTexArrUniforms.TileMetallicGlossMapTexArr, tileMaterial.GetTexture(TileTexArrUniforms.TileMetallicGlossMapTexArr));
+            // Keep the mod's custom albedo, but reuse DFU's current terrain lighting stack.
+            terrainMaterialData.Material.SetTexture(TileTexArrUniforms.TileTexArr, modAlbedoArray);
+            terrainMaterialData.Material.SetTexture(TileTexArrUniforms.TileNormalMapTexArr, vanillaTileMaterial.GetTexture(TileTexArrUniforms.TileNormalMapTexArr));
+            terrainMaterialData.Material.SetTexture(TileTexArrUniforms.TileParallaxMapTexArr, vanillaTileMaterial.GetTexture(TileTexArrUniforms.TileParallaxMapTexArr));
+            terrainMaterialData.Material.SetTexture(TileTexArrUniforms.TileMetallicGlossMapTexArr, vanillaTileMaterial.GetTexture(TileTexArrUniforms.TileMetallicGlossMapTexArr));
             terrainMaterialData.Material.SetTexture(TileTexArrUniforms.TilemapTex, terrainMaterialData.TileMapTexture);
+
+            AssignKeyWord(KeyWords.NormalMap, vanillaTileMaterial, terrainMaterialData.Material);
+            AssignKeyWord(KeyWords.HeightMap, vanillaTileMaterial, terrainMaterialData.Material);
+            AssignKeyWord(KeyWords.MetallicGlossMap, vanillaTileMaterial, terrainMaterialData.Material);
+
+            if (vanillaTileMaterial.HasProperty(Uniforms.Smoothness))
+                terrainMaterialData.Material.SetFloat(Uniforms.Smoothness, vanillaTileMaterial.GetFloat(Uniforms.Smoothness));
         }
 
-        public Material GetTerrainTextureArrayMaterial(int archive)
+        private Texture2DArray GetModTerrainTextureArray(int archive)
         {
-            Material material;
-
-            // Ready check
-            /* if (!IsReady)
-                return null; */
-
-            // Return from cache if present
-            /* int key = MakeTextureKey((short)archive, (byte)0, (byte)0, TileMapKeyGroup);
-            if (materialDict.ContainsKey(key))
-            {
-                CachedMaterial cm = GetMaterialFromCache(key);
-                if (cm.filterMode == MainFilterMode)
-                {
-                    // Properties are the same
-                    return cm.material;
-                }
-                else
-                {
-                    // Properties don't match, remove material and reload
-                    materialDict.Remove(key);
-                }
-            } */
-
-            // Generate texture array
             Texture2DArray textureArrayTerrainTiles = mod.GetAsset<Texture2DArray>("302-TexArray.asset");
             if (archive == 002)
                 textureArrayTerrainTiles = mod.GetAsset<Texture2DArray>("002-TexArray.asset");
@@ -109,36 +88,16 @@ namespace DaggerfallWorkshop
                 textureArrayTerrainTiles = mod.GetAsset<Texture2DArray>("403-TexArray.asset");
             if (archive == 404)
                 textureArrayTerrainTiles = mod.GetAsset<Texture2DArray>("404-TexArray.asset");
-            Texture2DArray textureArrayTerrainTilesNormalMap = null; // = GetTerrainNormalMapTextureArray(archive);
-            Texture2DArray textureArrayTerrainTilesMetallicGloss = null; // = GetTerrainMetallicGlossMapTextureArray(archive);
-            textureArrayTerrainTiles.filterMode =  FilterMode.Point;
+            textureArrayTerrainTiles.filterMode = DaggerfallUnity.Instance.MaterialReader.MainFilterMode;
+            return textureArrayTerrainTiles;
+        }
 
-            material = new Material(shader);
-            material.name = string.Format("TEXTURE.{0:000} [TilemapTextureArray]", archive);
-
-            material.SetTexture(TileTexArrUniforms.TileTexArr, textureArrayTerrainTiles);
-            if (textureArrayTerrainTilesNormalMap != null)
-            {
-                // if normal map texture array was loaded successfully enable normalmap in shader and set texture
-                material.SetTexture(TileTexArrUniforms.TileNormalMapTexArr, textureArrayTerrainTilesNormalMap);
-                material.EnableKeyword(KeyWords.NormalMap);
-            }
-            if (textureArrayTerrainTilesMetallicGloss != null)
-            {
-                // if metallic gloss map texture array was loaded successfully set texture (should always contain a valid texture array - since it defaults to 1x1 textures)
-                material.SetTexture(TileTexArrUniforms.TileMetallicGlossMapTexArr, textureArrayTerrainTilesMetallicGloss);
-            }
-
-            /* CachedMaterial newcm = new CachedMaterial()
-            {
-                key = key,
-                keyGroup = TileMapKeyGroup,
-                material = material,
-                filterMode = MainFilterMode,
-            };
-            materialDict.Add(key, newcm); */
-
-            return material;
+        void AssignKeyWord(string keyword, Material src, Material dst)
+        {
+            if (src.IsKeywordEnabled(keyword))
+                dst.EnableKeyword(keyword);
+            else
+                dst.DisableKeyword(keyword);
         }
 
         private TextureFormat ParseTextureFormat(SupportedAlphaTextureFormats format)
