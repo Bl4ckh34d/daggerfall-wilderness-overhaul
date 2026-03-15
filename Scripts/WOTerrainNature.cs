@@ -44,6 +44,7 @@ namespace WildernessOverhaul
         private static int currentBillboardDrops;
         private static int currentTileIndex;
         private static int currentTileCount;
+        private static bool currentNatureMeshUsed;
 
         // Important data classes holding values and lists
         public WOVegetationList vegetationList;
@@ -202,6 +203,8 @@ namespace WildernessOverhaul
             stochastics = new WOStochasticChances(randomSeed);
             vegetationChance = new WOVegetationChance(randomSeed);
             vegetationList = new WOVegetationList(randomSeed);
+            NatureMeshUsed = false;
+            currentNatureMeshUsed = false;
 
             // Adds one shooting star Particle System of every MapPixel
             if (shootingStarsExist)
@@ -268,7 +271,7 @@ namespace WildernessOverhaul
                     if (tile == 0 || height <= 0)
                         continue;
 
-                    ContainerObject baseData = new ContainerObject(dfTerrain, dfBillboardBatch, terrain, scale, steepness, x, y, maxTerrainHeight);
+                    ContainerObject baseData = new ContainerObject(dfTerrain, dfBillboardBatch, terrain, scale, steepness, x, y, terrainDist, maxTerrainHeight);
 
                     switch (climate.WorldClimate) {
                         #region Temperate Spawns
@@ -690,6 +693,7 @@ namespace WildernessOverhaul
             }
 
             // Apply new batch
+            NatureMeshUsed = currentNatureMeshUsed;
             dfBillboardBatch.Apply();
         }
 
@@ -736,11 +740,31 @@ namespace WildernessOverhaul
 
         private static bool TryQueueBillboard(ContainerObject baseData, int record, Vector3 pos)
         {
+            if (TryImportNatureReplacement(baseData, record, pos))
+                return true;
+
             if (!CanQueueBillboard())
                 return false;
 
             baseData.dfBillboardBatch.AddItem(record, pos);
             return true;
+        }
+
+        private static bool TryImportNatureReplacement(ContainerObject baseData, int record, Vector3 pos)
+        {
+            if (baseData.terrainDist > 1)
+                return false;
+
+            int tileX = Mathf.Clamp(Mathf.RoundToInt(pos.x / baseData.scale), 0, MapsFile.WorldMapTileDim - 1);
+            int tileY = Mathf.Clamp(Mathf.RoundToInt(pos.z / baseData.scale), 0, MapsFile.WorldMapTileDim - 1);
+
+            if (MeshReplacement.ImportNatureGameObject(baseData.dfBillboardBatch.TextureArchive, record, baseData.terrain, tileX, tileY))
+            {
+                currentNatureMeshUsed = true;
+                return true;
+            }
+
+            return false;
         }
 
         private bool Roll(float chance)
@@ -3262,7 +3286,18 @@ namespace WildernessOverhaul
             shootingStarInstance.AddComponent<WOShootingStarController>();
             shootingStarInstance.GetComponent<WOShootingStarController>().ps = shootingStarInstance.GetComponent<ParticleSystem>();
             var emissionModule = shootingStarInstance.GetComponent<WOShootingStarController>().ps.emission;
-            emissionModule.rateOverTime = new ParticleSystem.MinMaxCurve(sSMin / 1000, sSMax / 1000);
+            float dailyMultiplier = GetDailyShootingStarMultiplier();
+            emissionModule.rateOverTime = new ParticleSystem.MinMaxCurve((sSMin * dailyMultiplier) / 1000, (sSMax * dailyMultiplier) / 1000);
+        }
+
+        private static float GetDailyShootingStarMultiplier()
+        {
+            DaggerfallDateTime now = DaggerfallUnity.Instance.WorldTime.Now;
+            int dayKey = (now.Year * DaggerfallDateTime.DaysPerYear) + (now.Month * DaggerfallDateTime.DaysPerMonth) + now.Day;
+            uint hash = (uint)((dayKey * 1103515245) + 12345);
+            float normalized = (hash & 0xFFFF) / 65535f;
+            float biased = normalized * normalized;
+            return Mathf.Lerp(0.60f, 1.30f, biased);
         }
 
         static public bool TileTypeCheck(

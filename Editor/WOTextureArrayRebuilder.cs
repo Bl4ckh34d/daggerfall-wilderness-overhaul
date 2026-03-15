@@ -9,9 +9,9 @@ namespace WildernessOverhaul.Editor
 {
     public static class WOTextureArrayRebuilder
     {
-        private const string SourceRoot = "Assets/Game/Mods/daggerfall-wilderness-overhaul/Textures/TextureFiles";
-        private const string TargetRoot = "Assets/Game/Mods/daggerfall-wilderness-overhaul/Textures";
-        private const string VanillaRoot = "Assets/Game/Mods/daggerfall-wilderness-overhaul/Textures/VanillaTextureFiles";
+        private const string SourceRoot = "Assets/Game/Mods/WildernessOverhaul/Textures/TextureFiles";
+        private const string TargetRoot = "Assets/Game/Mods/WildernessOverhaul/Textures";
+        private const string VanillaRoot = "Assets/Game/Mods/WildernessOverhaul/Textures/VanillaTextureFiles";
         private const int TerrainSliceCount = 56;
 
         [MenuItem("Tools/Wilderness Overhaul/Rebuild All Mod Texture Arrays From TextureFiles")]

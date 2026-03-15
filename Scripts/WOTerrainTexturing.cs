@@ -684,14 +684,44 @@ namespace WildernessOverhaul
         // Encodes a byte with Daggerfall tile neighbours
         static int FindTileIndex(int[][] array, int bl, int br, int tr, int tl)
         {
-            int[] testArray = new int[4]{bl,br,tr,tl};
-            for (int i = 0; i < array.Length; ++i) {
-                if(array[i][0] == testArray[0] && array[i][1] == testArray[1] && array[i][2] == testArray[2] && array[i][3] == testArray[3]) {
+            int bestIndex = 0;
+            int bestScore = int.MaxValue;
+            int bestCornerMatches = -1;
+
+            for (int i = 0; i < array.Length; ++i)
+            {
+                int[] candidate = array[i];
+                if (candidate == null)
+                    continue;
+
+                if (candidate[0] == bl && candidate[1] == br && candidate[2] == tr && candidate[3] == tl)
                     return i;
+
+                // Ignore special road entries when approximating unsupported terrain blends.
+                if (candidate[0] > stone || candidate[1] > stone || candidate[2] > stone || candidate[3] > stone)
+                    continue;
+
+                int score =
+                    Mathf.Abs(candidate[0] - bl) +
+                    Mathf.Abs(candidate[1] - br) +
+                    Mathf.Abs(candidate[2] - tr) +
+                    Mathf.Abs(candidate[3] - tl);
+
+                int cornerMatches =
+                    (candidate[0] == bl ? 1 : 0) +
+                    (candidate[1] == br ? 1 : 0) +
+                    (candidate[2] == tr ? 1 : 0) +
+                    (candidate[3] == tl ? 1 : 0);
+
+                if (score < bestScore || (score == bestScore && cornerMatches > bestCornerMatches))
+                {
+                    bestIndex = i;
+                    bestScore = score;
+                    bestCornerMatches = cornerMatches;
                 }
             }
-            Debug.LogErrorFormat("Couldnt find index. Setting tile to water.");
-            return 0;
+
+            return bestIndex;
         }
 
         // Encodes a byte with Daggerfall tile lookup

@@ -40,7 +40,7 @@ namespace WildernessOverhaul.Editor
             if (string.IsNullOrEmpty(rootFolder))
                 return;
 
-            string[] guids = AssetDatabase.FindAssets("t:Texture2DArray", new[] { "Assets/Game/Mods/daggerfall-wilderness-overhaul/Textures" });
+            string[] guids = AssetDatabase.FindAssets("t:Texture2DArray", new[] { "Assets/Game/Mods/WildernessOverhaul/Textures" });
             foreach (string guid in guids)
             {
                 string assetPath = AssetDatabase.GUIDToAssetPath(guid);

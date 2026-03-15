@@ -12,6 +12,7 @@ namespace WildernessOverhaul {
         public float steepness;
         public int x;
         public int y;
+        public int terrainDist;
         public float maxTerrainHeight;
 
         public ContainerObject(
@@ -22,6 +23,7 @@ namespace WildernessOverhaul {
           float Steepness,
           int X,
           int Y,
+          int TerrainDist,
           float MaxTerrainHeight)
         {
             dfTerrain = DFTerrain;
@@ -31,6 +33,7 @@ namespace WildernessOverhaul {
             steepness = Steepness;
             x = X;
             y = Y;
+            terrainDist = TerrainDist;
             maxTerrainHeight = MaxTerrainHeight;
         }
     }
